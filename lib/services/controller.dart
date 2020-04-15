@@ -8,6 +8,7 @@ import 'package:trivia_form/services/services.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
+
   // UsuarioModel usuarioAct = UsuarioModel(
   //   nombre: 'Memo',
   //   correo: 'Knotfold@gmail.com',
@@ -19,6 +20,7 @@ class Controller with ChangeNotifier {
   agregausuario(UsuarioModel usuario) {
     usuarioAct = usuario;
   }
+
 
   notify() {
     notifyListeners();
@@ -44,7 +46,7 @@ class Controller with ChangeNotifier {
     name = '';
     imageUrl = '';
     email = '';
-    usuarioAct.nombre = 'No name';
+    usuario.nombre = 'No name';
     notifyListeners();
     print('finished');
   }
@@ -65,7 +67,7 @@ class Controller with ChangeNotifier {
           .where('correo', isEqualTo: prefs.getString('correo'))
           .getDocuments()
           .then((onValue) {
-        usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+        usuario = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
       });
       // await storeToken();
       return true;
@@ -154,4 +156,5 @@ class Controller with ChangeNotifier {
     }
     return true;
   }
+
 }

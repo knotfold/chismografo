@@ -5,8 +5,12 @@ class LibretasA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => null,
+        label: Text('Nueva solicitud'),
+        icon: Icon(Icons.fiber_new),
+      ),
       appBar: myAppBar(),
-      drawer: myDrawer(context),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

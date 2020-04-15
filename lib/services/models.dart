@@ -73,6 +73,17 @@ class Formulario1{
 class Usuario {
   String nombre;
   String foto;
+  String correo;
+  String id;
+  DocumentReference ref;
+
+  Usuario.fromDS(DocumentSnapshot ds){
+    nombre =  ds['nombre'];
+    foto = ds['foto'];
+    correo  = ds['correo'];
+    id = ds.documentID;
+    ref = ds.reference;
+  }
 
   Map<String, dynamic> toMap() {
     return {
