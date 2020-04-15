@@ -42,7 +42,7 @@ class Formulario1{
     Pregunta(pregunta: '14. Cuando lo publiques en tu muro, te contesto la pregunta 11'),
 
   ];
-  List<Usuario> usuarios;
+  List<UsuarioModel> usuarios;
   String password;
   String creadorId;
   String creadorNombre;
@@ -70,17 +70,7 @@ class Formulario1{
   }
 }
 
-class Usuario {
-  String nombre;
-  String foto;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'nombre': nombre,
-      'foto': foto,
-    };
-  }
-}
 
 class Pregunta {
   String pregunta;
@@ -109,6 +99,8 @@ class UsuarioModel {
   String nombre;
   DocumentReference reference;
   String documentId;
+  List<dynamic> amigos;
+  List<dynamic> solicitudesAE;
 
   UsuarioModel({
     this.contrasena,
@@ -118,12 +110,21 @@ class UsuarioModel {
     this.documentId,
   });
 
+  Map<String,dynamic> toMap(){
+    return {
+      'nombre' : nombre,
+      'foto' : foto, 
+    };
+  }
+
   UsuarioModel.fromDocumentSnapshot(DocumentSnapshot data) {
     contrasena = data['contrasena'];
     correo = data['correo'];
     foto = data['foto'];
-    nombre = data['nombre'];
+    nombre = data['nombre']??'';
     reference = data.reference;
     documentId = data.documentID;
+     amigos = data['amigos'] ?? [];
+    solicitudesAE = data['solicitudesAE'] ?? [];
   }
 }

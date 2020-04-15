@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'pages.dart';
+import 'package:provider/provider.dart';
+import 'package:trivia_form/services/services.dart';
 
 class FormularioCreator extends StatelessWidget {
-  final PageController pageController = PageController();
-  final TextEditingController textEditingController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -14,13 +16,13 @@ class FormularioCreator extends StatelessWidget {
       body: PageView(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        controller: pageController,
-        children: <Widget>[first(),CreadorLP()],
+        controller: controller.pageController,
+        children: <Widget>[first(controller.textEditingController, controller.pageController),CreadorLP(),AmigosSelector()],
       ),
     );
   }
 
-  Widget first(){
+  Widget first(TextEditingController textEditingController, PageController pageController){
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -44,7 +46,7 @@ class FormularioCreator extends StatelessWidget {
             onPressed: () {
               pageController.jumpToPage(1);
             },
-            icon: Icon(Icons.next_week),
+           
             label: Text('Next'),
           ),
         ],

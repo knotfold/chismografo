@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trivia_form/services/services.dart';
+import 'package:trivia_form/main.dart';
 
 AppBar myAppBar() {
   return AppBar(
@@ -10,6 +13,7 @@ AppBar myAppBar() {
 }
 
 Drawer myDrawer(BuildContext context) {
+  Controller controller = Provider.of<Controller>(context);
   return Drawer(
     child: Column(
       children: <Widget>[
@@ -35,6 +39,18 @@ Drawer myDrawer(BuildContext context) {
           title: Text('Info'),
           leading: Icon(Icons.info),
         ),
+        ListTile(
+          title: Text('Cerrar Sesión'),
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () async {
+              signOutGoogle();
+              await controller.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/', ModalRoute.withName('/home'));
+            },
+          ),
+        )
       ],
     ),
   );
