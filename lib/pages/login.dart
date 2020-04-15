@@ -95,9 +95,7 @@ class _LogInState extends State<LogIn> {
                                 padding: EdgeInsets.all(20.0),
                                 child: Column(
                                   children: <Widget>[
-                                    SizedBox(
-                                      height: 30.0,
-                                    ),
+                                   
                                     // TextFormField(
                                     //   onSaved: (String texto) {
                                     //     loginMap['user'] = texto;
@@ -145,9 +143,7 @@ class _LogInState extends State<LogIn> {
                                     //     ),
                                     //   ),
                                     // ),
-                                    SizedBox(
-                                      height: 25.0,
-                                    ),
+                                  
                                     Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

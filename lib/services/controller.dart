@@ -67,7 +67,7 @@ class Controller with ChangeNotifier {
           .where('correo', isEqualTo: prefs.getString('correo'))
           .getDocuments()
           .then((onValue) {
-        usuario = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+        usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
       });
       // await storeToken();
       return true;
