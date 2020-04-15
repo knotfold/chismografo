@@ -5,3 +5,5 @@ export 'tusLibretas.dart';
 export 'libretasA.dart';
 export 'formularioCreator.dart';
 export 'creadorListaPreguntas.dart';
+export 'login.dart';
+export 'registroUsuario.dart';

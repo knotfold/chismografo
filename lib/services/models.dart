@@ -122,7 +122,7 @@ class UsuarioModel {
     contrasena = data['contrasena'];
     correo = data['correo'];
     foto = data['foto'];
-    nombre = data['nombre'];
+    nombre = data['nombre']??'';
     reference = data.reference;
     documentId = data.documentID;
   }

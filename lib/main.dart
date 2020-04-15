@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'shared/shared.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -21,9 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: backgroundColor,
           bottomAppBarColor: backgroundColor,
-          bottomAppBarTheme: BottomAppBarTheme(
-            color: Colors.grey
-          ),
+          bottomAppBarTheme: BottomAppBarTheme(color: Colors.grey),
           scaffoldBackgroundColor: backgroundColor,
           backgroundColor: backgroundColor,
           dialogBackgroundColor: backgroundColor,
@@ -32,11 +31,14 @@ class MyApp extends StatelessWidget {
           primaryTextTheme: GoogleFonts.rubikTextTheme(),
           primarySwatch: Colors.grey,
         ),
-        home: Home(),
+        home: LogIn(),
         routes: {
-          '/misLibretas' : (context) => TusLibretas(),
-          '/libretasAmigos' : (context) => LibretasA(),
-          '/creadorLibreta' : (context) => FormularioCreator()
+          '/home': (context) => Home(),
+          'login': (context) => LogIn(),
+          '/registro_usuario': (context) => RegistroUsuario(),
+          '/misLibretas': (context) => TusLibretas(),
+          '/libretasAmigos': (context) => LibretasA(),
+          '/creadorLibreta': (context) => FormularioCreator()
         },
       ),
     );
