@@ -44,13 +44,10 @@ class Amigos extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: documents.length,
                         itemBuilder: (context, index) {
-                          Usuario usuario = Usuario.fromDS(documents[index]);
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(usuario.foto),
-                            ),
-                            title: Text(usuario.nombre),
-                          );
+                          UsuarioModel usuario =
+                              UsuarioModel.fromDocumentSnapshot(
+                                  documents[index]);
+                          return AmigoTile(usuario: usuario);
                         },
                       );
               },
@@ -77,42 +74,88 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Solicitudes de Amistad'),
+            Text(
+              'Solicitudes de Amistad',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             StreamBuilder(
-              stream: controller.usuario.reference
-                  .collection('solicitudes')
+              stream: Firestore.instance
+                  .collection('usuarios')
+                  .where('solicitudesAE',
+                      arrayContains: controller.usuario.documentId)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const CircularProgressIndicator();
                 List<DocumentSnapshot> documents = snapshot.data.documents;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: documents.length,
-                  itemBuilder: (context, index) {
-                    Usuario usuario = Usuario.fromDS(documents[index]);
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(usuario.foto),
-                      ),
-                      title: Text(usuario.nombre),
-                      trailing: Row(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.check),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete_forever),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
+                return documents.isEmpty
+                    ? Text('No tienes solicitudes')
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: documents.length,
+                        itemBuilder: (context, index) {
+                          UsuarioModel usuario =
+                              UsuarioModel.fromDocumentSnapshot(
+                                  documents[index]);
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(usuario.foto),
+                            ),
+                            title: Text(usuario.nombre),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  onPressed: () async {
+                                    await controller.usuario.reference
+                                        .updateData({
+                                      'amigos': FieldValue.arrayUnion(
+                                          [usuario.documentId])
+                                    });
+                                    await usuario.reference.updateData({
+                                      'solicitudesAE': FieldValue.arrayRemove(
+                                          [controller.usuario.documentId]),
+                                      'amigos': FieldValue.arrayUnion(
+                                          [controller.usuario.documentId])
+                                    });
+                                    controller.usuario.amigos
+                                        .add(usuario.documentId);
+                                    controller.notify();
+                                  },
+                                  icon: Icon(Icons.check),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    await usuario.reference.updateData({
+                                      'solicitudesAE': FieldValue.arrayRemove(
+                                          [controller.usuario.documentId])
+                                    });
+                                  },
+                                  icon: Icon(Icons.delete_forever),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
               },
             ),
+            SizedBox(
+              height: 20,
+            ),
             FloatingActionButton.extended(
-              onPressed: () => showSearch(),
-              icon: Icon(Icons.search),
+              elevation: 0,
+              shape: BeveledRectangleBorder(),
+              onPressed: () => showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
+              ),
+              icon: Icon(
+                Icons.search,
+                size: 17,
+              ),
               label: Text('Buscar Amigos'),
             )
           ],

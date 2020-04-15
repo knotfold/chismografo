@@ -26,6 +26,16 @@ class Controller with ChangeNotifier {
     notifyListeners();
   }
 
+  //Cosas para llenar  una libreta
+  List<String> preguntas = [];
+  List<String> participantes  = [];
+  String nombreLibreta;
+
+  PageController pageController = PageController();
+  TextEditingController textEditingController = TextEditingController();
+
+  //fiiiiiiin
+
   String uid = '';
   String name = '';
   String email = '';
