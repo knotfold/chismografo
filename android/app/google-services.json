@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "734736031213",
+    "firebase_url": "https://chismografo-28b95.firebaseio.com",
+    "project_id": "chismografo-28b95",
+    "storage_bucket": "chismografo-28b95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734736031213:android:82532c9c3d13d852321be4",
+        "android_client_info": {
+          "package_name": "com.gudtech.chismografo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "734736031213-ika664d8ne16dfu6rou08n8h0ptj1sgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudtech.chismografo",
+            "certificate_hash": "f4287ebb732376ec828d10fcd025cd818db42284"
+          }
+        },
+        {
+          "client_id": "734736031213-570mosnmfrb755452c2keqec9lnku4kr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIWMLRv_CM5mtBCaQ52YXZd44-VTuuI3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "734736031213-570mosnmfrb755452c2keqec9lnku4kr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
