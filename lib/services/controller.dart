@@ -10,13 +10,14 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
-  UsuarioModel usuarioAct = UsuarioModel(
+  UsuarioModel usuario = UsuarioModel(
     nombre: 'Memo',
     correo: 'Knotfold@gmail.com',
+    documentId: 'Kixz42Qe8JXs87OKOJZ8',
     foto:
         'https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/90590478_3194401850588829_8179029891061121024_o.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=Ds1ApjyXdy8AX8gQWIP&_nc_ht=scontent-ssn1-1.xx&oh=5e2f518ff1449c1bc8f0f3894e32a39a&oe=5EBB0839',
   );
-  UsuarioModel get usuario => usuario;
+  
   notify() {
     notifyListeners();
   }
@@ -44,7 +45,7 @@ class Controller with ChangeNotifier {
     name = '';
     imageUrl = '';
     email = '';
-    usuarioAct.nombre = 'No name';
+    usuario.nombre = 'No name';
     notifyListeners();
     print('finished');
   }
@@ -65,7 +66,7 @@ class Controller with ChangeNotifier {
           .where('correo', isEqualTo: prefs.getString('correo'))
           .getDocuments()
           .then((onValue) {
-        usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+        usuario = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
       });
       // await storeToken();
       return true;
@@ -156,6 +157,6 @@ class Controller with ChangeNotifier {
   }
 
   agregausuario(UsuarioModel usuario) {
-    usuarioAct = usuario;
+    usuario = usuario;
   }
 }

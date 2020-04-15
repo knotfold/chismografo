@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   List<Widget> _widgetOptions = <Widget>[
     TusLibretas(),
     LibretasA(),
-    TusLibretas(),
+    Amigos(),
     LibretasA(),
     TusLibretas(),
   ];
@@ -32,7 +32,8 @@ class _HomeState extends State<Home> {
       body: _widgetOptions.elementAt(seleccionado),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: seleccionado,
-          
+          backgroundColor: Colors.black,
+          fixedColor: Colors.black,
           onTap: (int index) {
             _onItemTapped(index);
           },

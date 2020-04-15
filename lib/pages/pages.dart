@@ -5,3 +5,4 @@ export 'tusLibretas.dart';
 export 'libretasA.dart';
 export 'formularioCreator.dart';
 export 'creadorListaPreguntas.dart';
+export 'amigos.dart';
