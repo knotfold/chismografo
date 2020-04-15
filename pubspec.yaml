@@ -35,6 +35,9 @@ dependencies:
   multi_image_picker: ^4.6.6+rc.1
   permission_handler: ^5.0.0+hotfix.3
   google_fonts: ^0.4.1
+  google_sign_in: ^4.1.4
+  font_awesome_flutter: ^8.7.0
+  grouped_buttons: ^1.0.4
 
 
 
