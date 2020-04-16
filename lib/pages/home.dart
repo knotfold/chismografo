@@ -14,8 +14,8 @@ class _HomeState extends State<Home> {
     TusLibretas(),
     LibretasA(),
     Amigos(),
-    LibretasA(),
-    TusLibretas(),
+    Perfil(),
+    Info(),
   ];
 
   _onItemTapped(int index) {

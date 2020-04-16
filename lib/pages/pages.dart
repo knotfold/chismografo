@@ -9,3 +9,5 @@ export 'login.dart';
 export 'registroUsuario.dart';
 export 'amigos.dart';
 export 'amigosSelector.dart';
+export 'perfil.dart';
+export 'info.dart';
