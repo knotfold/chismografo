@@ -10,7 +10,7 @@ class TusLibretas extends StatelessWidget {
     Controller controller = Provider.of(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-      
+        heroTag: 'btn1',
         isExtended: true,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
         label: Text('Crea una nueva libreta'),

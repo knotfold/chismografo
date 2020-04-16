@@ -12,12 +12,13 @@ class LibretasA extends StatelessWidget {
       floatingActionButton: StreamBuilder(
         stream: Firestore.instance
             .collection('formularios')
-            .where('invitaciones', arrayContains: controller.usuario.documentId)
+            .where('invitaciones', arrayContains: controller.usuario.usuario)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const CircularProgressIndicator();
           List<DocumentSnapshot> documents = snapshot.data.documents;
           return FloatingActionButton.extended(
+            heroTag: 'btn1',
             onPressed: () {
               showDialog(
                 context: context,

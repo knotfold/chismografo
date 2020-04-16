@@ -23,6 +23,7 @@ class _MiniProfileState extends State<MiniProfile> {
       child: Container(
         width: double.maxFinite,
         height: 280,
+
         child: Stack(
           alignment: Alignment.topCenter,
           children: <Widget>[
@@ -44,6 +45,7 @@ class _MiniProfileState extends State<MiniProfile> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(
+
                       height: 30,
                     ),
                     Container(
@@ -54,8 +56,7 @@ class _MiniProfileState extends State<MiniProfile> {
                       alignment: Alignment.center,
                     ),
                     SizedBox(
-                      height: 20,
-                    ),
+                      height: 20),
                     Text('LIBRETAS'),
                     StreamBuilder(
                       stream: Firestore.instance
@@ -94,12 +95,14 @@ class _MiniProfileState extends State<MiniProfile> {
                           SizedBox(
                             height: 30,
                           ),
+                           Expanded(child: Text(widget.usuario.nombre)),
                           verifyMyFRequest(controller)
                               ? Container(
                                 width: 280,
                                  alignment: Alignment.bottomRight,
                                   child: RaisedButton(
-                                    child: Text('Cancelar Solicitud'),
+                                    child: Expanded(
+                                      child: Text('Cancelar Solicitud')),
                                     onPressed: () async {
                                       await controller.usuario.reference
                                           .updateData({

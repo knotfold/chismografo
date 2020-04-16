@@ -9,7 +9,6 @@ class CreadorLP extends StatefulWidget {
 
 class _CreadorLPState extends State<CreadorLP> {
   TextEditingController textEditingController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +16,13 @@ class _CreadorLPState extends State<CreadorLP> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(10),
-              child: Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('PREGUNTAS (${controller.preguntas.length}/15)', style: TextStyle(fontSize: 20),),
+            Text(
+              'PREGUNTAS (${controller.preguntas.length}/15)',
+              style: TextStyle(fontSize: 20),
+            ),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -32,28 +34,29 @@ class _CreadorLPState extends State<CreadorLP> {
                   trailing: IconButton(
                     onPressed: () {
                       controller.preguntas.remove(controller.preguntas[index]);
-                    controller.notify();
+                      controller.notify();
                     },
                     icon: Icon(Icons.delete),
                   ),
                 );
               },
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               children: <Widget>[
                 FloatingActionButton(
-                  
+                  heroTag: 'btn1',
                   mini: true,
                   child: Icon(Icons.add),
                   onPressed: () {
-                    if(controller.preguntas.length>=15){
+                    if (controller.preguntas.length >= 15) {
                       showDialog(
-                        context: context,
-                        child: AlertDialog(
-                          title: Text('No puedes tener mas de 15 preguntas'),
-                        )
-                      );
+                          context: context,
+                          child: AlertDialog(
+                            title: Text('No puedes tener mas de 15 preguntas'),
+                          ));
                       return;
                     }
                     showDialog(
@@ -75,6 +78,7 @@ class _CreadorLPState extends State<CreadorLP> {
                                 height: 15,
                               ),
                               FloatingActionButton.extended(
+                                heroTag: 'btn2',
                                 icon: Icon(Icons.add),
                                 label: Text('Agregar Nueva Pregunta'),
                                 onPressed: () {
@@ -83,7 +87,8 @@ class _CreadorLPState extends State<CreadorLP> {
                                     return;
                                   }
 
-                                  controller.preguntas.add(textEditingController.text);
+                                  controller.preguntas
+                                      .add(textEditingController.text);
                                   textEditingController.clear();
                                   controller.notify();
 
@@ -98,18 +103,20 @@ class _CreadorLPState extends State<CreadorLP> {
                     setState(() {});
                   },
                 ),
-                 FloatingActionButton.extended(
-                                onPressed: () {
-                                  controller.pageController.jumpToPage(0);
-                                },
-                                label: Text('Back'),
-                              ),
-                  FloatingActionButton.extended(
-                                onPressed: () {
-                                  controller.pageController.jumpToPage(2);
-                                },
-                                label: Text('Next'),
-                              ),
+                FloatingActionButton.extended(
+                  heroTag: 'btn3',
+                  onPressed: () {
+                    controller.pageController.jumpToPage(0);
+                  },
+                  label: Text('Back'),
+                ),
+                FloatingActionButton.extended(
+                  heroTag: 'btn4',
+                  onPressed: () {
+                    controller.pageController.jumpToPage(2);
+                  },
+                  label: Text('Next'),
+                ),
               ],
             )
           ],

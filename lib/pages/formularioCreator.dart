@@ -65,6 +65,7 @@ class FormularioCreator extends StatelessWidget {
             ],
           ),
           FloatingActionButton.extended(
+            heroTag: 'btn1',
             onPressed: () {
               controller.pageController.jumpToPage(1);
             },
