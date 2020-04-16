@@ -19,7 +19,7 @@ class Amigos extends StatelessWidget {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
-              child: Icon(documents.isEmpty ? Icons.face : Icons.add_alert),
+              child: Icon(documents.isEmpty ? Icons.person_add : Icons.add_alert),
               onPressed: () {
                 showDialog(
                   context: context,
