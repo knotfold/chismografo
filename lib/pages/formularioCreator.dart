@@ -10,8 +10,8 @@ class FormularioCreator extends StatelessWidget {
     Controller controller = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        elevation: 1,
+       backgroundColor: Colors.transparent,
       ),
       body: PageView(
         physics: BouncingScrollPhysics(),
@@ -40,14 +40,14 @@ class FormularioCreator extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           FloatingActionButton.extended(
             onPressed: () {
               pageController.jumpToPage(1);
             },
            
-            label: Text('Next'),
+            label: Text('Siguiente'),
           ),
         ],
       ),

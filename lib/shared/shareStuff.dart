@@ -20,7 +20,7 @@ Drawer myDrawer(BuildContext context) {
         AppBar(
           // centerTitle: true,
           backgroundColor: Colors.transparent,
-          elevation: 0,
+          elevation: 1,
           title: Text('Ménu'),
         ),
         ListTile(

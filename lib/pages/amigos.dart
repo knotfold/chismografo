@@ -10,7 +10,7 @@ class Amigos extends StatelessWidget {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.face),
+        child: Icon(Icons.person_add),
         onPressed: () {
           showDialog(
             context: context,

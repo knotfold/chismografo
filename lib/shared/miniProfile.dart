@@ -19,126 +19,42 @@ class _MiniProfileState extends State<MiniProfile> {
     return Dialog(
       elevation: 0,
       backgroundColor: Colors.transparent,
-          child: Container(
-      
-        height: 300,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+      child: Container(
+        width: double.maxFinite,
+        height: 280,
         child: Stack(
           alignment: Alignment.topCenter,
           children: <Widget>[
             Container(
-              height: 200,
+              decoration: BoxDecoration(
+                  
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(20)),
+          
+              width: double.maxFinite,
               margin: EdgeInsets.only(top: 60),
-              color: backgroundColor,
               alignment: Alignment.topCenter,
               child: Container(
-                padding: EdgeInsets.all(20),
+              
+                width: double.maxFinite,
+                padding: EdgeInsets.only(top: 20,left: 20,right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(widget.usuario.nombre),
-                        verifyMyFRequest(controller)
-                            ? Container(
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                child: RaisedButton(
-                                  child: Text('Cancelar Solicitud'),
-                                  onPressed: () async {
-                                    await controller.usuario.reference
-                                        .updateData({
-                                      'solicitudesAE': FieldValue.arrayRemove(
-                                          [widget.usuario.documentId])
-                                    });
-                                    controller.usuario.solicitudesAE
-                                        .remove(widget.usuario.documentId);
-                                    controller.notify();
-                                  },
-                                ),
-                              )
-                            : verifyItsFRequest(controller)
-                                ? Row(
-                                    children: <Widget>[
-                                      IconButton(
-                                        onPressed: () async {
-                                          await controller.usuario.reference
-                                              .updateData({
-                                            'amigos': FieldValue.arrayUnion(
-                                                [widget.usuario.documentId])
-                                          });
-                                          await widget.usuario.reference
-                                              .updateData({
-                                            'amigos': FieldValue.arrayUnion([
-                                              controller.usuario.documentId
-                                            ]),
-                                            'solicitudesAE':
-                                                FieldValue.arrayRemove([
-                                              controller.usuario.documentId
-                                            ]),
-                                          });
-                                          controller.usuario.amigos
-                                              .add(widget.usuario.documentId);
-                                          controller.notify();
-                                          Navigator.of(context).pop();
-                                        },
-                                        icon: Icon(Icons.check),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          await widget.usuario.reference
-                                              .updateData({
-                                            'solicitudesAE':
-                                                FieldValue.arrayRemove([
-                                              controller.usuario.documentId
-                                            ])
-                                          });
-                                          controller.notify();
-                                          Navigator.of(context).pop();
-                                        },
-                                        icon: Icon(Icons.delete_forever),
-                                      )
-                                    ],
-                                  )
-                                : verifyFriendship(controller)
-                                    ? IconButton(
-                                        icon: Icon(Icons.delete_forever),
-                                        onPressed: () async {
-                                          await controller.usuario.reference
-                                              .updateData({
-                                            'amigos': FieldValue.arrayRemove(
-                                                [widget.usuario.documentId])
-                                          });
-                                          await widget.usuario.reference
-                                              .updateData({
-                                            'amigos': FieldValue.arrayRemove([
-                                              controller.usuario.documentId
-                                            ])
-                                          });
-                                          controller.usuario.amigos.remove(
-                                              widget.usuario.documentId);
-                                          controller.notify();
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    : IconButton(
-                                        onPressed: () async {
-                                          await controller.usuario.reference
-                                              .updateData({
-                                            'solicitudesAE':
-                                                FieldValue.arrayUnion([
-                                              widget.usuario.documentId
-                                            ]),
-                                          });
-                                          controller.usuario.solicitudesAE
-                                              .add(widget.usuario.documentId);
-                                          controller.notify();
-                                          setState(() {});
-                                        },
-                                        icon: Icon(Icons.person_add),
-                                      ),
-                      ],
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      child: Text(widget.usuario.nombre,
+                          style: TextStyle(
+                            fontSize: 20,
+                          )),
+                      alignment: Alignment.center,
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Text('LIBRETAS'),
                     StreamBuilder(
@@ -169,6 +85,141 @@ class _MiniProfileState extends State<MiniProfile> {
                                 },
                               );
                       },
+                    ),
+                    Container(
+                      height:70 ,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 30,
+                          ),
+                          verifyMyFRequest(controller)
+                              ? Container(
+                                width: 280,
+                                 alignment: Alignment.bottomRight,
+                                  child: RaisedButton(
+                                    child: Text('Cancelar Solicitud'),
+                                    onPressed: () async {
+                                      await controller.usuario.reference
+                                          .updateData({
+                                        'solicitudesAE': FieldValue.arrayRemove(
+                                            [widget.usuario.documentId])
+                                      });
+                                      controller.usuario.solicitudesAE
+                                          .remove(widget.usuario.documentId);
+                                      controller.notify();
+                                    },
+                                    elevation: 1,
+                                    splashColor: Colors.blueGrey[100],
+                                    color: Colors.blueGrey
+                                  ),
+                                )
+                              : verifyItsFRequest(controller)
+                                  ? Row(
+                                      children: <Widget>[
+                                        Container(
+                                          width: 280,
+                                        alignment: Alignment.bottomRight,
+                                          child: IconButton(
+                                            onPressed: () async {
+                                              await controller.usuario.reference
+                                                  .updateData({
+                                                'amigos': FieldValue.arrayUnion(
+                                                    [widget.usuario.documentId])
+                                              });
+                                              await widget.usuario.reference
+                                                  .updateData({
+                                                'amigos': FieldValue.arrayUnion([
+                                                  controller.usuario.documentId
+                                                ]),
+                                                'solicitudesAE':
+                                                    FieldValue.arrayRemove([
+                                                  controller.usuario.documentId
+                                                ]),
+                                              });
+                                              controller.usuario.amigos
+                                                  .add(widget.usuario.documentId);
+                                              controller.notify();
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: Icon(Icons.check),
+                                            iconSize: 35,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 280,
+                                        alignment: Alignment.bottomRight,
+                                          child: IconButton(
+                                            onPressed: () async {
+                                              await widget.usuario.reference
+                                                  .updateData({
+                                                'solicitudesAE':
+                                                    FieldValue.arrayRemove([
+                                                  controller.usuario.documentId
+                                                ])
+                                              });
+                                              controller.notify();
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: Icon(Icons.delete_forever),
+                                            iconSize: 35,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : verifyFriendship(controller)
+                                      ? Container(
+                                        width: 280,
+                                        alignment: Alignment.bottomRight,
+                                        child: IconButton(
+                                            icon: Icon(Icons.delete_forever),
+                                            iconSize: 35,
+                                            onPressed: () async {
+                                              await controller.usuario.reference
+                                                  .updateData({
+                                                'amigos': FieldValue.arrayRemove(
+                                                    [widget.usuario.documentId])
+                                              });
+                                              await widget.usuario.reference
+                                                  .updateData({
+                                                'amigos': FieldValue.arrayRemove([
+                                                  controller.usuario.documentId
+                                                ])
+                                              });
+                                              controller.usuario.amigos.remove(
+                                                  widget.usuario.documentId);
+                                              controller.notify();
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                      )
+                                      : Container(
+                                        
+                                        width: 280,
+                                        alignment: Alignment.bottomRight,
+                                        child: IconButton(
+
+                                            onPressed: () async {
+                                              await controller.usuario.reference
+                                                  .updateData({
+                                                'solicitudesAE':
+                                                    FieldValue.arrayUnion([
+                                                  widget.usuario.documentId
+                                                ]),
+                                              });
+                                              controller.usuario.solicitudesAE
+                                                  .add(widget.usuario.documentId);
+                                              controller.notify();
+                                              setState(() {});
+                                            },
+                                            icon: Icon(Icons.person_add),
+                                            
+                                            iconSize: 35,
+                                          ),
+                                      ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

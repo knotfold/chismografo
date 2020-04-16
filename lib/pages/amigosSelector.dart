@@ -28,7 +28,7 @@ class _AmigosSelectorState extends State<AmigosSelector> {
               if (!snapshot.hasData) return const CircularProgressIndicator();
               List<DocumentSnapshot> documents = snapshot.data.documents;
               return documents.isEmpty
-                  ? Text('No tienes Amigos :(')
+                  ? Text('No tienes Amigos aún :C ' )
                   : ListView.builder(
                     shrinkWrap: true,
                       itemCount: documents.length,

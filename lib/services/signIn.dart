@@ -10,7 +10,8 @@ String imageUrl;
 String uid;
 
 Future<String> signInWithGoogle(Controller controlador1) async {
-  print('entré a signinwithgoogle');
+  print('entré a signinwithgoogle');  
+  
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn().catchError((onError){
     print(onError);
   });

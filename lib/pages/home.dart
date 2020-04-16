@@ -32,8 +32,9 @@ class _HomeState extends State<Home> {
       body: _widgetOptions.elementAt(seleccionado),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: seleccionado,
-          backgroundColor: Colors.black,
-          fixedColor: Colors.black,
+        
+          fixedColor: Colors.blueGrey,
+          unselectedItemColor: Colors.grey,
           onTap: (int index) {
             _onItemTapped(index);
           },
@@ -52,7 +53,7 @@ class _HomeState extends State<Home> {
               title: Text('Amigos'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.person),
               title: Text('Perfil'),
             ),
             BottomNavigationBarItem(
