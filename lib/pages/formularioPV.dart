@@ -1,76 +1,141 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/shared/shareStuff.dart';
+import 'package:provider/provider.dart';
 
 class FormularioPV extends StatefulWidget {
+  final FormularioModel formularioModel;
+  FormularioPV({this.formularioModel});
   @override
   _FormularioPVState createState() => _FormularioPVState();
 }
 
 class _FormularioPVState extends State<FormularioPV> {
-  Formulario1 formulario1 = Formulario1();
+  FormularioModel formulario = FormularioModel();
+
   PageController pageController = PageController(
     initialPage: 0,
   );
+  int index = 1;
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    Controller controller = Provider.of(context);
     return Scaffold(
       appBar: myAppBar(),
       body: PageView(
         scrollDirection: Axis.horizontal,
         physics: PageScrollPhysics(),
         controller: pageController,
-        onPageChanged: (value) => null,
-        children: pageBuilder(),
+        onPageChanged: (value) {
+          controller.textECR.text = controller.respuestas[value];
+          index = value + 1;
+          controller.notify();
+        },
+        children: pageBuilder(controller, context),
       ),
     );
   }
 
-  List<Widget> pageBuilder() {
-    TextEditingController textEditingController = TextEditingController();
+  List<Widget> pageBuilder(Controller controller, BuildContext context) {
     List<Widget> pages = [];
-    formulario1.preguntas.forEach((pregunta) {
+    widget.formularioModel.preguntas.forEach((pregunta) {
+      if (controller.respuestas.length !=
+          widget.formularioModel.preguntas.length) {
+        controller.respuestas.add('');
+      }
+
+      print(pregunta.pregunta);
       pages.add(Container(
         padding: EdgeInsets.all(25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text('$index / ${widget.formularioModel.preguntas.length}'),
             Text(
               pregunta.pregunta,
               style: TextStyle(fontSize: 25),
             ),
             TextFormField(
-              controller: textEditingController,
+              onChanged: (value) {
+                controller.respuestas[index - 1] = controller.textECR.text;
+                controller.notify();
+                print(controller.respuestas.length);
+              },
+              controller: controller.textECR,
               decoration: InputDecoration(
                 labelText: 'Respuesta',
               ),
               validator: (value) => validateAnswer(value),
-              onSaved: (newValue) =>
-                  saveAnswer(formulario1, newValue, pregunta),
+              onSaved: (newValue) => saveAnswer(formulario, newValue, pregunta),
             ),
             SizedBox(
               height: 10,
             ),
             FloatingActionButton.extended(
-              icon: Icon(Icons.skip_next),
-              label: Text('Siguiente'),
-              onPressed: () {
-                if (textEditingController.text.trim() == '' ||
-                    textEditingController.text.isEmpty ||
-                    textEditingController.text.trim().toLowerCase() == 'nose' ||
-                    textEditingController.text.trim().toLowerCase() ==
-                        'no se') {
-                  print('bad answer');
+              icon: Icon(index == widget.formularioModel.preguntas.length
+                  ? Icons.send
+                  : Icons.skip_next),
+              label: Text(index == widget.formularioModel.preguntas.length
+                  ? 'Enviar Respuestas'
+                  : 'Siguiente'),
+              onPressed: () async {
+                if (index == widget.formularioModel.preguntas.length) {
+                  controller.vRespuestas.clear();
+                  for (var respuesta in controller.respuestas) {
+                    if (!validateAnswerBool(respuesta)) {
+                      showDialog(
+                          context: context,
+                          child: AlertDialog(
+                            title: Text(
+                                'Debes de contestar todas las preguntas de la libreta. No se puede contestar no se, o algo parecido y las respuestas deben de tener mino 5 letras'),
+                          ));
+                      controller.vRespuestas.clear();
+                      return;
+                    }
+                    controller.vRespuestas.add(Respuesta.fromString(
+                        respuesta, controller.usuario.usuario));
+                    print(respuesta);
+                  }
+                  print(controller.vRespuestas.length);
+                  int tracker = 0;
+
+                  for (var respuesta in controller.vRespuestas) {
+                    print(tracker);
+                    print(controller.toFillForm.preguntas[tracker].pregunta);
+                    controller.toFillForm.preguntas[tracker].respuestas
+                        .add(respuesta.toMap());
+                    tracker = tracker + 1;
+                  }
+
+                  controller.toFillForm.invitaciones
+                      .remove(controller.usuario.documentId);
+                  controller.toFillForm.usuarios
+                      .add(controller.usuario.usuario);
+
+                  await controller.toFillForm.reference
+                      .updateData(controller.toFillForm.toMap());
+
+                  controller.vRespuestas.clear();
+                  controller.respuestas.clear();
+                  controller.textECR.clear();
+
+                  Navigator.of(context).pushReplacementNamed('/home');
+
+                  print('Todo bien');
+
                   return;
                 }
-                textEditingController.clear();
                 if (pageController.page != 0) {
                   pageController.nextPage(
                       duration: Duration(seconds: 1), curve: ElasticInCurve());
+
+                  setState(() {});
                 } else {
                   pageController.jumpToPage(1);
+
+                  setState(() {});
                 }
                 // pageController.animateToPage(1,
                 //     duration: Duration(seconds: 1), curve: ElasticInCurve());
@@ -85,15 +150,25 @@ class _FormularioPVState extends State<FormularioPV> {
     return pages;
   }
 
-  saveAnswer(Formulario1 formulario1, String newValue, Pregunta pregunta) {
+  saveAnswer(FormularioModel formulario, String newValue, Pregunta pregunta) {
     pregunta.respuestas.add(
       {
         'respuesta': newValue,
-        'usuarioNombre': 'Memo god',
-        'usuarioFoto':
-            'https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/90590478_3194401850588829_8179029891061121024_o.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=Ds1ApjyXdy8AX8gQWIP&_nc_ht=scontent-ssn1-1.xx&oh=5e2f518ff1449c1bc8f0f3894e32a39a&oe=5EBB0839',
+        'usuario': 'Memo god',
+        'fecha': DateTime.now(),
       },
     );
+  }
+
+  bool validateAnswerBool(String value) {
+    if (value.isEmpty ||
+        value.trim() == '' ||
+        value.trim().toLowerCase() == 'nose' ||
+        value.trim().toLowerCase() == 'no se' ||
+        value.length < 5) {
+      return false;
+    }
+    return true;
   }
 
   String validateAnswer(String value) {
