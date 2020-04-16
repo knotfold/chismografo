@@ -38,10 +38,12 @@ class MyApp extends StatelessWidget {
         routes: {
           '/home': (context) => Home(),
           'login': (context) => LogIn(),
+          '/responderLibreta' : (context) => FormularioPV(formularioModel: ModalRoute.of(context).settings.arguments,),
           '/registro_usuario': (context) => RegistroUsuario(),
           '/misLibretas': (context) => TusLibretas(),
           '/libretasAmigos': (context) => LibretasA(),
-          '/creadorLibreta': (context) => FormularioCreator()
+          '/creadorLibreta': (context) => FormularioCreator(),
+          '/libretaDetalles' : (context) => LibretaDetails(),
         },
       ),
     );

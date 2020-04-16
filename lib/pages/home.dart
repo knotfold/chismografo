@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'pages.dart';
+import 'package:provider/provider.dart';
+import 'package:trivia_form/services/services.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,8 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-   int seleccionado = 0;
-
   List<Widget> _widgetOptions = <Widget>[
     TusLibretas(),
     LibretasA(),
@@ -18,28 +18,30 @@ class _HomeState extends State<Home> {
     TusLibretas(),
   ];
 
-  _onItemTapped(int index) {
+  _onItemTapped(int index, Controller controller) {
     setState(() {
-      seleccionado = index;
-     
+      controller.seleccionado = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      body: _widgetOptions.elementAt(seleccionado),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: seleccionado,
-        
-          fixedColor: Colors.blueGrey,
-          unselectedItemColor: Colors.grey,
+    Controller controller = Provider.of(context);
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: _widgetOptions.elementAt(controller.seleccionado),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: controller.seleccionado,
+          backgroundColor: Colors.black,
+          fixedColor: Colors.black,
+          unselectedItemColor: Colors.blueGrey,
           onTap: (int index) {
-            _onItemTapped(index);
+            _onItemTapped(index, controller);
           },
-        items: const <BottomNavigationBarItem>[
-            
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
               title: Text('Tus Libretas'),
@@ -60,8 +62,8 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.info),
               title: Text('Info'),
             ),
-            
           ],
+        ),
       ),
     );
   }

@@ -9,7 +9,7 @@ class CreadorLP extends StatefulWidget {
 
 class _CreadorLPState extends State<CreadorLP> {
   TextEditingController textEditingController = TextEditingController();
-  List<String> preguntas = [];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class _CreadorLPState extends State<CreadorLP> {
               child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('PREGUNTAS', style: TextStyle(fontSize: 20),),
+            Text('PREGUNTAS (${controller.preguntas.length}/15)', style: TextStyle(fontSize: 20),),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -43,9 +43,19 @@ class _CreadorLPState extends State<CreadorLP> {
             Row(
               children: <Widget>[
                 FloatingActionButton(
+                  
                   mini: true,
                   child: Icon(Icons.add),
                   onPressed: () {
+                    if(controller.preguntas.length>=15){
+                      showDialog(
+                        context: context,
+                        child: AlertDialog(
+                          title: Text('No puedes tener mas de 15 preguntas'),
+                        )
+                      );
+                      return;
+                    }
                     showDialog(
                       context: context,
                       child: Dialog(

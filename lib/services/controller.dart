@@ -8,7 +8,6 @@ import 'package:trivia_form/services/services.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
-
   // UsuarioModel usuarioAct = UsuarioModel(
   //   nombre: 'Memo',
   //   correo: 'Knotfold@gmail.com',
@@ -16,25 +15,86 @@ class Controller with ChangeNotifier {
   //       'https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/90590478_3194401850588829_8179029891061121024_o.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=Ds1ApjyXdy8AX8gQWIP&_nc_ht=scontent-ssn1-1.xx&oh=5e2f518ff1449c1bc8f0f3894e32a39a&oe=5EBB0839',
   // );
   UsuarioModel usuarioAct;
+  int seleccionado = 0;
   UsuarioModel get usuario => usuarioAct;
   agregausuario(UsuarioModel usuario) {
     usuarioAct = usuario;
   }
 
-
   notify() {
     notifyListeners();
   }
 
+  //cosas para responder un formulario
+  FormularioModel toFillForm;
+  List<String> respuestas = [];
+  List<Respuesta> vRespuestas = [];
+  TextEditingController textECR = TextEditingController();
+
+  //finnnn
+
   //Cosas para llenar  una libreta
   List<String> preguntas = [];
-  List<String> participantes  = [];
+  List<String> participantes = [];
+  bool privado = true;
   String nombreLibreta;
 
   PageController pageController = PageController();
   TextEditingController textEditingController = TextEditingController();
 
+   crearFormulario(BuildContext context) async {
+    
+    List<Pregunta> preguntasM = [];
+    print('first');
+    if(preguntas.length < 3){
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Muy Pocas Preguntas'),
+          content: Text('Tu libreta debe de tener al menos 3 Preguntas'),
+        ),
+        
+      );
+      return false;
+    }
+    preguntas.forEach((pregunta) {
+      preguntasM.add(Pregunta.fromString(pregunta));
+    });
+    print('second');
+    print(preguntasM.length);
+    FormularioModel formularioModel = FormularioModel(
+        creadorID: usuario.documentId,
+        invitaciones: participantes,
+        preguntas: preguntasM,
+        priv: privado,
+        nombre: textEditingController.text,
+        creadorUsuario: usuario.usuario);
+
+    print('third');
+    await Firestore.instance
+        .collection('formularios')
+        .add(formularioModel.toMap())
+        .catchError((onError) {
+      print(onError);
+      return false;
+    });
+    preguntas.clear();
+    participantes.clear();
+    privado = true;
+    nombreLibreta = '';
+    textEditingController.clear();
+    return true;
+  }
+
   //fiiiiiiin
+
+  String dateString(DateTime dateTime) {
+    return dateTime.day.toString() +
+        '-' +
+        dateTime.month.toString() +
+        '-' +
+        dateTime.year.toString();
+  }
 
   String uid = '';
   String name = '';
@@ -166,5 +226,4 @@ class Controller with ChangeNotifier {
     }
     return true;
   }
-
 }

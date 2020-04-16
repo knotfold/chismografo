@@ -60,7 +60,7 @@ class _MiniProfileState extends State<MiniProfile> {
                     StreamBuilder(
                       stream: Firestore.instance
                           .collection('libretas')
-                          .where('creador',
+                          .where('creadorID',
                               isEqualTo: widget.usuario.documentId)
                           .snapshots(),
                       builder: (context, snapshot) {
