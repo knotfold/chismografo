@@ -31,6 +31,7 @@ class FormularioModel {
   String id;
   bool priv;
   List<dynamic> invitaciones;
+  List<dynamic> nombreInvitaciones;
   String nombre;
   DocumentReference reference;
   String fecha;

@@ -45,7 +45,7 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                           ),
                           trailing: Checkbox(
                               value: controller.participantes
-                                  .contains(usuarioModel.documentId),
+                                  .contains(usuarioModel.usuario),
                               onChanged: (value) {
                                 if (value) {
                                   if (controller.participantes.length >= 25) {
@@ -60,14 +60,14 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                                     return;
                                   }
                                   controller.participantes
-                                      .add(usuarioModel.documentId);
+                                      .add(usuarioModel.usuario);
                                 
                                   print(controller.participantes);
                                   controller.notify();
                                   return;
                                 } else {
                                   controller.participantes
-                                      .remove(usuarioModel.documentId);
+                                      .remove(usuarioModel.usuario);
                                 
                                   print(controller.participantes);
                                
@@ -83,19 +83,21 @@ class _AmigosSelectorState extends State<AmigosSelector> {
           Row(
             children: <Widget>[
               FloatingActionButton.extended(
+                heroTag: 'btn1',
                 onPressed: () {
                   controller.pageController.jumpToPage(1);
                 },
                 label: Text('Back'),
               ),
               FloatingActionButton.extended(
+                heroTag: 'btn2',
                 onPressed: () async {
                  bool success = await controller.crearFormulario(context);
                   if(!success){
                     return;
                   }
                   print('nice');
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacementNamed('/home');
                 },
                 label: Text('Crear'),
               ),

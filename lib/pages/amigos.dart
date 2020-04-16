@@ -10,6 +10,7 @@ class Amigos extends StatelessWidget {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
       floatingActionButton: StreamBuilder(
+        
           stream: Firestore.instance
               .collection('usuarios')
               .where('solicitudesAE',
@@ -19,6 +20,7 @@ class Amigos extends StatelessWidget {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
+              heroTag: 'btn1',
               child: Icon(documents.isEmpty ? Icons.face : Icons.add_alert),
               onPressed: () {
                 showDialog(
@@ -126,6 +128,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 controller.usuario.amigos
                                     .add(usuario.documentId);
                                 controller.notify();
+                                 Navigator.of(context).pop();
                               },
                               icon: Icon(Icons.check),
                             ),
@@ -134,7 +137,10 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 await usuario.reference.updateData({
                                   'solicitudesAE': FieldValue.arrayRemove(
                                       [controller.usuario.documentId])
+                                  
                                 });
+
+                                Navigator.of(context).pop();
                               },
                               icon: Icon(Icons.delete_forever),
                             )
@@ -147,6 +153,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
               height: 20,
             ),
             FloatingActionButton.extended(
+              heroTag: 'btn2',
               elevation: 0,
               shape: BeveledRectangleBorder(),
               onPressed: () => showSearch(
