@@ -157,7 +157,7 @@ class Perfil extends StatelessWidget {
                   children: <Widget>[
                     Text('Nombre de usuario',
                         style: TextStyle(fontSize: 15, color: Colors.grey)),
-                    Text('aquí va el usuario',
+                    Text(controller.usuario.usuario,
                         style: TextStyle(
                           fontSize: 20,
                         )),
@@ -195,6 +195,11 @@ class Perfil extends StatelessWidget {
                   width: 25,
                 ),
               ],
+            ),
+            RaisedButton(
+              onPressed: () async{await controller.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));},
+              child: Text('Cerrar Sesión'),
             ),
           ],
         ));
