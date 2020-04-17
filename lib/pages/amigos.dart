@@ -10,7 +10,6 @@ class Amigos extends StatelessWidget {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
       floatingActionButton: StreamBuilder(
-        
           stream: Firestore.instance
               .collection('usuarios')
               .where('solicitudesAE',
@@ -127,8 +126,11 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 });
                                 controller.usuario.amigos
                                     .add(usuario.documentId);
+                                controller.usuario.solicitudesAE
+                                    .remove(usuario.documentId);
+
                                 controller.notify();
-                                 Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                               icon: Icon(Icons.check),
                             ),
@@ -137,7 +139,6 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 await usuario.reference.updateData({
                                   'solicitudesAE': FieldValue.arrayRemove(
                                       [controller.usuario.documentId])
-                                  
                                 });
 
                                 Navigator.of(context).pop();

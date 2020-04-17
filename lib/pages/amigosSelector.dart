@@ -54,7 +54,7 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                                         child: Dialog(
                                           child: AlertDialog(
                                             title: Text(
-                                                'El limite Maximo de participantes es 15'),
+                                                'El limite Maximo de participantes es 25'),
                                           ),
                                         ));
                                     return;

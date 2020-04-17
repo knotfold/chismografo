@@ -46,7 +46,7 @@ class _MiniProfileState extends State<MiniProfile> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Expanded(child: Text(widget.usuario.nombre)),
-                        verifyMyFRequest(controller)
+                       controller.usuario.documentId == widget.usuario.documentId ? Container() :  verifyMyFRequest(controller)
                             ? Container(
                                 margin: EdgeInsets.symmetric(horizontal: 5),
                                 child: RaisedButton(
@@ -86,6 +86,7 @@ class _MiniProfileState extends State<MiniProfile> {
                                           });
                                           controller.usuario.amigos
                                               .add(widget.usuario.documentId);
+                                          controller.usuario.solicitudesAE.remove(widget.usuario.documentId);
                                           controller.notify();
                                           Navigator.of(context).pop();
                                         },

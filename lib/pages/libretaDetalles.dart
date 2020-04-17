@@ -13,32 +13,77 @@ class LibretaDetails extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: <Widget>[
-          Text(controller.toFillForm.usuarios.length.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+          Text(
+            controller.toFillForm.usuarios.length.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
           IconButton(
             onPressed: () {
               showDialog(
-                context: context,
-                child: Dialog(
-                  backgroundColor: Colors.white,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text('Usuarios', style: TextStyle(fontSize: 20),),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: controller.toFillForm.usuarios.length,
-                          itemBuilder: (BuildContext context, int index) {
-                          return Text( '-'+controller.toFillForm.usuarios[index],);
-                         },
-                        ),
-                      ],
+                  context: context,
+                  child: Dialog(
+                    backgroundColor: Colors.white,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Usuarios',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          controller.toFillForm.usuarios.isEmpty
+                              ? Text('No hay usuarios participando')
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      controller.toFillForm.usuarios.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Text(
+                                      '-' +
+                                          controller.toFillForm.usuarios[index],
+                                    );
+                                  },
+                                ),
+                          Text(
+                            'Invitados',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          controller.toFillForm.invitaciones.isEmpty
+                              ? Text('No hay usuarios invitados')
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      controller.toFillForm.invitaciones.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Text(
+                                      '-' +
+                                          controller
+                                              .toFillForm.invitaciones[index],
+                                    );
+                                  },
+                                ),
+                                FloatingActionButton.extended(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      child: Dialog(
+                                        child: Container(
+                                          padding: EdgeInsets.all(20),
+                                          child: AmigosSelec()                                        ),
+                                      )
+                                    );
+                                  },
+                                  label: Text('Invitar Amigos'),
+                                  icon: Icon(Icons.group_add),
+                                ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              );
+                  ));
             },
             icon: Icon(Icons.people),
           ),
@@ -62,15 +107,17 @@ class LibretaDetails extends StatelessWidget {
                             controller.usuario.documentId ==
                                 controller.toFillForm.creadorID
                         ? IconButton(
-                          color: backgroundColor,
-                          highlightColor: backgroundColor,
-                          icon: Icon(Icons.group_add), onPressed: () {},
-                        )
+                            color: backgroundColor,
+                            highlightColor: backgroundColor,
+                            icon: Icon(Icons.group_add),
+                            onPressed: () {},
+                          )
                         : !controller.toFillForm.priv
                             ? IconButton(
-                              color: backgroundColor,
-                              icon: Icon(Icons.group_add), onPressed: () {},
-                            )
+                                color: backgroundColor,
+                                icon: Icon(Icons.group_add),
+                                onPressed: () {},
+                              )
                             : Container(),
                   ],
                 ),
@@ -106,8 +153,9 @@ class LibretaDetails extends StatelessWidget {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       itemBuilder: (context, ind) {
-                                        return Text('-' + preguntas[index]
-                                            .respuestas[ind]['respuesta']);
+                                        return Text('-' +
+                                            preguntas[index].respuestas[ind]
+                                                ['respuesta']);
                                       },
                                       itemCount:
                                           preguntas[index].respuestas.length,
