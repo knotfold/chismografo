@@ -61,7 +61,29 @@ class LibretasA extends StatelessWidget {
             },
             label:
                 Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
-            icon: Icon(documents.isEmpty ? Icons.tag_faces : Icons.fiber_new),
+            icon: documents.isEmpty
+                ? Icon(
+                    Icons.tag_faces,
+                    size: 30,
+                  )
+                : Stack(
+                    children: <Widget>[
+                      Container(
+                          child: Icon(
+                            Icons.fiber_new,
+                            size: 30,
+                          ),
+                          width: 30,
+                          height: 30),
+                          Container(
+                            alignment: Alignment.topRight,
+                            margin: EdgeInsets.only(left:20),
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: yemahuevo),
+                          )
+                    ],
+                  ),
           );
         },
       ),
@@ -90,7 +112,8 @@ class LibretasA extends StatelessWidget {
                       itemCount: documents.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        FormularioModel formularioModel = FormularioModel.fromDS(documents[index]);
+                        FormularioModel formularioModel =
+                            FormularioModel.fromDS(documents[index]);
                         return ListTile(
                           onTap: () {
                             controller.toFillForm = formularioModel;
@@ -98,8 +121,8 @@ class LibretasA extends StatelessWidget {
                           },
                           title: Text(formularioModel.nombre),
                           subtitle: Text(formularioModel.creadorUsuario),
-                          trailing: Text('${formularioModel.usuarios.length} / 25'),
-                          
+                          trailing:
+                              Text('${formularioModel.usuarios.length} / 25'),
                         );
                       });
                 },

@@ -15,6 +15,38 @@
       },
       "oauth_client": [
         {
+          "client_id": "734736031213-9rmbpvc5m04dc1fvdtvvdclmv2fa3g4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudtech.chismografo",
+            "certificate_hash": "d4e0d2ec99f61a62c6433b94ce7d4c19896c0e13"
+          }
+        },
+        {
+          "client_id": "734736031213-lq50sm8ken6gpu9lol47nuck6jgf0u4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudtech.chismografo",
+            "certificate_hash": "3fa6c02f7f92a6048a204fa36e813ec5e4107791"
+          }
+        },
+        {
+          "client_id": "734736031213-g9knf4bs7hdqtbotcpaha6bq8gql57nl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudtech.chismografo",
+            "certificate_hash": "bf2c14fbed0f0eca9d8c410b5df0d9f2d5700db9"
+          }
+        },
+        {
+          "client_id": "734736031213-p99pparrlcqo2njv86149kioc9hl560m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudtech.chismografo",
+            "certificate_hash": "430306536cc991d90947f9e331e694ea4d2c605e"
+          }
+        },
+        {
           "client_id": "734736031213-ika664d8ne16dfu6rou08n8h0ptj1sgs.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
