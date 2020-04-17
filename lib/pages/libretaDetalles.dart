@@ -64,12 +64,12 @@ class LibretaDetails extends StatelessWidget {
                         ? IconButton(
                           color: backgroundColor,
                           highlightColor: backgroundColor,
-                          icon: Icon(Icons.group_add),
+                          icon: Icon(Icons.group_add), onPressed: () {},
                         )
                         : !controller.toFillForm.priv
                             ? IconButton(
                               color: backgroundColor,
-                              icon: Icon(Icons.group_add),
+                              icon: Icon(Icons.group_add), onPressed: () {},
                             )
                             : Container(),
                   ],

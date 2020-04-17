@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trivia_form/services/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
@@ -107,7 +108,8 @@ class Controller with ChangeNotifier {
 
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await googleSignIn.signOut();
+    await googleSignIn.signOut();
+    await 
     await usuario.reference.updateData({
       'tokens': FieldValue.arrayRemove([activeToken])
     });

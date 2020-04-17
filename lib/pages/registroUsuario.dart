@@ -20,9 +20,10 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
   bool tos = false;
   String tipotemp = '';
   bool correov = true;
-
+  bool usuariov = true;
   Map<String, dynamic> form_usuario = {
     'nombre': null,
+    'usuario': null,
     'correo': null,
     'foto': null,
   };
@@ -40,7 +41,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    
+
     return WillPopScope(
       onWillPop: () async {
         // signOutGoogle();
@@ -149,9 +150,6 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                     SizedBox(
                       height: 15,
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
                     TextFormField(
                       enabled: controller.email.isEmpty ? true : false,
                       initialValue:
@@ -180,6 +178,22 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                     ),
                     SizedBox(
                       height: 15,
+                    ),
+                    TextFormField(
+                      onSaved: (String value) {
+                        form_usuario['usuario'] = '@'+value;                         
+                      },
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Usuario vacío';
+                        } else if (usuariov == false) {
+                          return 'Usuario existente';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: '* Usuario',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
                     ),
                     SizedBox(
                       height: 15,
@@ -231,8 +245,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                           ),
                           onPressed: () {
                             signOutGoogle();
-                            Navigator.of(context)
-                                .pushReplacementNamed('/');
+                            Navigator.of(context).pushReplacementNamed('/');
                           },
                         ),
                       ],
@@ -255,6 +268,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
             label: Text('Guardar'),
             onPressed: () async {
               correov = true;
+              usuariov = true;
               if (!_usuarioform.currentState.validate()) {
                 setState(() {
                   isLoadig = false;
@@ -264,6 +278,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               _usuarioform.currentState.save();
 
+              await _validatorUser(form_usuario[ 'usuario']);
               await _validatorEmail(form_usuario['correo']);
 
               setState(() {
@@ -352,6 +367,26 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
       } else {
         setState(() {
           correov = true;
+        });
+      }
+    });
+  }
+
+  Future _validatorUser(String value) async {
+    print(value);
+    await Firestore.instance
+        .collection('usuarios')
+        .where('usuario', isEqualTo: value)
+        .getDocuments()
+        .then((onValue) {
+      if (onValue.documents.isNotEmpty) {
+        print('usuario existente');
+        setState(() {
+          usuariov = false;
+        });
+      } else {
+        setState(() {
+          usuariov = true;
         });
       }
     });
