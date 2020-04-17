@@ -53,7 +53,7 @@ class _MiniProfileState extends State<MiniProfile> {
                           style: TextStyle(
                             fontSize: 20,
                           )),
-                      alignment: Alignment.center,
+                      alignment: Alignment.topCenter,
                     ),
                     SizedBox(
                       height: 20),
@@ -95,14 +95,13 @@ class _MiniProfileState extends State<MiniProfile> {
                           SizedBox(
                             height: 30,
                           ),
-                           Expanded(child: Text(widget.usuario.nombre)),
+                        //   Expanded(child: Text(widget.usuario.nombre)),
                           verifyMyFRequest(controller)
                               ? Container(
                                 width: 280,
                                  alignment: Alignment.bottomRight,
                                   child: RaisedButton(
-                                    child: Expanded(
-                                      child: Text('Cancelar Solicitud')),
+                                    child: Text('Cancelar Solicitud'),
                                     onPressed: () async {
                                       await controller.usuario.reference
                                           .updateData({

@@ -10,7 +10,6 @@ class Amigos extends StatelessWidget {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
       floatingActionButton: StreamBuilder(
-        
           stream: Firestore.instance
               .collection('usuarios')
               .where('solicitudesAE',
@@ -21,7 +20,28 @@ class Amigos extends StatelessWidget {
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
               heroTag: 'btn1',
-              child: Icon(documents.isEmpty ? Icons.face : Icons.add_alert),
+              child: documents.isEmpty
+                  ? Icon(
+                      Icons.face,
+                      size: 30,
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        Container(
+                          child: Icon(
+                            Icons.add_alert,
+                            size: 30,
+                          ),
+                          width: 30,
+                          height: 30,
+                        ),
+                        Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: yemahuevo),
+                        )
+                      ],
+                    ),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -52,7 +72,7 @@ class Amigos extends StatelessWidget {
                 print(documents.length);
                 return documents.isEmpty
                     ? Text(
-                        'No tienes amigos :(, Haz click en el botón de abajo para buscar mas amigos')
+                        'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
                     : ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -128,7 +148,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 controller.usuario.amigos
                                     .add(usuario.documentId);
                                 controller.notify();
-                                 Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                               icon: Icon(Icons.check),
                             ),
@@ -137,7 +157,6 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                 await usuario.reference.updateData({
                                   'solicitudesAE': FieldValue.arrayRemove(
                                       [controller.usuario.documentId])
-                                  
                                 });
 
                                 Navigator.of(context).pop();

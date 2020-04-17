@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:trivia_form/shared/colors.dart';
 
 //801510547545-ae7kl5f46tdf74uha67kicha4g7djk4u.apps.googleusercontent.com
 class LogIn extends StatefulWidget {
@@ -43,256 +44,273 @@ class _LogInState extends State<LogIn> {
         onWillPop: () async => false,
         child: SingleChildScrollView(
           child: Center(
-            child: Container(
-              width: double.maxFinite,
-              margin: EdgeInsets.all(4.0),
-              padding: const EdgeInsets.fromLTRB(0, 70, 0, 90),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    'TRIVIA',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold),
+            child: Column(
+              children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(40)),
+
+                                      child: Container(
+                      //  decoration: BoxDecoration(
+                      //    color: backgroundColor,
+                      //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight:Radius.circular(10))
+                      //  ),
+                       padding: const EdgeInsets.fromLTRB(0, 100, 0, 100),
+                        color: backgroundColor,
+                          width: double.maxFinite,
+                          child: Column(children: <Widget>[
+                            Text(
+                            'TRIVIA',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'DESARROLLADO POR ',
+                                style: TextStyle(color: Colors.grey[50], fontSize: 15),
+                              ),
+                              Text(
+                                ' GUDTECH',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          
+
+                          ],),
+                        ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
+                Container(
+                  width: double.maxFinite,
+                  margin: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.fromLTRB(0, 70, 0, 80),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      Text(
-                        'DESARROLLADO POR',
-                        style: TextStyle(color: Colors.grey, fontSize: 15),
-                      ),
-                      Text(
-                        ' GUDTECH',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  FlatButton(
-                      onPressed: () {
-                        return Navigator.of(context)
-                            .pushReplacementNamed('/home');
-                      },
-                      child: null),
-                  isLoading2
-                      ? CircularProgressIndicator(backgroundColor: Colors.black,)
-                      : Column(
-                          children: <Widget>[
-                            Card(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
-                              elevation: 9.0,
-                              shape: ContinuousRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50.0)),
-                              child: Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Column(
-                                  children: <Widget>[
-                                   
-                                    // TextFormField(
-                                    //   onSaved: (String texto) {
-                                    //     loginMap['user'] = texto;
-                                    //   },
-                                    //   validator: (String texto) {
-                                    //     if (texto.isEmpty ||
-                                    //         texto == '' ||
-                                    //         errorbase) {
-                                    //       return 'Correo incorrecto';
-                                    //     }
-                                    //   },
-                                    //   keyboardType: TextInputType.emailAddress,
-                                    //   decoration: InputDecoration(
-                                    //     contentPadding: EdgeInsets.fromLTRB(
-                                    //         30.0, 15.0, 20.0, 15.0),
-                                    //     labelText: 'Usuario',
-                                    //     prefixIcon: Icon(Icons.account_circle),
-                                    //     border: OutlineInputBorder(
-                                    //       borderRadius: BorderRadius.circular(25.0),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 10.0,
-                                    // ),
-                                    // TextFormField(
-                                    //   obscureText: true,
-                                    //   onSaved: (String texto) {
-                                    //     loginMap['password'] = texto;
-                                    //   },
-                                    //   validator: (String texto) {
-                                    //     if (texto.isEmpty ||
-                                    //         texto == '' ||
-                                    //         errorbase) {
-                                    //       return 'Contraseña incorrecta';
-                                    //     }
-                                    //   },
-                                    //   decoration: InputDecoration(
-                                    //     contentPadding: EdgeInsets.fromLTRB(
-                                    //         30.0, 15.0, 20.0, 15.0),
-                                    //     labelText: 'Contraseña',
-                                    //     prefixIcon: Icon(Icons.lock),
-                                    //     border: OutlineInputBorder(
-                                    //       borderRadius: BorderRadius.circular(25.0),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                  
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                      
+                      // SizedBox(
+                      //   height: 70.0,
+                      // ),
+                     
+                      isLoading2
+                          ? CircularProgressIndicator(backgroundColor: Colors.black,)
+                          : Column(
+                              children: <Widget>[
+                                Card(
+                                  margin: EdgeInsets.symmetric(horizontal: 40),
+                                  elevation: 9.0,
+                                  shape: ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20.0),
+                                    child: Column(
                                       children: <Widget>[
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        // OutlineButton(
-                                        //   onPressed: () async {
-                                        //     errorbase = false;
-
-                                        //     if (!key.currentState.validate()) {
-                                        //       return;
-                                        //     }
-
-                                        //     key.currentState.save();
-
-                                        //     setState(() {
-                                        //       isLoading2 = true;
-                                        //     });
-                                        //     var query = await Firestore.instance
-                                        //         .collection('usuarios')
-                                        //         .where('correo',
-                                        //             isEqualTo: loginMap['user'])
-                                        //         .where('contrasena',
-                                        //             isEqualTo: loginMap['password'])
-                                        //         .getDocuments();
-
-                                        //     if (query.documents.isEmpty) {
-                                        //       isLoading2 = false;
-
-                                        //       errorbase = true;
-                                        //       if (!key.currentState.validate()) {
-                                        //         return;
-                                        //       }
-                                        //     } else {
-                                        //       var user = query.documents.first;
-                                        //       controller.usuarioAct =
-                                        //           UsuarioModel.fromDocumentSnapshot(
-                                        //               user);
-                                        //       await controller.signIn();
-                                        //       print('accediste');
-                                        //       Navigator.of(context)
-                                        //           .pushNamedAndRemoveUntil(
-                                        //               '/',
-                                        //               ModalRoute.withName(
-                                        //                   '/home'));
+                                       
+                                        // TextFormField(
+                                        //   onSaved: (String texto) {
+                                        //     loginMap['user'] = texto;
+                                        //   },
+                                        //   validator: (String texto) {
+                                        //     if (texto.isEmpty ||
+                                        //         texto == '' ||
+                                        //         errorbase) {
+                                        //       return 'Correo incorrecto';
                                         //     }
                                         //   },
-                                        //   shape: RoundedRectangleBorder(
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(30)),
-                                        //   highlightElevation: 6,
-                                        //   borderSide:
-                                        //       BorderSide(color: Colors.black),
-                                        //   child: Padding(
-                                        //     padding: const EdgeInsets.fromLTRB(
-                                        //         0, 10, 0, 10),
-                                        //     child: FittedBox(
-                                        //       child: Row(
-                                        //         mainAxisSize: MainAxisSize.min,
-                                        //         mainAxisAlignment:
-                                        //             MainAxisAlignment.center,
-                                        //         children: <Widget>[
-                                        //           Icon(
-                                        //             Icons.account_box,
-                                        //             size: 20,
-                                        //           ),
-                                        //           Padding(
-                                        //             padding: const EdgeInsets.only(
-                                        //                 left: 15),
-                                        //             child: Text(
-                                        //               'Iniciar Sesión',
-                                        //               style: TextStyle(
-                                        //                 fontSize: 15,
-                                        //                 color: Colors.black,
-                                        //               ),
-                                        //             ),
-                                        //           )
-                                        //         ],
-                                        //       ),
+                                        //   keyboardType: TextInputType.emailAddress,
+                                        //   decoration: InputDecoration(
+                                        //     contentPadding: EdgeInsets.fromLTRB(
+                                        //         30.0, 15.0, 20.0, 15.0),
+                                        //     labelText: 'Usuario',
+                                        //     prefixIcon: Icon(Icons.account_circle),
+                                        //     border: OutlineInputBorder(
+                                        //       borderRadius: BorderRadius.circular(25.0),
                                         //     ),
                                         //   ),
                                         // ),
                                         // SizedBox(
-                                        //   height: 10,
+                                        //   height: 10.0,
                                         // ),
-                                        // OutlineButton(
-                                        //   onPressed: () => Navigator.of(context)
-                                        //       .pushReplacementNamed(
-                                        //           '/registro_usuario'),
-                                        //   shape: RoundedRectangleBorder(
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(30)),
-                                        //   highlightElevation: 6,
-                                        //   borderSide:
-                                        //       BorderSide(color: Colors.black),
-                                        //   child: Padding(
-                                        //     padding: const EdgeInsets.fromLTRB(
-                                        //         0, 10, 0, 10),
-                                        //     child: FittedBox(
-                                        //       child: Row(
-                                        //         mainAxisSize: MainAxisSize.min,
-                                        //         mainAxisAlignment:
-                                        //             MainAxisAlignment.center,
-                                        //         children: <Widget>[
-                                        //           Icon(
-                                        //             Icons.group,
-                                        //             size: 20,
-                                        //           ),
-                                        //           Padding(
-                                        //             padding: const EdgeInsets.only(
-                                        //                 left: 15),
-                                        //             child: Text(
-                                        //               'Registrate',
-                                        //               style: TextStyle(
-                                        //                 fontSize: 15,
-                                        //                 color: Colors.black,
-                                        //               ),
-                                        //             ),
-                                        //           )
-                                        //         ],
-                                        //       ),
+                                        // TextFormField(
+                                        //   obscureText: true,
+                                        //   onSaved: (String texto) {
+                                        //     loginMap['password'] = texto;
+                                        //   },
+                                        //   validator: (String texto) {
+                                        //     if (texto.isEmpty ||
+                                        //         texto == '' ||
+                                        //         errorbase) {
+                                        //       return 'Contraseña incorrecta';
+                                        //     }
+                                        //   },
+                                        //   decoration: InputDecoration(
+                                        //     contentPadding: EdgeInsets.fromLTRB(
+                                        //         30.0, 15.0, 20.0, 15.0),
+                                        //     labelText: 'Contraseña',
+                                        //     prefixIcon: Icon(Icons.lock),
+                                        //     border: OutlineInputBorder(
+                                        //       borderRadius: BorderRadius.circular(25.0),
                                         //     ),
                                         //   ),
                                         // ),
-                                        SizedBox(
-                                          height: 10,
+                                      
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            // OutlineButton(
+                                            //   onPressed: () async {
+                                            //     errorbase = false;
+
+                                            //     if (!key.currentState.validate()) {
+                                            //       return;
+                                            //     }
+
+                                            //     key.currentState.save();
+
+                                            //     setState(() {
+                                            //       isLoading2 = true;
+                                            //     });
+                                            //     var query = await Firestore.instance
+                                            //         .collection('usuarios')
+                                            //         .where('correo',
+                                            //             isEqualTo: loginMap['user'])
+                                            //         .where('contrasena',
+                                            //             isEqualTo: loginMap['password'])
+                                            //         .getDocuments();
+
+                                            //     if (query.documents.isEmpty) {
+                                            //       isLoading2 = false;
+
+                                            //       errorbase = true;
+                                            //       if (!key.currentState.validate()) {
+                                            //         return;
+                                            //       }
+                                            //     } else {
+                                            //       var user = query.documents.first;
+                                            //       controller.usuarioAct =
+                                            //           UsuarioModel.fromDocumentSnapshot(
+                                            //               user);
+                                            //       await controller.signIn();
+                                            //       print('accediste');
+                                            //       Navigator.of(context)
+                                            //           .pushNamedAndRemoveUntil(
+                                            //               '/',
+                                            //               ModalRoute.withName(
+                                            //                   '/home'));
+                                            //     }
+                                            //   },
+                                            //   shape: RoundedRectangleBorder(
+                                            //       borderRadius:
+                                            //           BorderRadius.circular(30)),
+                                            //   highlightElevation: 6,
+                                            //   borderSide:
+                                            //       BorderSide(color: Colors.black),
+                                            //   child: Padding(
+                                            //     padding: const EdgeInsets.fromLTRB(
+                                            //         0, 10, 0, 10),
+                                            //     child: FittedBox(
+                                            //       child: Row(
+                                            //         mainAxisSize: MainAxisSize.min,
+                                            //         mainAxisAlignment:
+                                            //             MainAxisAlignment.center,
+                                            //         children: <Widget>[
+                                            //           Icon(
+                                            //             Icons.account_box,
+                                            //             size: 20,
+                                            //           ),
+                                            //           Padding(
+                                            //             padding: const EdgeInsets.only(
+                                            //                 left: 15),
+                                            //             child: Text(
+                                            //               'Iniciar Sesión',
+                                            //               style: TextStyle(
+                                            //                 fontSize: 15,
+                                            //                 color: Colors.black,
+                                            //               ),
+                                            //             ),
+                                            //           )
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   height: 10,
+                                            // ),
+                                            // OutlineButton(
+                                            //   onPressed: () => Navigator.of(context)
+                                            //       .pushReplacementNamed(
+                                            //           '/registro_usuario'),
+                                            //   shape: RoundedRectangleBorder(
+                                            //       borderRadius:
+                                            //           BorderRadius.circular(30)),
+                                            //   highlightElevation: 6,
+                                            //   borderSide:
+                                            //       BorderSide(color: Colors.black),
+                                            //   child: Padding(
+                                            //     padding: const EdgeInsets.fromLTRB(
+                                            //         0, 10, 0, 10),
+                                            //     child: FittedBox(
+                                            //       child: Row(
+                                            //         mainAxisSize: MainAxisSize.min,
+                                            //         mainAxisAlignment:
+                                            //             MainAxisAlignment.center,
+                                            //         children: <Widget>[
+                                            //           Icon(
+                                            //             Icons.group,
+                                            //             size: 20,
+                                            //           ),
+                                            //           Padding(
+                                            //             padding: const EdgeInsets.only(
+                                            //                 left: 15),
+                                            //             child: Text(
+                                            //               'Registrate',
+                                            //               style: TextStyle(
+                                            //                 fontSize: 15,
+                                            //                 color: Colors.black,
+                                            //               ),
+                                            //             ),
+                                            //           )
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                           // Divider(),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            _singInButton(controller),
+                                            Divider(),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            _singInButtonFacebook(controller),
+                                          ],
                                         ),
-                                        Divider(),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        _singInButton(controller),
-                                        Divider(),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        _singInButtonFacebook(controller),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                ],
-              ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -325,24 +343,30 @@ class _LogInState extends State<LogIn> {
           print(onError);
         });
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       highlightElevation: 6,
-      borderSide: BorderSide(color: Colors.black),
+     borderSide: BorderSide(color: Colors.black),
+    
+   
       child: Padding(
+
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: FittedBox(
+          
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(
-                FontAwesomeIcons.google,
-                size: 15,
-              ),
+              
+              Image(image: AssetImage('assets/google-logo.png'),height: 35,width: 35,),
+              // Icon(
+              //   FontAwesomeIcons.google,
+              //   size: 30,
+              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Text(
-                  'Acceder con Google',
+                  'Acceder con Google ',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -355,12 +379,30 @@ class _LogInState extends State<LogIn> {
       ),
     );
   }
-}
 
-Widget _singInButtonFacebook(Controller controller) {
+  Widget _singInButtonFacebook(Controller controller) {
   return OutlineButton(
     splashColor: Colors.grey,
     onPressed: () async {
+      login(controller).then((value) async{
+         print('estoy dentro y voy a navegar con ' + controller.name);
+          Firestore.instance
+              .collection('usuarios')
+              .where('correo', isEqualTo: controller.email)
+              .getDocuments()
+              .then((onValue) async {
+            if (onValue.documents.isEmpty) {
+              Navigator.of(context).pushReplacementNamed('/registro_usuario');
+            } else {
+              controller.usuarioAct =
+                  UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+              await controller.signIn();
+              Navigator.of(context).pushReplacementNamed('/home');
+            }
+          });
+      }).catchError((onError){
+        print(onError);
+      });
       // print('entro al on pressed');
       // signInWithGoogle(controller).then((value) async {
       //   print('estoy dentro y voy a navegar con' + controller.name);
@@ -382,9 +424,9 @@ Widget _singInButtonFacebook(Controller controller) {
       //   print(onError);
       // });
     },
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     highlightElevation: 6,
-    borderSide: BorderSide(color: Colors.black),
+   borderSide: BorderSide(color: Colors.black),
     child: Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: FittedBox(
@@ -394,7 +436,8 @@ Widget _singInButtonFacebook(Controller controller) {
           children: <Widget>[
             Icon(
               FontAwesomeIcons.facebook,
-              size: 15,
+              size: 30,
+              color: Colors.blue,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
@@ -412,3 +455,6 @@ Widget _singInButtonFacebook(Controller controller) {
     ),
   );
 }
+
+}
+
