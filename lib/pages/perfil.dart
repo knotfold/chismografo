@@ -8,6 +8,7 @@ class Perfil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
+    TextEditingController textEditingController = TextEditingController();
     // TODO: implement build
     return Scaffold(
         appBar: myAppBar(),
@@ -90,7 +91,53 @@ class Perfil extends StatelessWidget {
                 SizedBox(
                   width: 20,
                 ),
-                Icon(Icons.edit, size: 20),
+                IconButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    child: Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Container(
+                        margin: EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            TextField(
+                              maxLength: 50,
+                              decoration: InputDecoration(labelText: 'Nombre'),
+                              controller: textEditingController,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            FloatingActionButton.extended(
+                              backgroundColor: Colors.white,
+                              onPressed: () async {
+                                controller.loading = true;
+                                controller.notify();
+                                await controller.usuario.reference.updateData(
+                                    {'nombre': textEditingController.text});
+                                controller.usuario.nombre =
+                                    textEditingController.text;
+                                controller.loading = false;
+                                controller.notify();
+                                Navigator.of(context).pop();
+                              },
+                              label: Text(
+                                'Actualizar',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              icon: Icon(
+                                Icons.edit,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  icon: Icon(Icons.edit),
+                ),
               ],
             ),
             SizedBox(
