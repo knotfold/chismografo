@@ -20,11 +20,12 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-       final AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: accessToken.token);
+        final FacebookAccessToken accessToken = await result.accessToken;
+       final AuthCredential credential =await FacebookAuthProvider.getCredential(accessToken: accessToken.token);
        final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
         final FirebaseUser currentUser = await _auth.currentUser();
-       
+        //firebaseAuthWithFacebook(loginResult.getAccessToken());
+        
         print('''
          Logged in!
          
@@ -38,7 +39,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture&access_token=${token}');
 final profile = json.decode(graphResponse.body);
-controlador.name= (profile['first_name']+profile['last_name']);
+controlador.name= (profile['first_name']+' '+profile['last_name']);
 controlador.email= (profile['email']);
 controlador.imageUrl=(profile['picture']['data']['url']);
 

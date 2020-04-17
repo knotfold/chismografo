@@ -109,6 +109,7 @@ class Controller with ChangeNotifier {
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await googleSignIn.signOut();
+    await facebookSignIn.logOut();
     await 
     await usuario.reference.updateData({
       'tokens': FieldValue.arrayRemove([activeToken])
@@ -122,7 +123,7 @@ class Controller with ChangeNotifier {
     notifyListeners();
     print('finished');
   }
-  
+
 
   signIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

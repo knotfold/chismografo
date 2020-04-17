@@ -388,7 +388,7 @@ class _LogInState extends State<LogIn> {
          print('estoy dentro y voy a navegar con ' + controller.name);
           Firestore.instance
               .collection('usuarios')
-              .where('correo', isEqualTo: controller.email)
+              .where('correo', isEqualTo: controller.email.trim())
               .getDocuments()
               .then((onValue) async {
             if (onValue.documents.isEmpty) {
