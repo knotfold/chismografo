@@ -9,15 +9,29 @@ class Amigos extends StatelessWidget {
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.face),
-        onPressed: () {
-          showDialog(
-            context: context,
-            child: SolicitudesAmistad(),
-          );
-        },
-      ),
+      floatingActionButton: StreamBuilder(
+        
+          stream: Firestore.instance
+              .collection('usuarios')
+              .where('solicitudesAE',
+                  arrayContains: controller.usuario.documentId)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const CircularProgressIndicator();
+            List<DocumentSnapshot> documents = snapshot.data.documents;
+            return FloatingActionButton(
+              heroTag: 'btn1',
+              child: Icon(documents.isEmpty ? Icons.face : Icons.add_alert),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  child: SolicitudesAmistad(
+                    documents: snapshot.data.documents,
+                  ),
+                );
+              },
+            );
+          }),
       appBar: myAppBar(),
       body: Container(
         padding: EdgeInsets.all(10),
@@ -60,6 +74,8 @@ class Amigos extends StatelessWidget {
 }
 
 class SolicitudesAmistad extends StatefulWidget {
+  final List<DocumentSnapshot> documents;
+  SolicitudesAmistad({this.documents});
   @override
   _SolicitudesAmistadState createState() => _SolicitudesAmistadState();
 }
@@ -81,71 +97,63 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
             SizedBox(
               height: 20,
             ),
-            StreamBuilder(
-              stream: Firestore.instance
-                  .collection('usuarios')
-                  .where('solicitudesAE',
-                      arrayContains: controller.usuario.documentId)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
-                List<DocumentSnapshot> documents = snapshot.data.documents;
-                return documents.isEmpty
-                    ? Text('No tienes solicitudes')
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          UsuarioModel usuario =
-                              UsuarioModel.fromDocumentSnapshot(
-                                  documents[index]);
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(usuario.foto),
+            widget.documents.isEmpty
+                ? Text('No tienes solicitudes')
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.documents.length,
+                    itemBuilder: (context, index) {
+                      UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
+                          widget.documents[index]);
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(usuario.foto),
+                        ),
+                        title: Text(usuario.nombre),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              onPressed: () async {
+                                await controller.usuario.reference.updateData({
+                                  'amigos': FieldValue.arrayUnion(
+                                      [usuario.documentId])
+                                });
+                                await usuario.reference.updateData({
+                                  'solicitudesAE': FieldValue.arrayRemove(
+                                      [controller.usuario.documentId]),
+                                  'amigos': FieldValue.arrayUnion(
+                                      [controller.usuario.documentId])
+                                });
+                                controller.usuario.amigos
+                                    .add(usuario.documentId);
+                                controller.notify();
+                                 Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.check),
                             ),
-                            title: Text(usuario.nombre),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  onPressed: () async {
-                                    await controller.usuario.reference
-                                        .updateData({
-                                      'amigos': FieldValue.arrayUnion(
-                                          [usuario.documentId])
-                                    });
-                                    await usuario.reference.updateData({
-                                      'solicitudesAE': FieldValue.arrayRemove(
-                                          [controller.usuario.documentId]),
-                                      'amigos': FieldValue.arrayUnion(
-                                          [controller.usuario.documentId])
-                                    });
-                                    controller.usuario.amigos
-                                        .add(usuario.documentId);
-                                    controller.notify();
-                                  },
-                                  icon: Icon(Icons.check),
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    await usuario.reference.updateData({
-                                      'solicitudesAE': FieldValue.arrayRemove(
-                                          [controller.usuario.documentId])
-                                    });
-                                  },
-                                  icon: Icon(Icons.delete_forever),
-                                )
-                              ],
-                            ),
-                          );
-                        },
+                            IconButton(
+                              onPressed: () async {
+                                await usuario.reference.updateData({
+                                  'solicitudesAE': FieldValue.arrayRemove(
+                                      [controller.usuario.documentId])
+                                  
+                                });
+
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.delete_forever),
+                            )
+                          ],
+                        ),
                       );
-              },
-            ),
+                    },
+                  ),
             SizedBox(
               height: 20,
             ),
             FloatingActionButton.extended(
+              heroTag: 'btn2',
               elevation: 0,
               shape: BeveledRectangleBorder(),
               onPressed: () => showSearch(

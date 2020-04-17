@@ -25,7 +25,7 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     var stream = Firestore.instance
         .collection('usuarios')
-        .where('nombre', isEqualTo: query)
+        .where('usuario', isEqualTo: query)
         .snapshots();
 
     print(query);

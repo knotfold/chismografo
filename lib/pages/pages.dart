@@ -11,3 +11,5 @@ export 'amigos.dart';
 export 'amigosSelector.dart';
 export 'perfil.dart';
 export 'info.dart';
+export 'libretaDetalles.dart';
+

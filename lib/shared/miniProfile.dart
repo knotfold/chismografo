@@ -19,8 +19,7 @@ class _MiniProfileState extends State<MiniProfile> {
     return Dialog(
       elevation: 0,
       backgroundColor: Colors.transparent,
-          child: Container(
-      
+      child: Container(
         height: 300,
         child: Stack(
           alignment: Alignment.topCenter,
@@ -36,16 +35,23 @@ class _MiniProfileState extends State<MiniProfile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      widget.usuario.usuario,
+                      style: TextStyle(fontSize: 20),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.usuario.nombre),
+                        Expanded(child: Text(widget.usuario.nombre)),
                         verifyMyFRequest(controller)
                             ? Container(
                                 margin: EdgeInsets.symmetric(horizontal: 5),
                                 child: RaisedButton(
-                                  child: Text('Cancelar Solicitud'),
+                                  child: Expanded(
+                                      child: Text('Cancelar Solicitud')),
                                   onPressed: () async {
                                     await controller.usuario.reference
                                         .updateData({
@@ -112,9 +118,8 @@ class _MiniProfileState extends State<MiniProfile> {
                                           });
                                           await widget.usuario.reference
                                               .updateData({
-                                            'amigos': FieldValue.arrayRemove([
-                                              controller.usuario.documentId
-                                            ])
+                                            'amigos': FieldValue.arrayRemove(
+                                                [controller.usuario.documentId])
                                           });
                                           controller.usuario.amigos.remove(
                                               widget.usuario.documentId);
@@ -144,7 +149,7 @@ class _MiniProfileState extends State<MiniProfile> {
                     StreamBuilder(
                       stream: Firestore.instance
                           .collection('libretas')
-                          .where('creador',
+                          .where('creadorID',
                               isEqualTo: widget.usuario.documentId)
                           .snapshots(),
                       builder: (context, snapshot) {

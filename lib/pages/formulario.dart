@@ -5,7 +5,7 @@ import 'package:trivia_form/shared/shareStuff.dart';
 class Formulario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Formulario1 formulario1 = Formulario1();
+    FormularioModel formulario = FormularioModel();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => null,
@@ -13,20 +13,20 @@ class Formulario extends StatelessWidget {
       ),
       appBar: myAppBar(),
       body: ListView.builder(
-        itemCount: formulario1.preguntas.length,
+        itemCount: formulario.preguntas.length,
         itemBuilder: (context, index) => Container(
           child: Container(
             padding: EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(formulario1.preguntas[index].pregunta),
+                Text(formulario.preguntas[index].pregunta),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Respuesta',
                   ),
                   validator: (value) => validateAnswer(value),
-                  onSaved: (newValue) => saveAnswer(index, formulario1, newValue),
+                  onSaved: (newValue) => saveAnswer(index, formulario, newValue),
                 )
               ],
             ),
@@ -36,8 +36,8 @@ class Formulario extends StatelessWidget {
     );
   }
 
-  saveAnswer(int index, Formulario1 formulario1, String newValue) {
-    formulario1.preguntas[index].respuestas.add(
+  saveAnswer(int index, FormularioModel formulario, String newValue) {
+    formulario.preguntas[index].respuestas.add(
       {
         'respuesta': newValue,
       },
