@@ -148,6 +148,34 @@ class Perfil extends StatelessWidget {
                 SizedBox(
                   width: 25,
                 ),
+                Icon(Icons.search, color: Colors.white, size: 30),
+                SizedBox(
+                  width: 25,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Nombre de usuario',
+                        style: TextStyle(fontSize: 15, color: Colors.grey)),
+                    Text('aquí va el usuario',
+                        style: TextStyle(
+                          fontSize: 20,
+                        )),
+                  ],
+                ),
+                SizedBox(
+                  width: 25,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 25,
+                ),
                 Icon(Icons.mail, color: Colors.white, size: 30),
                 SizedBox(
                   width: 25,
