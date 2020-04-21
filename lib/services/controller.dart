@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
@@ -43,18 +44,16 @@ class Controller with ChangeNotifier {
   PageController pageController = PageController();
   TextEditingController textEditingController = TextEditingController();
 
-   crearFormulario(BuildContext context) async {
-    
+  crearFormulario(BuildContext context) async {
     List<Pregunta> preguntasM = [];
     print('first');
-    if(preguntas.length < 3){
+    if (preguntas.length < 3) {
       showDialog(
         context: context,
         child: AlertDialog(
           title: Text('Muy Pocas Preguntas'),
           content: Text('Tu libreta debe de tener al menos 3 Preguntas'),
         ),
-        
       );
       return false;
     }
@@ -109,7 +108,8 @@ class Controller with ChangeNotifier {
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await googleSignIn.signOut();
-    await 
+    await facebookSignIn.logOut();
+
     await usuario.reference.updateData({
       'tokens': FieldValue.arrayRemove([activeToken])
     });
@@ -126,7 +126,7 @@ class Controller with ChangeNotifier {
   signIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('correo', usuario.correo);
-    // await storeToken();
+    await storeToken();
   }
 
   Future<bool> signInCheck() async {
@@ -141,9 +141,19 @@ class Controller with ChangeNotifier {
           .then((onValue) {
         usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
       });
-      // await storeToken();
+      await storeToken();
       return true;
     }
+  }
+
+  storeToken() async {
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+    firebaseMessaging.getToken().then((value) {
+      activeToken = value;
+      usuario.reference.updateData({
+        'tokens': FieldValue.arrayUnion([value])
+      });
+    });
   }
 
   permissonDeniedDialog(BuildContext context) {

@@ -37,6 +37,7 @@ class _HomeState extends State<Home> {
           currentIndex: controller.seleccionado,
           backgroundColor: Colors.black,
           fixedColor: Colors.black,
+          unselectedItemColor: Colors.blueGrey,
           onTap: (int index) {
             _onItemTapped(index, controller);
           },
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
               title: Text('Amigos'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.person),
               title: Text('Perfil'),
             ),
             BottomNavigationBarItem(

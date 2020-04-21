@@ -33,6 +33,7 @@ class _AmigosSelec extends State<AmigosSelec> {
     return Container(
       padding: EdgeInsets.all(10.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             'Selecciona a los participantes (${controller.toFillForm.invitaciones.length + controller.toFillForm.usuarios.length + controller.participantes.length}/25)',

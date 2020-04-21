@@ -20,7 +20,28 @@ class Amigos extends StatelessWidget {
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
               heroTag: 'btn1',
-              child: Icon(documents.isEmpty ? Icons.face : Icons.add_alert),
+              child: documents.isEmpty
+                  ? Icon(
+                      Icons.face,
+                      size: 30,
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        Container(
+                          child: Icon(
+                            Icons.add_alert,
+                            size: 30,
+                          ),
+                          width: 30,
+                          height: 30,
+                        ),
+                        Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: yemahuevo),
+                        )
+                      ],
+                    ),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -51,7 +72,7 @@ class Amigos extends StatelessWidget {
                 print(documents.length);
                 return documents.isEmpty
                     ? Text(
-                        'No tienes amigos :(, Haz click en el botón de abajo para buscar mas amigos')
+                        'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
                     : ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

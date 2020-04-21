@@ -110,7 +110,7 @@ class _FormularioPVState extends State<FormularioPV> {
                   }
 
                   controller.toFillForm.invitaciones
-                      .remove(controller.usuario.documentId);
+                      .remove(controller.usuario.usuario);
                   controller.toFillForm.usuarios
                       .add(controller.usuario.usuario);
 

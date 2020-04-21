@@ -26,6 +26,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     'usuario': null,
     'correo': null,
     'foto': null,
+    'usuarioSearch': null
   };
 
   // _launchURL() async {
@@ -129,6 +130,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       height: 15,
                     ),
                     TextFormField(
+                      enabled: false,
                       initialValue:
                           controller.name.isEmpty ? null : controller.name,
                       onSaved: (String value) {
@@ -180,14 +182,21 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       height: 15,
                     ),
                     TextFormField(
+                      maxLength: 10,
+                      maxLines: 1,
+                      minLines: 1,
                       onSaved: (String value) {
-                        form_usuario['usuario'] = '@'+value;                         
+                        form_usuario['usuario'] = '@' + value.trim();
+                        form_usuario['usuarioSearch'] =
+                            '@' + value.toLowerCase().trim();
                       },
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Usuario vacío';
                         } else if (usuariov == false) {
                           return 'Usuario existente';
+                        } else if (value.contains('@')) {
+                          return 'Tu nombre de usuario no debe llevar "@"';
                         }
                       },
                       decoration: InputDecoration(
@@ -278,7 +287,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               _usuarioform.currentState.save();
 
-              await _validatorUser(form_usuario[ 'usuario']);
+              await _validatorUser(form_usuario['usuarioSearch']);
               await _validatorEmail(form_usuario['correo']);
 
               setState(() {
@@ -335,20 +344,17 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               await Firestore.instance
                   .collection('usuarios')
-                  .add(form_usuario)
-                  .then((value) async {
-                if (value != null) {
-                  var dsUsuario = await value.get();
-                  controller.agregausuario(
-                      UsuarioModel.fromDocumentSnapshot(dsUsuario));
-                  controller.signIn();
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  .document(form_usuario['usuario'])
+                  .setData(form_usuario);
 
-                  return true;
-                } else {
-                  return false;
-                }
-              });
+              var ds = await Firestore.instance
+                  .collection('usuarios')
+                  .document(form_usuario['usuario'])
+                  .get();
+
+              controller.agregausuario(UsuarioModel.fromDocumentSnapshot(ds));
+              controller.signIn();
+              Navigator.of(context).pushReplacementNamed('/home');
             });
   }
 
@@ -376,7 +382,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     print(value);
     await Firestore.instance
         .collection('usuarios')
-        .where('usuario', isEqualTo: value)
+        .where('usuarioSearch', isEqualTo: value)
         .getDocuments()
         .then((onValue) {
       if (onValue.documents.isNotEmpty) {
