@@ -159,6 +159,7 @@ class UsuarioModel {
   String contrasena;
   String correo;
   String foto;
+  int coins;
   String fotoStorageRef;
   String nombre;
   String usuario;
@@ -192,5 +193,6 @@ class UsuarioModel {
     amigos = data['amigos'] ?? [];
     solicitudesAE = data['solicitudesAE'] ?? [];
     usuario = data['usuario'] ?? '';
+    coins = data['coins'] ?? 0;
   }
 }

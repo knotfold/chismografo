@@ -14,12 +14,22 @@ class LibretaDetails extends StatelessWidget {
       appBar: AppBar(
         actions: <Widget>[
           Text(
+            controller.usuario.coins.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          IconButton(
+            icon: Icon(Icons.stars),
+            color: Colors.yellow[800],
+            onPressed: () => null,
+
+          ),
+          Text(
             controller.toFillForm.usuarios.length.toString(),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           IconButton(
             onPressed: () {
-              showDialog(
+                showDialog(
                   context: context,
                   child: Dialog(
                     backgroundColor: Colors.white,
@@ -66,7 +76,7 @@ class LibretaDetails extends StatelessWidget {
                                     );
                                   },
                                 ),
-                                FloatingActionButton.extended(
+                               controller.usuario.usuario == controller.toFillForm.creadorUsuario || controller.toFillForm.priv ? FloatingActionButton.extended(
                                   onPressed: () {
                                     showDialog(
                                       context: context,
@@ -79,7 +89,7 @@ class LibretaDetails extends StatelessWidget {
                                   },
                                   label: Text('Invitar Amigos'),
                                   icon: Icon(Icons.group_add),
-                                ),
+                                )   : Container(),
                         ],
                       ),
                     ),
@@ -153,9 +163,12 @@ class LibretaDetails extends StatelessWidget {
                                     ListView.builder(
                                       shrinkWrap: true,
                                       itemBuilder: (context, ind) {
-                                        return Text('-' +
+                                        return ListTile(
+                                          trailing: IconButton(icon: Icon(Icons.lock_open), onPressed: () => null,),
+                                          title: Text(
                                             preguntas[index].respuestas[ind]
-                                                ['respuesta']);
+                                                ['respuesta']),
+                                        );
                                       },
                                       itemCount:
                                           preguntas[index].respuestas.length,

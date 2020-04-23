@@ -44,6 +44,23 @@ class Controller with ChangeNotifier {
   PageController pageController = PageController();
   TextEditingController textEditingController = TextEditingController();
 
+ Future<bool> buyCoins(int amount) async {
+    if (await checkPayment()) {
+      usuarioAct.coins = usuarioAct.coins + amount;
+      await usuarioAct.reference.updateData({
+        'coins' : usuarioAct.coins,
+      });
+      notifyListeners();
+      return true;
+      
+    }
+    return false;
+  }
+
+  Future<bool> checkPayment() async {
+    return true;
+  }
+
   crearFormulario(BuildContext context) async {
     List<Pregunta> preguntasM = [];
     print('first');

@@ -16,7 +16,7 @@ class TusLibretas extends StatelessWidget {
         label: Text('Crea una nueva libreta'),
         icon: Icon(Icons.book),
       ),
-      appBar: myAppBar(),
+      appBar: myAppBar(controller),
       body: Container(
         padding: EdgeInsets.all(10.0),
         child: Column(

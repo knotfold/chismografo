@@ -55,7 +55,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                       itemBuilder: (BuildContext context, int index) {
                         UsuarioModel usuarioModel =
                             UsuarioModel.fromDocumentSnapshot(documents[index]);
-                        return !checkInvitado(usuarioModel.usuario, controller)
+                        return !checkInvitado(usuarioModel.usuario, controller) || controller.toFillForm.creadorUsuario == usuarioModel.usuario
                             ? Container()
                             : ListTile(
                                 title: Text(usuarioModel.nombre),

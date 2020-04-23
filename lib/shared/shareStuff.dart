@@ -3,12 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/main.dart';
 
-AppBar myAppBar() {
+AppBar myAppBar(Controller controller) {
   return AppBar(
     centerTitle: true,
+    
     backgroundColor: Colors.transparent,
     elevation: 0,
     title: Text('Chismografo'),
+    actions: <Widget>[
+      Text(
+            controller.usuario.coins.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          IconButton(
+            icon: Icon(Icons.stars),
+            color: Colors.yellow[400],
+            onPressed: () => null,
+
+          ),
+    ],
   );
 }
 

@@ -52,7 +52,7 @@ class Amigos extends StatelessWidget {
               },
             );
           }),
-      appBar: myAppBar(),
+      appBar: myAppBar(controller),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

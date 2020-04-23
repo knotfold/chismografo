@@ -324,6 +324,9 @@ class _LogInState extends State<LogIn> {
       onPressed: () async {
         print('entro al on pressed');
         signInWithGoogle(controller).then((value) async {
+          if(controller.email == null || controller.email == ''){
+            return;
+          }
           print('estoy dentro y voy a navegar con ' + controller.name);
           Firestore.instance
               .collection('usuarios')

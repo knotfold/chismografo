@@ -29,6 +29,7 @@ class CustomSearchDelegate extends SearchDelegate {
         .snapshots();
 
     print(query);
+   
     return StreamBuilder(
       stream: stream,
       builder: (context, snapshot) {

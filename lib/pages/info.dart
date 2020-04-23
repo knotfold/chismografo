@@ -1,9 +1,10 @@
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:trivia_form/services/services.dart';
 class Info extends StatefulWidget {
   @override
   _InfoState createState() => _InfoState();
@@ -21,8 +22,9 @@ class _InfoState extends State<Info> {
 
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
     return Scaffold(
-      appBar: myAppBar(),
+      appBar: myAppBar(controller),
       body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),

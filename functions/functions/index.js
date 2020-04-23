@@ -64,8 +64,104 @@ exports.nuevoFormulario = functions.firestore.document('/formularios/{formulario
 })
 
 exports.friends = functions.firestore.document('usuarios/{usuario}'
-).onUpdate((snapshot, context) => { 
-    
+).onUpdate((snapshot, context) => {
+    var usuarioAfterData = snapshot.after.data();
+    var usuarioBeforeData = snapshot.before.data();
+    var listaTokens = [];
+
+    if (usuarioAfterData.solicitudesAE != null) {
+        let newSolicitudes = usuarioAfterData.solicitudesAE.filter(x => !usuarioBeforeData.solicitudesAE.includes(x));
+
+        if (newSolicitudes.length > 0) {
+            console.log('nueva solicitud');
+
+            for (var usuarioID of newSolicitudes) {
+                console.log(usuarioID);
+                admin.firestore().collection('usuarios').doc(usuarioID).get().then((doc) => {
+
+
+                    var usuarioData = doc.data();
+                    if (usuarioData.tokens != undefined) {
+                        console.log('tokens definido');
+                        if (usuarioData.tokens != null) {
+                            console.log('tokens no nulo');
+                            for (var token of usuarioData.tokens) {
+                                console.log('adding token');
+                                listaTokens.push(token);
+                            }
+                        }
+                    }
+
+                    var payload = {
+                        "notification": {
+                            "title": usuarioAfterData.usuario + " te a invitado una solicitud de amistad",
+                            "body": ':)',
+                            "sound": "default"
+                        },
+                        "data": {
+                            "sendername": usuarioAfterData.nombre,
+                            "message": 'idk',
+                        }
+                    }
+
+                    return admin.messaging().sendToDevice(listaTokens, payload).then((response) => {
+                        console.log('Se enviaron todas las notificaciones');
+                        listaTokens.length = 0;
+
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                })
+            }
+            return;
+        }
+
+        let accepted = usuarioBeforeData.solicitudesAE.filter(x => !usuarioAfterData.solicitudesAE.includes(x));
+        if (accepted.length > 0) {
+            if (usuarioAfterData.amigos.length == 0) {
+                console.log('NO amigos wtfff');
+
+                return;
+            }
+            if (!usuarioAfterData.amigos.includes(accepted[0])) {
+                console.log('cancelaste la solicitud');
+                return;
+            }
+            console.log('nuevo amigo me acepto');
+            var usuarioData = usuarioAfterData;
+            if (usuarioData.tokens != undefined) {
+                console.log('tokens definido');
+                if (usuarioData.tokens != null) {
+                    console.log('tokens no nulo');
+                    for (var token of usuarioData.tokens) {
+                        console.log('adding token');
+                        listaTokens.push(token);
+                    }
+                }
+            }
+            var payload = {
+                "notification": {
+                    "title": accepted[0] + " A aceptado tu solicitud de amistad",
+                    "body": ':)',
+                    "sound": "default"
+                },
+                "data": {
+                    "sendername": usuarioAfterData.nombre,
+                    "message": 'idk',
+                }
+            }
+
+            return admin.messaging().sendToDevice(listaTokens, payload).then((response) => {
+                console.log('Se enviaron todas las notificaciones');
+                listaTokens.length = 0;
+
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+
+
+    }
 })
 
 exports.formularioChanged = functions.firestore.document('formularios/{formulario}'
@@ -73,7 +169,7 @@ exports.formularioChanged = functions.firestore.document('formularios/{formulari
     var formularioAfterData = snapshot.after.data();
     var formularioBeforeData = snapshot.before.data();
     var listaTokens = [];
-    var adopcionID = snapshot.after.id;
+    var formularioID = snapshot.after.id;
 
 
 
@@ -84,7 +180,16 @@ exports.formularioChanged = functions.firestore.document('formularios/{formulari
         }
 
         let newInvs = formularioAfterData.invitaciones.filter(x => !formularioBeforeData.invitaciones.includes(x));
-        for (var usuarioID in newInvs) {
+        if (newInvs.length == 0) {
+            return;
+        }
+        for (var usuarioID of newInvs) {
+            if (formularioAfterData.usuarios != null) {
+                if (formularioAfterData.usuarios.includes(usuarioID)) {
+                    return;
+                }
+            }
+
             admin.firestore().collection('usuarios').doc(usuarioID).get().then((doc) => {
                 var usuarioData = doc.data();
                 if (usuarioData.tokens != undefined) {
@@ -168,7 +273,7 @@ exports.formularioChanged = functions.firestore.document('formularios/{formulari
             })
 
             //notify users
-            for (var usuarioID in formularioAfterData.usuarios) {
+            for (var usuarioID of formularioAfterData.usuarios) {
                 admin.firestore().collection('usuarios').doc(usuarioID).get().then((doc) => {
                     var usuarioData = doc.data();
                     if (usuarioData.tokens != undefined) {

@@ -23,7 +23,7 @@ class _FormularioPVState extends State<FormularioPV> {
     // TODO: implement build
     Controller controller = Provider.of(context);
     return Scaffold(
-      appBar: myAppBar(),
+      appBar: myAppBar(controller),
       body: PageView(
         scrollDirection: Axis.horizontal,
         physics: PageScrollPhysics(),
@@ -121,7 +121,7 @@ class _FormularioPVState extends State<FormularioPV> {
                   controller.respuestas.clear();
                   controller.textECR.clear();
 
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
 
                   print('Todo bien');
 

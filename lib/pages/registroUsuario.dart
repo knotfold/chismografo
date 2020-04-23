@@ -287,7 +287,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               _usuarioform.currentState.save();
 
-              await _validatorUser(form_usuario['usuarioSearch']);
+              await _validatorUser('@' + form_usuario['usuarioSearch']);
               await _validatorEmail(form_usuario['correo']);
 
               setState(() {

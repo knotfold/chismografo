@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/shared/shareStuff.dart';
 
 class Formulario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
     FormularioModel formulario = FormularioModel();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => null,
         child: Icon(Icons.save),
       ),
-      appBar: myAppBar(),
+      appBar: myAppBar(controller),
       body: ListView.builder(
         itemCount: formulario.preguntas.length,
         itemBuilder: (context, index) => Container(

@@ -4,6 +4,7 @@ import 'pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -15,8 +16,15 @@ class _HomeState extends State<Home> {
     LibretasA(),
     Amigos(),
     Perfil(),
-    Info(),
+    Store(),
   ];
+
+  @override
+  void initState() { 
+    super.initState();
+    FirebaseMessage firebaseMessage = FirebaseMessage();
+    
+  }
 
   _onItemTapped(int index, Controller controller) {
     setState(() {
@@ -59,8 +67,8 @@ class _HomeState extends State<Home> {
               title: Text('Perfil'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              title: Text('Info'),
+              icon: Icon(Icons.store),
+              title: Text('Tienda'),
             ),
           ],
         ),

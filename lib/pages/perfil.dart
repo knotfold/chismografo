@@ -11,7 +11,7 @@ class Perfil extends StatelessWidget {
     TextEditingController textEditingController = TextEditingController();
     // TODO: implement build
     return Scaffold(
-        appBar: myAppBar(),
+        appBar: myAppBar(controller),
         body: ListView(
           addSemanticIndexes: true,
           addRepaintBoundaries: true,
@@ -69,11 +69,13 @@ class Perfil extends StatelessWidget {
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   width: 25,
                 ),
-                Icon(Icons.person, color: Colors.white, size: 30),
+                Icon(Icons.person, color: Colors.white, size: 15),
                 SizedBox(
                   width: 25,
                 ),
@@ -81,7 +83,7 @@ class Perfil extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('Nombre',
-                        style: TextStyle(fontSize: 15, color: Colors.grey)),
+                        style: TextStyle(fontSize: 15, color: Colors.white)),
                     Text(controller.usuario.nombre,
                         style: TextStyle(
                           fontSize: 20,
@@ -144,11 +146,13 @@ class Perfil extends StatelessWidget {
               height: 25,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   width: 25,
                 ),
-                Icon(Icons.search, color: Colors.white, size: 30),
+                Icon(Icons.search, color: Colors.white, size: 15),
                 SizedBox(
                   width: 25,
                 ),
@@ -156,7 +160,7 @@ class Perfil extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('Nombre de usuario',
-                        style: TextStyle(fontSize: 15, color: Colors.grey)),
+                        style: TextStyle(fontSize: 15, color: Colors.white)),
                     Text(controller.usuario.usuario,
                         style: TextStyle(
                           fontSize: 20,
@@ -172,11 +176,13 @@ class Perfil extends StatelessWidget {
               height: 25,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   width: 25,
                 ),
-                Icon(Icons.mail, color: Colors.white, size: 30),
+                Icon(Icons.mail, color: Colors.white, size: 15),
                 SizedBox(
                   width: 25,
                 ),
@@ -184,7 +190,7 @@ class Perfil extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text('Correo',
-                        style: TextStyle(fontSize: 15, color: Colors.grey)),
+                        style: TextStyle(fontSize: 15, color: Colors.white)),
                     Text(controller.usuario.correo,
                         style: TextStyle(
                           fontSize: 20,
@@ -197,8 +203,12 @@ class Perfil extends StatelessWidget {
               ],
             ),
             RaisedButton(
-              onPressed: () async{await controller.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));},
+
+              onPressed: () async {
+                await controller.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+              },
               child: Text('Cerrar Sesión'),
             ),
           ],
