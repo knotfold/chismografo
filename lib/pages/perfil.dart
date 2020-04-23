@@ -11,6 +11,7 @@ class Perfil extends StatelessWidget {
     TextEditingController textEditingController = TextEditingController();
     // TODO: implement build
     return Scaffold(
+      backgroundColor: backgroundColor,
         appBar: myAppBar(controller),
         body: ListView(
           addSemanticIndexes: true,
@@ -69,27 +70,21 @@ class Perfil extends StatelessWidget {
               ],
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  width: 25,
+                  width: 15,
                 ),
-                Icon(Icons.person, color: Colors.white, size: 15),
+                Icon(Icons.person, color: Colors.black, size: 30),
                 SizedBox(
-                  width: 25,
+                  width: 15,
+                  
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Nombre',
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
-                    Text(controller.usuario.nombre,
-                        style: TextStyle(
-                          fontSize: 20,
-                        )),
-                  ],
-                ),
+                Text(controller.usuario.nombre,
+                    style: TextStyle(
+                      fontSize: 20,
+                    )),
                 SizedBox(
                   width: 20,
                 ),
@@ -127,10 +122,11 @@ class Perfil extends StatelessWidget {
                               },
                               label: Text(
                                 'Actualizar',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: buttonColors),
                               ),
                               icon: Icon(
                                 Icons.edit,
+                                color: buttonColors,
                               ),
                             )
                           ],
@@ -145,30 +141,36 @@ class Perfil extends StatelessWidget {
             SizedBox(
               height: 25,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
+              //mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  width: 25,
-                ),
-                Icon(Icons.search, color: Colors.white, size: 15),
-                SizedBox(
-                  width: 25,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text('Nombre de usuario',
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
+                    SizedBox(
+                      width: 25,
+                    ),
+                    Icon(Icons.search, color: Colors.black, size: 30),
+                    SizedBox(
+                      width: 25,
+                    ),
                     Text(controller.usuario.usuario,
                         style: TextStyle(
                           fontSize: 20,
                         )),
+                    SizedBox(
+                      width: 25,
+                    ),
                   ],
                 ),
-                SizedBox(
-                  width: 25,
+                
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 80,),
+                    Text('Éste es tu nombre de usuario, tus amigos pueden\nencontrarte fácilmente dentro de la aplicación con él.',style: TextStyle(fontSize: 12,color: Colors.white60,),textAlign: TextAlign.justify,),
+                  ],
                 ),
               ],
             ),
@@ -176,40 +178,50 @@ class Perfil extends StatelessWidget {
               height: 25,
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
                   width: 25,
                 ),
-                Icon(Icons.mail, color: Colors.white, size: 15),
+                Icon(Icons.mail, color: Colors.black, size: 30),
                 SizedBox(
                   width: 25,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Correo',
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
-                    Text(controller.usuario.correo,
-                        style: TextStyle(
-                          fontSize: 20,
-                        )),
-                  ],
-                ),
+                Text(controller.usuario.correo,
+                    style: TextStyle(
+                      fontSize: 20,
+                    )),
                 SizedBox(
                   width: 25,
                 ),
               ],
             ),
-            RaisedButton(
+            SizedBox(height: 70,),
+            Container(
+          
+              width: 30,
+              height: 45,
+              margin: EdgeInsets.only(right: 100,left: 100),
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                elevation: 4,
+                    color: buttonColors,
+                onPressed: () async {
+                  await controller.signOut();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('Cerrar Sesión',style: TextStyle(fontSize: 20,color: Colors.white),),
+                    
+                    Icon(Icons.exit_to_app,color: Colors.white,)
+                  ],
+                ),
 
-              onPressed: () async {
-                await controller.signOut();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-              },
-              child: Text('Cerrar Sesión'),
+              ),
             ),
           ],
         ));

@@ -51,7 +51,7 @@ class TusLibretas extends StatelessWidget {
                                 Navigator.of(context)
                                     .pushNamed('/libretaDetalles');
                               },
-                              title: Text(formularioModel.nombre),
+                              title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
                               subtitle: Text('Tu libreta'),
                               trailing: Text(
                                   '${formularioModel.usuarios.length} / 25'),
