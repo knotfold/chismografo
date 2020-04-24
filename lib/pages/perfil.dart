@@ -21,7 +21,7 @@ class Perfil extends StatelessWidget {
             Column(
               children: <Widget>[
                 SizedBox(
-                  height: 15,
+                  height: 30,
                 ),
                 Center(
                   child: SizedBox(
@@ -71,10 +71,10 @@ class Perfil extends StatelessWidget {
             ),
             Row(
               //crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width: 15,
+                  width: 25,
                 ),
                 Icon(Icons.person, color: Colors.black, size: 30),
                 SizedBox(
