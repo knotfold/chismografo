@@ -167,6 +167,7 @@ class UsuarioModel {
   String documentId;
   List<dynamic> amigos;
   List<dynamic> solicitudesAE;
+  bool monedasFree;
 
   UsuarioModel({
     this.contrasena,
@@ -174,6 +175,7 @@ class UsuarioModel {
     this.foto,
     this.nombre,
     this.documentId,
+    this.monedasFree
   });
 
   Map<String, dynamic> toMap() {
@@ -194,5 +196,6 @@ class UsuarioModel {
     solicitudesAE = data['solicitudesAE'] ?? [];
     usuario = data['usuario'] ?? '';
     coins = data['coins'] ?? 0;
+    monedasFree = data['monedasFree'] ?? false;
   }
 }
