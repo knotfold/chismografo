@@ -12,39 +12,45 @@ class LibretaDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text('Preguntas',style: TextStyle(color: Colors.white),),
+       backgroundColor: buttonColors,
         actions: <Widget>[
-          Text(
-            controller.usuario.coins.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          IconButton(
+          Row(
+            children: <Widget>[
+              IconButton(
             icon: Icon(Icons.stars),
-            color: Colors.yellow[800],
+            color: Colors.yellow[500],
             onPressed: () => null,
 
           ),
-          Text(
-            controller.toFillForm.usuarios.length.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
+              Text(
+                controller.usuario.coins.toString(),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
+              ),
+                SizedBox(width: 10),
           IconButton(
             onPressed: () {
                 showDialog(
                   context: context,
                   child: Dialog(
-                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: backgroundColor,
                     child: Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
                             'Usuarios',
                             style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
                           ),
                           controller.toFillForm.usuarios.isEmpty
-                              ? Text('No hay usuarios participando')
+                              ? Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text('No hay usuarios participando'),
+                              )
                               : ListView.builder(
                                   shrinkWrap: true,
                                   itemCount:
@@ -54,6 +60,7 @@ class LibretaDetails extends StatelessWidget {
                                     return Text(
                                       '-' +
                                           controller.toFillForm.usuarios[index],
+                                          style: TextStyle(fontSize: 15),
                                     );
                                   },
                                 ),
@@ -61,8 +68,12 @@ class LibretaDetails extends StatelessWidget {
                             'Invitados',
                             style: TextStyle(fontSize: 20),
                           ),
+                         
                           controller.toFillForm.invitaciones.isEmpty
-                              ? Text('No hay usuarios invitados')
+                              ? Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text('No hay usuarios invitados'),
+                              )
                               : ListView.builder(
                                   shrinkWrap: true,
                                   itemCount:
@@ -81,6 +92,7 @@ class LibretaDetails extends StatelessWidget {
                                     showDialog(
                                       context: context,
                                       child: Dialog(
+                                        backgroundColor: backgroundColor,
                                         child: Container(
                                           padding: EdgeInsets.all(20),
                                           child: AmigosSelec()                                        ),
@@ -88,7 +100,7 @@ class LibretaDetails extends StatelessWidget {
                                     );
                                   },
                                   label: Text('Invitar Amigos'),
-                                  icon: Icon(Icons.group_add),
+                                  icon: Icon(Icons.group_add,size: 30,),
                                 )   : Container(),
                         ],
                       ),
@@ -97,9 +109,17 @@ class LibretaDetails extends StatelessWidget {
             },
             icon: Icon(Icons.people),
           ),
-          SizedBox(
-            width: 10,
+          Text(
+            controller.toFillForm.usuarios.length.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
           ),
+          SizedBox(
+            width: 15,
+          ),
+            ],
+          ),
+          
+          
         ],
       ),
       body: controller.toFillForm.usuarios.length < 1
@@ -134,15 +154,18 @@ class LibretaDetails extends StatelessWidget {
               ),
             )
           : Container(
-              padding: EdgeInsets.all(15),
+            
+              padding: EdgeInsets.only(left: 15,right: 15,bottom: 15,top: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Preguntas',
-                    style: TextStyle(fontSize: 25),
-                  ),
-                  ListView.builder(
+                  // Text(
+                  //   'Preguntas',
+                  //   style: TextStyle(fontSize: 25),
+                  // ),
+                  
+                  ListView.separated(
+                    separatorBuilder: (context,index)=>Divider(height: 2,thickness: 1.5,color: Colors.brown[100],),
                     shrinkWrap: true,
                     itemCount: preguntas.length,
                     itemBuilder: (context, index) => ListTile(
@@ -150,16 +173,30 @@ class LibretaDetails extends StatelessWidget {
                         showDialog(
                             context: context,
                             child: Dialog(
+                              backgroundColor: backgroundColor,
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               child: Container(
                                 padding: EdgeInsets.all(25),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
+                                   Row(
+                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                     children: <Widget>[
+                                      
+
+                                     ],
+                                   ),
                                     Text(
                                       preguntas[index].pregunta,
                                       style: TextStyle(fontSize: 25),
+                                      textAlign: TextAlign.center,
                                     ),
+                                    
+                                     Divider(height: 30,color: Colors.white54,),
+                                     
                                     ListView.builder(
                                       shrinkWrap: true,
                                       itemBuilder: (context, ind) {
@@ -178,9 +215,11 @@ class LibretaDetails extends StatelessWidget {
                               ),
                             ));
                       },
-                      leading: Text((index + 1).toString()),
+
+                      leading: Text((index + 1).toString(),style: TextStyle(fontSize: 20),),
+
                       title: Text(preguntas[index].pregunta),
-                      trailing: Icon(Icons.details),
+                      trailing: Icon(Icons.library_books),
                     ),
                   ),
                 ],

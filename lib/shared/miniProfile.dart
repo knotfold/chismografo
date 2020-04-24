@@ -51,7 +51,7 @@ class _MiniProfileState extends State<MiniProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(child: Text(widget.usuario.nombre)),
+                        Expanded(child: Text(widget.usuario.nombre,style: TextStyle(fontSize: 20),)),
                        controller.usuario.documentId == widget.usuario.documentId ? Container() :  verifyMyFRequest(controller)
                             ? Container(
                                 margin: EdgeInsets.symmetric(horizontal: 5),
@@ -97,7 +97,7 @@ class _MiniProfileState extends State<MiniProfile> {
                                           controller.notify();
                                           Navigator.of(context).pop();
                                         },
-                                        icon: Icon(Icons.check),
+                                        icon: Icon(Icons.check,size: 30,),
                                       ),
                                       IconButton(
                                         onPressed: () async {
@@ -111,13 +111,13 @@ class _MiniProfileState extends State<MiniProfile> {
                                           controller.notify();
                                           Navigator.of(context).pop();
                                         },
-                                        icon: Icon(Icons.delete_forever),
+                                        icon: Icon(Icons.delete_forever,size: 30,),
                                       )
                                     ],
                                   )
                                 : verifyFriendship(controller)
                                     ? IconButton(
-                                        icon: Icon(Icons.delete_forever),
+                                        icon: Icon(Icons.delete_forever,size: 30,),
                                         onPressed: () async {
                                           await controller.usuario.reference
                                               .updateData({
@@ -149,11 +149,11 @@ class _MiniProfileState extends State<MiniProfile> {
                                           controller.notify();
                                           setState(() {});
                                         },
-                                        icon: Icon(Icons.person_add),
+                                        icon: Icon(Icons.person_add,size: 30,),
                                       ),
                       ],
                     ),
-                    Expanded(child: Text(widget.usuario.usuario)),
+                    Expanded(child: Text(widget.usuario.usuario,style: TextStyle(fontSize: 15),)),
                     // SizedBox(
                     //   height: 20),
                     // Text('LIBRETAS'),
