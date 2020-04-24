@@ -3,24 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/main.dart';
 
-AppBar myAppBar(Controller controller) {
+AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
     centerTitle: true,
-    
     backgroundColor: Colors.transparent,
     elevation: 0,
     title: Text('Chismografo'),
     actions: <Widget>[
       Text(
-            controller.usuario.coins.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          IconButton(
-            icon: Icon(Icons.stars),
-            color: Colors.yellow[400],
-            onPressed: () => null,
-
-          ),
+        controller.usuario.coins.toString(),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+      IconButton(
+        icon: Icon(Icons.stars),
+        color: Colors.yellow[400],
+        onPressed: () {
+          controller.seleccionado = 4;
+                           controller.notify();
+        },
+      ),
     ],
   );
 }
@@ -59,8 +60,8 @@ Drawer myDrawer(BuildContext context) {
             onPressed: () async {
               signOutGoogle();
               await controller.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/', ModalRoute.withName('/home'));
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/', ModalRoute.withName('/home'));
             },
           ),
         )

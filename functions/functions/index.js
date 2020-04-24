@@ -9,6 +9,20 @@ admin.initializeApp(functions.config().firebase);
 //  response.send("Hello from Firebase!");
 // });
 
+// exports.scheduledFunctionCrontab = functions.pubsub.schedule('5 8 * * *')
+//   .timeZone('America/New_York') // Users can choose timezone - default is America/Los_Angeles
+//   .onRun((context) => {
+//   console.log('This will be run every day at 8:05 AM Eastern!');
+//   return null;
+// });
+
+// exports.scheduledFunctionCrontab = functions.pubsub.schedule('1 23 * * *')
+//   .timeZone('America/New_York') // Users can choose timezone - default is America/Los_Angeles
+//   .onRun((context) => {
+//   console.log('This will be run every day at 23:01 PM Eastern!');
+//   return null;
+// });
+
 exports.nuevoFormulario = functions.firestore.document('/formularios/{formulario}'
 ).onCreate((snapshot, context) => {
     var formularioData = snapshot.data();

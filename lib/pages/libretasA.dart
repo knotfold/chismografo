@@ -18,7 +18,7 @@ class LibretasA extends StatelessWidget {
           if (!snapshot.hasData) return const CircularProgressIndicator();
           List<DocumentSnapshot> documents = snapshot.data.documents;
           return FloatingActionButton.extended(
-            heroTag: 'btn1',
+            heroTag: 'btnA1',
             
             onPressed: () {
               documents.isEmpty ?  null : showDialog(
@@ -88,7 +88,7 @@ class LibretasA extends StatelessWidget {
           );
         },
       ),
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

@@ -19,7 +19,7 @@ class Amigos extends StatelessWidget {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
-              heroTag: 'btn1',
+              heroTag: 'btnA1',
               child: documents.isEmpty
                   ? Icon(
                       Icons.face,
@@ -52,7 +52,7 @@ class Amigos extends StatelessWidget {
               },
             );
           }),
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
@@ -175,7 +175,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
               height: 20,
             ),
             FloatingActionButton.extended(
-              heroTag: 'btn2',
+              heroTag: 'btnA1',
               elevation: 0,
               shape: BeveledRectangleBorder(),
               onPressed: () => showSearch(

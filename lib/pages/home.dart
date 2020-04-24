@@ -3,7 +3,7 @@ import 'package:trivia_form/shared/shared.dart';
 import 'pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,10 +20,9 @@ class _HomeState extends State<Home> {
   ];
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     FirebaseMessage firebaseMessage = FirebaseMessage();
-    
   }
 
   _onItemTapped(int index, Controller controller) {
@@ -41,37 +40,56 @@ class _HomeState extends State<Home> {
       },
       child: Scaffold(
         body: _widgetOptions.elementAt(controller.seleccionado),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: controller.seleccionado,
-          backgroundColor: Colors.black,
-          fixedColor: Colors.black,
-          unselectedItemColor: Colors.blueGrey,
-          onTap: (int index) {
-            _onItemTapped(index, controller);
-          },
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              title: Text('Tus Libretas'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.collections_bookmark),
-              title: Text('Libretas Amigos'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              title: Text('Amigos'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Perfil'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.store),
-              title: Text('Tienda'),
-            ),
-          ],
-        ),
+        bottomNavigationBar: StreamBuilder(
+            stream: controller.usuario.reference.snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                UsuarioModel newU =
+                    UsuarioModel.fromDocumentSnapshot(snapshot.data);
+              }
+              return BottomNavigationBar(
+                currentIndex: controller.seleccionado,
+                backgroundColor: Colors.black,
+                fixedColor: Colors.black,
+                unselectedItemColor: Colors.blueGrey,
+                onTap: (int index) {
+                  _onItemTapped(index, controller);
+                },
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.book),
+                    title: Text('Tus Libretas'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('usuarios')
+                            .where('solicitudesAE',
+                                arrayContains: controller.usuario.documentId)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<DocumentSnapshot> documents =
+                              snapshot.data.documents;
+
+                          return Icon(Icons.collections_bookmark);
+                        }),
+                    title: Text('Libretas Amigos'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.group),
+                    title: Text('Amigos'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    title: Text('Perfil'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.store),
+                    title: Text('Tienda'),
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }

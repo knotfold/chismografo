@@ -11,7 +11,7 @@ class Perfil extends StatelessWidget {
     TextEditingController textEditingController = TextEditingController();
     // TODO: implement build
     return Scaffold(
-        appBar: myAppBar(controller),
+        appBar: myAppBar(controller, context),
         body: ListView(
           addSemanticIndexes: true,
           addRepaintBoundaries: true,
@@ -113,6 +113,7 @@ class Perfil extends StatelessWidget {
                               height: 15,
                             ),
                             FloatingActionButton.extended(
+                              heroTag: 'perfil1',
                               backgroundColor: Colors.white,
                               onPressed: () async {
                                 controller.loading = true;
@@ -258,6 +259,7 @@ class _DialogContentState extends State<DialogContent> {
                       alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
+                          heroTag: 'perfil2',
                           backgroundColor: Colors.white,
                           onPressed: () async {
                             imagen = await controller.getImage(context);
@@ -280,6 +282,7 @@ class _DialogContentState extends State<DialogContent> {
                       alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
+                          heroTag: 'perfil3',
                           backgroundColor: Colors.white,
                           onPressed: () async {
                             imagen = await controller.getImageCamera(context);
@@ -302,6 +305,7 @@ class _DialogContentState extends State<DialogContent> {
                       alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
+                          heroTag: 'perfil4',
                           backgroundColor: Colors.white,
                           onPressed: () async {
                             controller.loading = true;

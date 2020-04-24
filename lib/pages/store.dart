@@ -10,13 +10,13 @@ class Store extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomPadding: true,
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: SingleChildScrollView(
               child: Container(
           padding: EdgeInsets.all(30),
           child: Column(
             children: <Widget>[
-              StoreItem(cantidad: '1',cantidadTexto: 'Una Estrella', precio: '1',),
+              StoreItem(cantidad: '5',cantidadTexto: 'Cinco Monedas', precio: '5',),
               StoreItem(cantidad: '10', cantidadTexto: 'Diez Estrellas', precio: '9', save: '\$1',),
               StoreItem(cantidad: '20', cantidadTexto: 'Diez Estrellas', precio: '17', save: '\$3',)
             ],
@@ -87,6 +87,7 @@ class StoreItem extends StatelessWidget {
             ),
            save != null ? Container(margin: EdgeInsets.only(bottom: 10), child: Text( '¡Ahorra: ' + save +'!', style: TextStyle(fontSize: 30),)) : Container(),
             FloatingActionButton.extended(
+              heroTag: 'store',
               onPressed: () async {
                var result = await controller.buyCoins(int.parse(cantidad));
                if(result){

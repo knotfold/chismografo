@@ -23,7 +23,7 @@ class _FormularioPVState extends State<FormularioPV> {
     // TODO: implement build
     Controller controller = Provider.of(context);
     return Scaffold(
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: PageView(
         scrollDirection: Axis.horizontal,
         physics: PageScrollPhysics(),
@@ -74,6 +74,7 @@ class _FormularioPVState extends State<FormularioPV> {
               height: 10,
             ),
             FloatingActionButton.extended(
+              heroTag: 'respuestas',
               icon: Icon(index == widget.formularioModel.preguntas.length
                   ? Icons.send
                   : Icons.skip_next),
