@@ -3,13 +3,18 @@ import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Perfil extends StatelessWidget {
+class Perfil extends StatefulWidget {
+  @override
+  _PerfilState createState() => _PerfilState();
+}
+
+class _PerfilState extends State<Perfil> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     TextEditingController textEditingController = TextEditingController();
-    // TODO: implement build
     return Scaffold(
       backgroundColor: backgroundColor,
         appBar: myAppBar(controller),
@@ -197,6 +202,7 @@ class Perfil extends StatelessWidget {
                 ),
               ],
             ),
+
             SizedBox(height: 70,),
             Container(
           
@@ -222,6 +228,66 @@ class Perfil extends StatelessWidget {
                 ),
 
               ),
+
+            SizedBox(
+              height: 25,
+            ),
+            !controller.usuario.monedasFree
+                ? FlatButton.icon(
+                    icon: Icon(Icons.stars, size: 18.0, color: Colors.white),
+                    label: Text(
+                      'Coins Free',
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    onPressed: () {
+                      return showDialog(
+                          context: context,
+                          child: Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: SingleChildScrollView(
+                                  child: Container(
+                                      margin: EdgeInsets.all(20),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Icon(Icons.stars,
+                                                  color: Colors.white,
+                                                  size: 20),
+                                              Text('Coins Free',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white))
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                              'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
+                                          FittedBox(
+                                            child: ListaAmigos(),
+                                          )
+                                        ],
+                                      )))));
+                    })
+                : Container(),
+            SizedBox(
+              height: 25,
+            ),
+            RaisedButton(
+              onPressed: () async {
+                await controller.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+              },
+              child: Text('Cerrar Sesión'),
+
             ),
           ],
         ));
@@ -239,7 +305,6 @@ class _DialogContentState extends State<DialogContent> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    // TODO: implement build
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -380,5 +445,127 @@ class _DialogContentState extends State<DialogContent> {
       ),
     );
     ;
+  }
+}
+
+class ListaAmigos extends StatefulWidget {
+  @override
+  _ListaAmigosState createState() => _ListaAmigosState();
+}
+
+class _ListaAmigosState extends State<ListaAmigos> {
+  var selectedFriend;
+  String friendId;
+  bool selected = false;
+  bool isLoading = false;
+  int coins = 0;
+  var stream;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    stream = Firestore.instance
+        .collection('usuarios')
+        .where('amigos', arrayContains: controller.usuario.documentId)
+        .snapshots();
+    return StreamBuilder(
+        stream: stream,
+        builder: (context, snapshot) {
+          List<DropdownMenuItem> listItems = [];
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          } else {
+            for (int i = 0; i < snapshot.data.documents.length; i++) {
+              DocumentSnapshot snap = snapshot.data.documents[i];
+
+              listItems.add(
+                DropdownMenuItem(
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 10,
+                        backgroundImage: NetworkImage(snap['foto']),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(snap['nombre']),
+                    ],
+                  ),
+                  value: i,
+                ),
+              );
+            }
+            return Column(
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      DropdownButton(
+                        items: listItems,
+                        onChanged: (value) {
+                          setState(() {
+                            friendId =
+                                snapshot.data.documents[value].documentID;
+
+                            coins = snapshot.data.documents[value]['coins'];
+
+                            selectedFriend = value;
+
+                            setState(() {});
+
+                            controller.notify();
+                          });
+                        },
+                        value: selectedFriend,
+                        isExpanded: false,
+                        hint: Text(
+                          "Selecciona a un amigo",
+                        ),
+                      )
+                    ]),
+                isLoading
+                    ? CircularProgressIndicator()
+                    : selectedFriend == '' || selectedFriend == null
+                        ? Container()
+                        : RaisedButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await Firestore.instance
+                                  .collection('usuarios')
+                                  .document(friendId)
+                                  .updateData({'coins': coins + 25});
+
+                              await controller.usuario.reference
+                                  .updateData({'monedasFree': true});
+
+                              controller.usuario.monedasFree = true;
+
+                              controller.notify();
+                              print(selectedFriend);
+                              print(friendId);
+
+                              setState(() {
+                                isLoading = false;
+                              });
+                              
+                              Navigator.of(context).pop();
+                             
+                            },
+                            child: Text(
+                              'Aceptar',
+                              style: TextStyle(color: buttonColors),
+                            ))
+              ],
+            );
+          }
+        });
   }
 }
