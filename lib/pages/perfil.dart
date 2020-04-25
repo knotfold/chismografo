@@ -398,11 +398,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Galeria',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.photo_library,
-                            color: Colors.white,
+                            color: buttonColors,
                           ),
                         )
                       ],
@@ -420,11 +420,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Camara',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.photo_camera,
-                            color: Colors.white,
+                            color: buttonColors,
                           ),
                         )
                       ],
@@ -481,11 +481,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Guardar',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.save,
-                            color: Colors.white,
+                            color: buttonColors,
                           ),
                         )
                       ],
