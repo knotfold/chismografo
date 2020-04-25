@@ -26,7 +26,10 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     'usuario': null,
     'correo': null,
     'foto': null,
-    'usuarioSearch': null
+    'usuarioSearch': null,
+    'monedasFree':false,
+    'dailyAnswers' : 3,
+    'dailyFormularios': 3,
   };
 
   // _launchURL() async {
@@ -287,7 +290,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               _usuarioform.currentState.save();
 
-              await _validatorUser('@' + form_usuario['usuarioSearch']);
+              await _validatorUser(form_usuario['usuarioSearch']);
               await _validatorEmail(form_usuario['correo']);
 
               setState(() {

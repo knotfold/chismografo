@@ -64,7 +64,7 @@ class Amigos extends StatelessWidget {
             StreamBuilder(
               stream: Firestore.instance
                   .collection('usuarios')
-                  .where('amigos', arrayContains: controller.usuario.documentId)
+                  .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const CircularProgressIndicator();

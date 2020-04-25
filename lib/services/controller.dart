@@ -133,6 +133,8 @@ class Controller with ChangeNotifier {
       print(onError);
       return false;
     });
+
+    
     preguntas.clear();
     participantes.clear();
     privado = true;

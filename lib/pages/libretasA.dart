@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/pages/pages.dart';
+
 import 'package:trivia_form/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:provider/provider.dart';
 
 class LibretasA extends StatelessWidget {
+  final Home home;
+  LibretasA({this.home});
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
     return Scaffold(
+       backgroundColor: Colors.white,
       floatingActionButton: StreamBuilder(
         stream: Firestore.instance
             .collection('formularios')
@@ -26,6 +31,7 @@ class LibretasA extends StatelessWidget {
                 child: Dialog(
                   child: Container(
                     child: ListView.builder(
+                      
                       shrinkWrap: true,
                       itemCount: documents.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -61,7 +67,7 @@ class LibretasA extends StatelessWidget {
               );
             },
             label:
-                Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
+                Text(documents.isEmpty ? 'Sin solicitudes'   : 'Nueva solicitud'),
             icon: documents.isEmpty
                 ? Icon(
                     Icons.tag_faces,
@@ -70,6 +76,7 @@ class LibretasA extends StatelessWidget {
                 : Stack(
                     children: <Widget>[
                       Container(
+                        
                           child: Icon(
                             Icons.fiber_new,
                             size: 30,
@@ -85,51 +92,55 @@ class LibretasA extends StatelessWidget {
                           )
                     ],
                   ),
+                  
           );
         },
       ),
       appBar: myAppBar(controller, context),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Libretas Amigos',
-              style: TextStyle(fontSize: 25),
-            ),
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('formularios')
-                    .where('usuarios',
-                        arrayContains: controller.usuario.usuario)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return const CircularProgressIndicator();
-                  List<DocumentSnapshot> documents = snapshot.data.documents;
-                  return ListView.builder(
-                      itemCount: documents.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        FormularioModel formularioModel =
-                            FormularioModel.fromDS(documents[index]);
-                        return ListTile(
-                          onTap: () {
-                            controller.toFillForm = formularioModel;
-                            Navigator.of(context).pushNamed('/libretaDetalles');
-                          },
-                          title: Text(formularioModel.nombre),
-                          subtitle: Text(formularioModel.creadorUsuario),
-                          trailing:
-                              Text('${formularioModel.usuarios.length} / 25'),
-                        );
-                      });
-                },
+      body: SingleChildScrollView(
+              child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Libretas Amigos',
+                style: TextStyle(fontSize: 25),
               ),
-            ),
-          ],
+              Container(
+                child: StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('formularios')
+                      .where('usuarios',
+                          arrayContains: controller.usuario.usuario)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return const CircularProgressIndicator();
+                    List<DocumentSnapshot> documents = snapshot.data.documents;
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                        itemCount: documents.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          FormularioModel formularioModel =
+                              FormularioModel.fromDS(documents[index]);
+                          return ListTile(
+                            onTap: () {
+                              controller.toFillForm = formularioModel;
+                              Navigator.of(context).pushNamed('/libretaDetalles');
+                            },
+                            title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
+                            subtitle: Text(formularioModel.creadorUsuario),
+                            trailing:
+                                Text('${formularioModel.usuarios.length} / 25'),
+                          );
+                        });
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

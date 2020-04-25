@@ -2,26 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/main.dart';
+import 'package:trivia_form/shared/colors.dart';
 
 AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
     centerTitle: true,
-    backgroundColor: Colors.transparent,
+    
+    backgroundColor: buttonColors,
     elevation: 0,
-    title: Text('Chismografo'),
+    title: Text('Chismografo',style: TextStyle(color: Colors.white),),
     actions: <Widget>[
-      Text(
-        controller.usuario.coins.toString(),
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      Container(
+        margin: EdgeInsets.only(right: 15),
+        child: Row(
+          children: <Widget>[
+            
+                 IconButton(
+            icon: Icon(Icons.stars),
+
+            color: Colors.yellow[800],
+            onPressed: () {
+              controller.seleccionado = 4;
+              controller.notify();
+            },
+
+          ),
+          Text(
+                  controller.usuario.coins.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
+                ),
+          ],
+        ),
+              
       ),
-      IconButton(
-        icon: Icon(Icons.stars),
-        color: Colors.yellow[400],
-        onPressed: () {
-          controller.seleccionado = 4;
-                           controller.notify();
-        },
-      ),
+         
     ],
   );
 }

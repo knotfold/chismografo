@@ -23,9 +23,43 @@ admin.initializeApp(functions.config().firebase);
 //   return null;
 // });
 
+exports.resetRewards = functions.firestore.document('/reset/{reset}'
+).onUpdate((snapshot, context) => {
+    var resetData = snapshot.after.data();
+    if (!resetData.reset) {
+        console.log('nothing to do');
+        return;
+    }
+
+    admin.firestore().collection('usuarios').get().then((snapshot) => {
+        var listaUsuarios = snapshot.docs;
+        var status = true;
+        
+
+        for(var usuario of listaUsuarios){
+            usuario.ref.update({
+                dailyAnswers : 3,
+                dailyFormularios : 3,
+            }).catch((error) => {
+                console.log(error);
+                status = false;
+            });
+
+        }
+
+        
+        if(status){
+            console.log('good');
+        }else{
+            console.log('bad');
+        }
+        
+    })
+})
+
 exports.nuevoFormulario = functions.firestore.document('/formularios/{formulario}'
 ).onCreate((snapshot, context) => {
-    var formularioData = snapshot.data();
+    var formularioData = snapshot.after.data();
     var listaTokens = [];
 
     if (invitaciones == null) {

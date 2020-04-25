@@ -46,7 +46,6 @@ class _FormularioPVState extends State<FormularioPV> {
         controller.respuestas.add('');
       }
 
-      print(pregunta.pregunta);
       pages.add(Container(
         padding: EdgeInsets.all(25),
         child: Column(
@@ -61,7 +60,6 @@ class _FormularioPVState extends State<FormularioPV> {
               onChanged: (value) {
                 controller.respuestas[index - 1] = controller.textECR.text;
                 controller.notify();
-                print(controller.respuestas.length);
               },
               controller: controller.textECR,
               decoration: InputDecoration(
@@ -103,8 +101,6 @@ class _FormularioPVState extends State<FormularioPV> {
                   int tracker = 0;
 
                   for (var respuesta in controller.vRespuestas) {
-                    print(tracker);
-                    print(controller.toFillForm.preguntas[tracker].pregunta);
                     controller.toFillForm.preguntas[tracker].respuestas
                         .add(respuesta.toMap());
                     tracker = tracker + 1;
@@ -122,11 +118,27 @@ class _FormularioPVState extends State<FormularioPV> {
                   controller.respuestas.clear();
                   controller.textECR.clear();
 
-                  Navigator.of(context).pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+                  if (controller.usuario.dailyAnswers > 0) {
+                    controller.usuario.dailyAnswers =
+                        controller.usuario.dailyAnswers - 1;
+                    controller.loading = true;
+                    controller.notify();
+                    showDialog(
+                      context: context,
+                      child: WillPopScope(
+                        onWillPop: () async {
+                          return false;
+                        },
+                        child: CoinRewardDialog(),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/home', ModalRoute.withName('/'));
+                    print('Todo bien');
 
-                  print('Todo bien');
-
-                  return;
+                    return;
+                  }
                 }
                 if (pageController.page != 0) {
                   pageController.nextPage(
@@ -180,5 +192,58 @@ class _FormularioPVState extends State<FormularioPV> {
       return 'Debes de contestar la pregunta';
     }
     return null;
+  }
+}
+
+class CoinRewardDialog extends StatelessWidget {
+  const CoinRewardDialog({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    return AlertDialog(
+      title: Text('¡Felicidades!', style: TextStyle(fontSize: 30),),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                Icons.stars,
+                color: Colors.yellow[800],
+              ),
+              Expanded(
+                              child: Text(
+                    'Haz ganado una recompensa de 5 Monedas por contestar esta Libreta', style: TextStyle(fontSize: 20),),
+              ),
+            ],
+          ),
+          SizedBox(height: 20,),
+          Text(
+              'Te quedan ${controller.usuario.dailyAnswers} de 3 oportunidades para recibir mas monedas'),
+        ],
+      ),
+      actions: <Widget>[
+        RaisedButton(
+          child: Row(
+            children: <Widget>[Text('Continuar')],
+          ),
+          onPressed: () async {
+            controller.usuario.coins = controller.usuario.coins + 5;
+            await controller.usuario.reference.updateData({
+              'dailyAnswers': controller.usuario.dailyAnswers,
+              'coins' : controller.usuario.coins
+            });
+            controller.loading = false;
+            controller.notify();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+          },
+        )
+      ],
+    );
   }
 }

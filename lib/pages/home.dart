@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'pages.dart';
@@ -6,6 +9,7 @@ import 'package:trivia_form/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
+  void pruena2() {}
   @override
   _HomeState createState() => _HomeState();
 }
@@ -40,56 +44,37 @@ class _HomeState extends State<Home> {
       },
       child: Scaffold(
         body: _widgetOptions.elementAt(controller.seleccionado),
-        bottomNavigationBar: StreamBuilder(
-            stream: controller.usuario.reference.snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                UsuarioModel newU =
-                    UsuarioModel.fromDocumentSnapshot(snapshot.data);
-              }
-              return BottomNavigationBar(
-                currentIndex: controller.seleccionado,
-                backgroundColor: Colors.black,
-                fixedColor: Colors.black,
-                unselectedItemColor: Colors.blueGrey,
-                onTap: (int index) {
-                  _onItemTapped(index, controller);
-                },
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.book),
-                    title: Text('Tus Libretas'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('usuarios')
-                            .where('solicitudesAE',
-                                arrayContains: controller.usuario.documentId)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          List<DocumentSnapshot> documents =
-                              snapshot.data.documents;
-
-                          return Icon(Icons.collections_bookmark);
-                        }),
-                    title: Text('Libretas Amigos'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.group),
-                    title: Text('Amigos'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    title: Text('Perfil'),
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.store),
-                    title: Text('Tienda'),
-                  ),
-                ],
-              );
-            }),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: controller.seleccionado,
+          backgroundColor: Colors.black,
+          fixedColor: Colors.black,
+          unselectedItemColor: Colors.blueGrey,
+          onTap: (int index) {
+            _onItemTapped(index, controller);
+          },
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              title: Text('Tus Libretas'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.collections_bookmark),
+              title: Text('Libretas Amigos'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.group),
+              title: Text('Amigos'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              title: Text('Perfil'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.store),
+              title: Text('Tienda'),
+            ),
+          ],
+        ),
       ),
     );
   }

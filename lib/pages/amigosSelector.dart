@@ -96,8 +96,27 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                   if(!success){
                     return;
                   }
-                  print('nice');
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  if (controller.usuario.dailyFormularios > 0) {
+                    controller.usuario.dailyFormularios =
+                        controller.usuario.dailyFormularios - 1;
+                    controller.loading = true;
+                    controller.notify();
+                    showDialog(
+                      context: context,
+                      child: WillPopScope(
+                        onWillPop: () async {
+                          return false;
+                        },
+                        child: CoinRewardDialogF(),
+                      ),
+                    );
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/home', ModalRoute.withName('/'));
+                    print('Todo bien');
+
+                    return;
+                  }
                 },
                 label: Text('Crear'),
               ),
@@ -105,6 +124,59 @@ class _AmigosSelectorState extends State<AmigosSelector> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CoinRewardDialogF extends StatelessWidget {
+  const CoinRewardDialogF({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    return AlertDialog(
+      title: Text('¡Felicidades!', style: TextStyle(fontSize: 30),),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                Icons.stars,
+                color: Colors.yellow[800],
+              ),
+              Expanded(
+                              child: Text(
+                    'Haz ganado una recompensa de 5 Monedas por crear esta Libreta', style: TextStyle(fontSize: 20),),
+              ),
+            ],
+          ),
+          SizedBox(height: 20,),
+          Text(
+              'Te quedan ${controller.usuario.dailyFormularios} de 3 oportunidades para recibir mas monedas'),
+        ],
+      ),
+      actions: <Widget>[
+        RaisedButton(
+          child: Row(
+            children: <Widget>[Text('Continuar')],
+          ),
+          onPressed: () async {
+            controller.usuario.coins = controller.usuario.coins + 5;
+            await controller.usuario.reference.updateData({
+              'dailyFormularios': controller.usuario.dailyFormularios,
+              'coins' : controller.usuario.coins
+            });
+            controller.loading = false;
+            controller.notify();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+          },
+        )
+      ],
     );
   }
 }
