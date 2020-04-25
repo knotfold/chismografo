@@ -16,22 +16,39 @@ class _PerfilState extends State<Perfil> {
     Controller controller = Provider.of<Controller>(context);
     TextEditingController textEditingController = TextEditingController();
     return Scaffold(
-      backgroundColor: backgroundColor,
+        backgroundColor: backgroundColor,
         appBar: myAppBar(controller),
         body: ListView(
           addSemanticIndexes: true,
           addRepaintBoundaries: true,
           scrollDirection: Axis.vertical,
           children: <Widget>[
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: SizedBox(
-                    height: 160,
-                    width: 160,
+                Container(
+                  color: Colors.transparent,
+                  margin:
+                      EdgeInsets.only(left: 20, right: 5, top: 20, bottom: 20),
+                  // height: 100,
+                  // width: 100,
+                  child: GestureDetector(
+                    onTap: () => showDialog(
+                      child: WillPopScope(
+                        onWillPop: () async {
+                          return controller.loading ? false : true;
+                        },
+                        child: SimpleDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          children: <Widget>[
+                            DialogContent(),
+                          ],
+                        ),
+                      ),
+                      context: context,
+                    ),
                     child: Stack(
                       children: <Widget>[
                         ClipRRect(
@@ -39,256 +56,293 @@ class _PerfilState extends State<Perfil> {
                           child: FadeInImage(
                             fit: BoxFit.cover,
                             placeholder: AssetImage('assets/gudtech.jpg'),
-                            width: 200,
-                            height: 200,
+                            width: 100,
+                            height: 100,
                             image: NetworkImage(controller.usuario.foto),
                           ),
                         ),
                         CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: IconButton(
-                              icon: Icon(Icons.photo_camera),
-                              onPressed: () => showDialog(
-                                child: WillPopScope(
-                                  onWillPop: () async {
-                                    return controller.loading ? false : true;
-                                  },
-                                  child: SimpleDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    children: <Widget>[
-                                      DialogContent(),
-                                    ],
-                                  ),
-                                ),
-                                context: context,
-                              ),
-                            ))
+                          backgroundColor: buttonColors,
+                          radius: 17,
+                          child: Icon(
+                            Icons.photo_camera,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                          // IconButton(
+                          //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
+                          //   onPressed: () => null,
+                          //   //=> showDialog(
+                          //   //   child: WillPopScope(
+                          //   //     onWillPop: () async {
+                          //   //       return controller.loading ? false : true;
+                          //   //     },
+                          //   //     child: SimpleDialog(
+                          //   //       shape: RoundedRectangleBorder(
+                          //   //           borderRadius:
+                          //   //               BorderRadius.circular(20)),
+                          //   //       children: <Widget>[
+                          //   //         DialogContent(),
+                          //   //       ],
+                          //   //     ),
+                          //   //   ),
+                          //   //   context: context,
+                          //   // ),
+                          // )
+                        )
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25,
-                ),
-              ],
-            ),
-            Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: 25,
-                ),
-                Icon(Icons.person, color: Colors.black, size: 30),
-                SizedBox(
-                  width: 15,
-                  
-                ),
-                Text(controller.usuario.nombre,
-                    style: TextStyle(
-                      fontSize: 20,
-                    )),
-                SizedBox(
-                  width: 20,
-                ),
-                IconButton(
-                  onPressed: () => showDialog(
-                    context: context,
-                    child: Dialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Container(
-                        margin: EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            TextField(
-                              maxLength: 50,
-                              decoration: InputDecoration(labelText: 'Nombre'),
-                              controller: textEditingController,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            FloatingActionButton.extended(
-                              backgroundColor: Colors.white,
-                              onPressed: () async {
-                                controller.loading = true;
-                                controller.notify();
-                                await controller.usuario.reference.updateData(
-                                    {'nombre': textEditingController.text});
-                                controller.usuario.nombre =
-                                    textEditingController.text;
-                                controller.loading = false;
-                                controller.notify();
-                                Navigator.of(context).pop();
-                              },
-                              label: Text(
-                                'Actualizar',
-                                style: TextStyle(color: buttonColors),
-                              ),
-                              icon: Icon(
-                                Icons.edit,
-                                color: buttonColors,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 25,
                     ),
-                  ),
-                  icon: Icon(Icons.edit),
+                    Row(
+                      //crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
+                        //Icon(Icons.person, color: Colors.black, size: 30),
+                        IconButton(
+                          onPressed: () => showDialog(
+                            context: context,
+                            child: Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    TextField(
+                                      maxLength: 50,
+                                      decoration:
+                                          InputDecoration(labelText: 'Nombre'),
+                                      controller: textEditingController,
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    FloatingActionButton.extended(
+                                      backgroundColor: Colors.white,
+                                      onPressed: () async {
+                                        controller.loading = true;
+                                        controller.notify();
+                                        await controller.usuario.reference
+                                            .updateData({
+                                          'nombre': textEditingController.text
+                                        });
+                                        controller.usuario.nombre =
+                                            textEditingController.text;
+                                        controller.loading = false;
+                                        controller.notify();
+                                        Navigator.of(context).pop();
+                                      },
+                                      label: Text(
+                                        'Actualizar',
+                                        style: TextStyle(color: buttonColors),
+                                      ),
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: buttonColors,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          icon: Icon(Icons.edit),
+                        ),
+
+                        Text(controller.usuario.nombre,
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(Icons.mail, color: buttonColors, size: 30),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Text(controller.usuario.correo,
+                            style: TextStyle(
+                              fontSize: 20,
+                            )),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
+            Divider(),
+
             SizedBox(
               height: 25,
             ),
-            Column(
-              //mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(
+                  width: 20,
+                ),
+                Icon(Icons.search, color: buttonColors, size: 30),
+                SizedBox(
+                  width: 25,
+                ),
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Icon(Icons.search, color: Colors.black, size: 30),
-                    SizedBox(
-                      width: 25,
-                    ),
                     Text(controller.usuario.usuario,
                         style: TextStyle(
                           fontSize: 20,
                         )),
-                    SizedBox(
-                      width: 25,
+                    Text(
+                      'Éste es tu nombre de usuario, tus amigos pueden encontrarte\nfácilmente dentro de la aplicación con él.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white54,
+                      ),
+                      textAlign: TextAlign.justify,
                     ),
                   ],
                 ),
-                
-                Row(
-                  children: <Widget>[
-                    SizedBox(width: 80,),
-                    Text('Éste es tu nombre de usuario, tus amigos pueden\nencontrarte fácilmente dentro de la aplicación con él.',style: TextStyle(fontSize: 12,color: Colors.white60,),textAlign: TextAlign.justify,),
-                  ],
-                ),
               ],
             ),
-            SizedBox(
-              height: 25,
-            ),
-            Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  width: 25,
-                ),
-                Icon(Icons.mail, color: Colors.black, size: 30),
-                SizedBox(
-                  width: 25,
-                ),
-                Text(controller.usuario.correo,
-                    style: TextStyle(
-                      fontSize: 20,
-                    )),
-                SizedBox(
-                  width: 25,
-                ),
-              ],
-            ),
-
-            SizedBox(height: 70,),
-            Container(
-          
-              width: 30,
-              height: 45,
-              margin: EdgeInsets.only(right: 100,left: 100),
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                elevation: 4,
-                    color: buttonColors,
-                onPressed: () async {
-                  await controller.signOut();
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Cerrar Sesión',style: TextStyle(fontSize: 20,color: Colors.white),),
-                    
-                    Icon(Icons.exit_to_app,color: Colors.white,)
-                  ],
-                ),
-
-              ),
 
             SizedBox(
               height: 25,
             ),
             !controller.usuario.monedasFree
-                ? FlatButton.icon(
-                    icon: Icon(Icons.stars, size: 18.0, color: Colors.white),
-                    label: Text(
-                      'Coins Free',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    onPressed: () {
-                      return showDialog(
-                          context: context,
-                          child: Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: SingleChildScrollView(
-                                  child: Container(
-                                      margin: EdgeInsets.all(20),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Icon(Icons.stars,
-                                                  color: Colors.white,
-                                                  size: 20),
-                                              Text('Coins Free',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                              'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
-                                          FittedBox(
-                                            child: ListaAmigos(),
-                                          )
-                                        ],
-                                      )))));
-                    })
+                ? Container(
+                  margin: EdgeInsets.only(left:10),
+                  alignment: Alignment.centerLeft,
+                  child: FlatButton.icon(
+                      icon: Icon(Icons.stars, size: 30, color: buttonColors),
+                      label: Text(
+                        'Coins Free',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () {
+                        return showDialog(
+                            context: context,
+                            child: Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: SingleChildScrollView(
+                                    child: Container(
+                                        margin: EdgeInsets.all(20),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Icon(Icons.stars,
+                                                    color: Colors.white,
+                                                    size: 20),
+                                                Text('Coins Free',
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.white))
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                                'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
+                                            FittedBox(
+                                              child: ListaAmigos(),
+                                            )
+                                          ],
+                                        )))));
+                      }),
+                )
                 : Container(),
+                SizedBox(height: 25,),
+                Container(
+                  margin: EdgeInsets.only(left:10),
+                  alignment: Alignment.centerLeft,
+                  child: FlatButton.icon(
+                      icon: Icon(Icons.group_add, size: 35, color: buttonColors),
+                      label: Text(
+                        'Inivtar amigos',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      onPressed: () =>null),
+                ),
+            
+            Container(
+              
+              height: 300,
+              alignment: Alignment.bottomRight,
+            padding: EdgeInsets.symmetric(horizontal: 40),
+              child: FloatingActionButton.extended(
+                icon: Icon(Icons.exit_to_app),
+                label: Text('Salir'),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                elevation: 4,
+                backgroundColor: buttonColors,
+                onPressed: () async {
+                  await controller.signOut();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+                },
+                // child: Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: <Widget>[
+                   
+                //     Icon(
+                //       Icons.exit_to_app,
+                //       color: Colors.white,
+                //     ),
+                //     Text('Salir'),
+                //   ],
+                // ),
+              ),
+            ),
+
             SizedBox(
               height: 25,
             ),
-            RaisedButton(
-              onPressed: () async {
-                await controller.signOut();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-              },
-              child: Text('Cerrar Sesión'),
 
+            SizedBox(
+              height: 25,
             ),
+            // RaisedButton(
+            //   onPressed: () async {
+            //     await controller.signOut();
+            //     Navigator.of(context)
+            //         .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
+            //   },
+            //   child: Text('Cerrar Sesión'),
+
+            // ),
           ],
         ));
   }
@@ -494,7 +548,14 @@ class _ListaAmigosState extends State<ListaAmigos> {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(snap['nombre']),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(snap['nombre']),
+                          Text(snap['usuario']),
+                        ],
+                      ),
                     ],
                   ),
                   value: i,
@@ -555,9 +616,8 @@ class _ListaAmigosState extends State<ListaAmigos> {
                               setState(() {
                                 isLoading = false;
                               });
-                              
+
                               Navigator.of(context).pop();
-                             
                             },
                             child: Text(
                               'Aceptar',
