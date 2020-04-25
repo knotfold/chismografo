@@ -90,7 +90,7 @@ class StoreItem extends StatelessWidget {
                 ),
                 Icon(
                   Icons.stars,
-                  color: Colors.yellow[600],
+                  color: Colors.yellow[800],
                   size: 20,
                 ),
                 SizedBox(
@@ -195,7 +195,7 @@ class StoreItemFree extends StatelessWidget {
                 ),
                 Icon(
                   Icons.stars,
-                  color: Colors.yellow[600],
+                  color: Colors.yellow[800],
                   size: 20,
                 ),
                 SizedBox(
