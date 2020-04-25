@@ -164,7 +164,7 @@ class _MiniProfileState extends State<MiniProfile> {
                     Expanded(child: Text(widget.usuario.usuario)),
                     !controller.usuario.monedasFree
                         ? isLoading
-                            ? CircularProgressIndicator()
+                            ? Center(child: CircularProgressIndicator())
                             : Center(
                                 child: Column(
                                   children: <Widget>[
