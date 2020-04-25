@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/pages/pages.dart';
+
 import 'package:trivia_form/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:provider/provider.dart';
 
 class LibretasA extends StatelessWidget {
+  final Home home;
+  LibretasA({this.home});
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
     return Scaffold(
+       backgroundColor: Colors.white,
       floatingActionButton: StreamBuilder(
         stream: Firestore.instance
             .collection('formularios')
@@ -61,7 +66,7 @@ class LibretasA extends StatelessWidget {
               );
             },
             label:
-                Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
+                Text(documents.isEmpty ? 'Sin solicitudes'   : 'Nueva solicitud'),
             icon: documents.isEmpty
                 ? Icon(
                     Icons.tag_faces,
@@ -70,6 +75,7 @@ class LibretasA extends StatelessWidget {
                 : Stack(
                     children: <Widget>[
                       Container(
+                        
                           child: Icon(
                             Icons.fiber_new,
                             size: 30,
@@ -85,6 +91,7 @@ class LibretasA extends StatelessWidget {
                           )
                     ],
                   ),
+                  
           );
         },
       ),
@@ -120,7 +127,7 @@ class LibretasA extends StatelessWidget {
                             controller.toFillForm = formularioModel;
                             Navigator.of(context).pushNamed('/libretaDetalles');
                           },
-                          title: Text(formularioModel.nombre),
+                          title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
                           subtitle: Text(formularioModel.creadorUsuario),
                           trailing:
                               Text('${formularioModel.usuarios.length} / 25'),

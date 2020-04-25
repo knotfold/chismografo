@@ -171,6 +171,8 @@ class _MiniProfileState extends State<MiniProfile> {
                                     Text(
                                         'Si este usuario te invito a usar esta App, nosotros les agradeceremos regalandole 25 monedas a cada uno. Solo puedes elgir una vez y a una persona'),
                                     RaisedButton(
+
+
                                         onPressed: () async {
                                           setState(() {
                                             isLoading = true;
@@ -206,6 +208,7 @@ class _MiniProfileState extends State<MiniProfile> {
 
                                           // Navigator.of(context).pop();
                                         },
+
                                         child: Text(
                                           'Regalar monedas ',
                                           style: TextStyle(color: buttonColors),
@@ -217,6 +220,7 @@ class _MiniProfileState extends State<MiniProfile> {
                     SizedBox(
                       height: 20,
                     )
+
                     // SizedBox(
                     //   height: 20),
                     // Text('LIBRETAS'),

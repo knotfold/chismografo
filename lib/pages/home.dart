@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'pages.dart';
@@ -6,11 +9,13 @@ import 'package:trivia_form/services/services.dart';
 
 
 class Home extends StatefulWidget {
+  void pruena2(){}
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+   
   List<Widget> _widgetOptions = <Widget>[
     TusLibretas(),
     LibretasA(),
@@ -19,10 +24,13 @@ class _HomeState extends State<Home> {
     Store(),
   ];
 
+ 
   @override
   void initState() { 
     super.initState();
     FirebaseMessage firebaseMessage = FirebaseMessage();
+
+
     
   }
 
@@ -31,6 +39,9 @@ class _HomeState extends State<Home> {
       controller.seleccionado = index;
     });
   }
+
+
+   
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +58,22 @@ class _HomeState extends State<Home> {
           fixedColor: Colors.black,
           unselectedItemColor: Colors.blueGrey,
           onTap: (int index) {
+            print(index);
+          
+
+            
+           
             _onItemTapped(index, controller);
           },
-          items: const <BottomNavigationBarItem>[
+          items:  <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
               title: Text('Tus Libretas'),
             ),
+
             BottomNavigationBarItem(
-              icon: Icon(Icons.collections_bookmark),
+              icon:  Icon(Icons.collections_bookmark ),
+              
               title: Text('Libretas Amigos'),
             ),
             BottomNavigationBarItem(
@@ -74,5 +92,12 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+
+ 
+   
   }
+
+  
+
+
 }
