@@ -10,10 +10,11 @@ class Formulario extends StatelessWidget {
     FormularioModel formulario = FormularioModel();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: 'formulario',
         onPressed: () => null,
         child: Icon(Icons.save),
       ),
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: ListView.builder(
         itemCount: formulario.preguntas.length,
         itemBuilder: (context, index) => Container(

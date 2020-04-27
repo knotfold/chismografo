@@ -23,7 +23,7 @@ class LibretasA extends StatelessWidget {
           if (!snapshot.hasData) return const CircularProgressIndicator();
           List<DocumentSnapshot> documents = snapshot.data.documents;
           return FloatingActionButton.extended(
-            heroTag: 'btn1',
+            heroTag: 'btnA1',
             
             onPressed: () {
               documents.isEmpty ?  null : showDialog(
@@ -31,6 +31,7 @@ class LibretasA extends StatelessWidget {
                 child: Dialog(
                   child: Container(
                     child: ListView.builder(
+                      
                       shrinkWrap: true,
                       itemCount: documents.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -95,48 +96,51 @@ class LibretasA extends StatelessWidget {
           );
         },
       ),
-      appBar: myAppBar(controller),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Libretas Amigos',
-              style: TextStyle(fontSize: 25),
-            ),
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('formularios')
-                    .where('usuarios',
-                        arrayContains: controller.usuario.usuario)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return const CircularProgressIndicator();
-                  List<DocumentSnapshot> documents = snapshot.data.documents;
-                  return ListView.builder(
-                      itemCount: documents.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        FormularioModel formularioModel =
-                            FormularioModel.fromDS(documents[index]);
-                        return ListTile(
-                          onTap: () {
-                            controller.toFillForm = formularioModel;
-                            Navigator.of(context).pushNamed('/libretaDetalles');
-                          },
-                          title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
-                          subtitle: Text(formularioModel.creadorUsuario),
-                          trailing:
-                              Text('${formularioModel.usuarios.length} / 25'),
-                        );
-                      });
-                },
+      appBar: myAppBar(controller, context),
+      body: SingleChildScrollView(
+              child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Libretas Amigos',
+                style: TextStyle(fontSize: 25),
               ),
-            ),
-          ],
+              Container(
+                child: StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('formularios')
+                      .where('usuarios',
+                          arrayContains: controller.usuario.usuario)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return const CircularProgressIndicator();
+                    List<DocumentSnapshot> documents = snapshot.data.documents;
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                        itemCount: documents.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          FormularioModel formularioModel =
+                              FormularioModel.fromDS(documents[index]);
+                          return ListTile(
+                            onTap: () {
+                              controller.toFillForm = formularioModel;
+                              Navigator.of(context).pushNamed('/libretaDetalles');
+                            },
+                            title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
+                            subtitle: Text(formularioModel.creadorUsuario),
+                            trailing:
+                                Text('${formularioModel.usuarios.length} / 25'),
+                          );
+                        });
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

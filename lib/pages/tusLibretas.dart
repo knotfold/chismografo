@@ -10,57 +10,63 @@ class TusLibretas extends StatelessWidget {
     Controller controller = Provider.of(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'btn1',
+        heroTag: 'btnT1',
         isExtended: true,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
         label: Text('Crea una nueva libreta'),
         icon: Icon(Icons.book),
       ),
-      appBar: myAppBar(controller),
-      body: Container(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Tus Libretas',
-              style: TextStyle(fontSize: 25),
-            ),
-            Container(
-              child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('formularios')
-                    .where('creadorID',
-                        isEqualTo: controller.usuario.documentId)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return const CircularProgressIndicator();
-                  List<DocumentSnapshot> documents = snapshot.data.documents;
-
-                  return documents.isEmpty
-                      ? Text('No tienes Libretas')
-                      : ListView.builder(
-                          itemCount: documents.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            FormularioModel formularioModel =
-                                FormularioModel.fromDS(documents[index]);
-                            return ListTile(
-                              onTap: () {
-                                controller.toFillForm = formularioModel;
-                                Navigator.of(context)
-                                    .pushNamed('/libretaDetalles');
-                              },
-                              title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
-                              subtitle: Text('Tu libreta'),
-                              trailing: Text(
-                                  '${formularioModel.usuarios.length} / 25'),
-                            );
-                          });
-                },
+      appBar: myAppBar(controller, context),
+      body: SingleChildScrollView(
+              child: Container(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Tus Libretas',
+                style: TextStyle(fontSize: 25),
               ),
-            ),
-          ],
+              Container(
+                child: StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('formularios')
+                      .where('creadorID',
+                          isEqualTo: controller.usuario.documentId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return const CircularProgressIndicator();
+                    List<DocumentSnapshot> documents = snapshot.data.documents;
+
+                    return documents.isEmpty
+                        ? Text('No tienes Libretas')
+                        : ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: documents.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              FormularioModel formularioModel =
+                                  FormularioModel.fromDS(documents[index]);
+                              return ListTile(
+                                onTap: () {
+                                  controller.toFillForm = formularioModel;
+                                  Navigator.of(context)
+                                      .pushNamed('/libretaDetalles');
+                                },
+                                title: Text(
+                                  formularioModel.nombre,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                subtitle: Text('Tu libreta'),
+                                trailing: Text(
+                                    '${formularioModel.usuarios.length} / 25'),
+                              );
+                            });
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

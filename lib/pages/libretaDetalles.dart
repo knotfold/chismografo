@@ -19,9 +19,12 @@ class LibretaDetails extends StatelessWidget {
             children: <Widget>[
               IconButton(
             icon: Icon(Icons.stars),
-            color: Colors.yellow[500],
-            onPressed: () => null,
-
+            color: Colors.yellow[800],
+            onPressed: () {
+              controller.seleccionado = 4;
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/'));
+            },
           ),
               Text(
                 controller.usuario.coins.toString(),
@@ -30,7 +33,7 @@ class LibretaDetails extends StatelessWidget {
                 SizedBox(width: 10),
           IconButton(
             onPressed: () {
-                showDialog(
+              showDialog(
                   context: context,
                   child: Dialog(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -87,21 +90,24 @@ class LibretaDetails extends StatelessWidget {
                                     );
                                   },
                                 ),
-                               controller.usuario.usuario == controller.toFillForm.creadorUsuario || controller.toFillForm.priv ? FloatingActionButton.extended(
+                          controller.usuario.usuario ==
+                                      controller.toFillForm.creadorUsuario ||
+                                  controller.toFillForm.priv
+                              ? FloatingActionButton.extended(
+                                heroTag: 'invamigos',
                                   onPressed: () {
                                     showDialog(
-                                      context: context,
-                                      child: Dialog(
-                                        backgroundColor: backgroundColor,
-                                        child: Container(
-                                          padding: EdgeInsets.all(20),
-                                          child: AmigosSelec()                                        ),
-                                      )
-                                    );
+                                        context: context,
+                                        child: Dialog(
+                                          child: Container(
+                                              padding: EdgeInsets.all(20),
+                                              child: AmigosSelec()),
+                                        ));
                                   },
                                   label: Text('Invitar Amigos'),
-                                  icon: Icon(Icons.group_add,size: 30,),
-                                )   : Container(),
+                                  icon: Icon(Icons.group_add),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -122,7 +128,7 @@ class LibretaDetails extends StatelessWidget {
           
         ],
       ),
-      body: controller.toFillForm.usuarios.length < 1
+      body: controller.toFillForm.usuarios.length < 3
           ? Center(
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -170,6 +176,8 @@ class LibretaDetails extends StatelessWidget {
                     itemCount: preguntas.length,
                     itemBuilder: (context, index) => ListTile(
                       onTap: () {
+                        List<dynamic> respuestas = preguntas[index].respuestas;
+                        respuestas.shuffle();
                         showDialog(
                             context: context,
                             child: Dialog(
@@ -201,14 +209,29 @@ class LibretaDetails extends StatelessWidget {
                                       shrinkWrap: true,
                                       itemBuilder: (context, ind) {
                                         return ListTile(
-                                          trailing: IconButton(icon: Icon(Icons.lock_open), onPressed: () => null,),
+                                          trailing: IconButton(
+                                            icon: Icon(Icons.lock_open),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                child: DesbloquearDialog(
+                                                  controller: controller,
+                                                  respuestas: respuestas,
+                                                  usuario: respuestas[ind]
+                                                      ['usuario'],
+                                                  respuesta: respuestas[ind]
+                                                      ['respuesta'],
+                                                  pregunta:
+                                                      preguntas[index].pregunta,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                           title: Text(
-                                            preguntas[index].respuestas[ind]
-                                                ['respuesta']),
+                                              respuestas[ind]['respuesta']),
                                         );
                                       },
-                                      itemCount:
-                                          preguntas[index].respuestas.length,
+                                      itemCount: respuestas.length,
                                     ),
                                   ],
                                 ),
@@ -225,6 +248,114 @@ class LibretaDetails extends StatelessWidget {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class DesbloquearDialog extends StatefulWidget {
+  const DesbloquearDialog(
+      {Key key,
+      @required this.controller,
+      @required this.respuestas,
+      this.pregunta,
+      this.respuesta,
+      this.usuario})
+      : super(key: key);
+
+  final Controller controller;
+  final List respuestas;
+  final String usuario;
+  final String respuesta;
+  final String pregunta;
+
+  @override
+  _DesbloquearDialogState createState() => _DesbloquearDialogState();
+}
+
+class _DesbloquearDialogState extends State<DesbloquearDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Desbloquer respuesta'),
+      content: Text(
+          'Para saber quien escribió esta respuesta necesitas pagar 5 monedas'),
+      actions: widget.controller.loading
+          ? <Widget>[LinearProgressIndicator()]
+          : <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Cancelar'),
+              ),
+              RaisedButton(
+                onPressed: () async {
+                  var status = await widget.controller.gastarMonedas();
+                  if (status) {
+                    showDialog(
+                        context: context,
+                        child: AlertDialog(
+                          title: Text('Disfruta de la verdad :)'),
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                '${widget.pregunta}',
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              Text(
+                                '${widget.usuario} :',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text('${widget.respuesta}'),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            RaisedButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('Aceptar'),
+                            )
+                          ],
+                        ));
+                  } else {
+                    showDialog(
+                        context: context,
+                        child: AlertDialog(
+                          title: Text(
+                            '¡No tienes suficientes monedas!',
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          content: Text(
+                              '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Cancelar'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                            RaisedButton(
+                              onPressed: () {
+                                widget.controller.seleccionado = 4;
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/home', ModalRoute.withName('/'));
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.store),
+                                  Text('Ir a la tienda'),
+                                ],
+                              ),
+                            )
+                          ],
+                        ));
+                  }
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.lock_open),
+                    Text('Desbloquear'),
+                  ],
+                ),
+              )
+            ],
     );
   }
 }

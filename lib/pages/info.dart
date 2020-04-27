@@ -24,7 +24,7 @@ class _InfoState extends State<Info> {
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     return Scaffold(
-      appBar: myAppBar(controller),
+      appBar: myAppBar(controller, context),
       body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
@@ -99,6 +99,7 @@ class _InfoState extends State<Info> {
                   height: 15,
                 ),
                 FloatingActionButton.extended(
+                  heroTag: 'info',
                   onPressed: () => launch(
                       'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CKVCWLMCRCFTN&source=url'),
                   label: Text('Donar'),

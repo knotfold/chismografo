@@ -4,7 +4,7 @@ import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/main.dart';
 import 'package:trivia_form/shared/colors.dart';
 
-AppBar myAppBar(Controller controller) {
+AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
     centerTitle: true,
     
@@ -20,8 +20,11 @@ AppBar myAppBar(Controller controller) {
                  IconButton(
             icon: Icon(Icons.stars),
 
-            color: Colors.yellow[500],
-            onPressed: () => null,
+            color: Colors.yellow[800],
+            onPressed: () {
+              controller.seleccionado = 4;
+              controller.notify();
+            },
 
           ),
           Text(
@@ -71,8 +74,8 @@ Drawer myDrawer(BuildContext context) {
             onPressed: () async {
               signOutGoogle();
               await controller.signOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/', ModalRoute.withName('/home'));
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/', ModalRoute.withName('/home'));
             },
           ),
         )

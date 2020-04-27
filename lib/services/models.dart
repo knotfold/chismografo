@@ -168,6 +168,8 @@ class UsuarioModel {
   List<dynamic> amigos;
   List<dynamic> solicitudesAE;
   bool monedasFree;
+  int dailyAnswers;
+  int dailyFormularios;
 
   UsuarioModel({
     this.contrasena,
@@ -197,5 +199,7 @@ class UsuarioModel {
     usuario = data['usuario'] ?? '';
     coins = data['coins'] ?? 0;
     monedasFree = data['monedasFree'] ?? false;
+    dailyAnswers = data['dailyAnswers'] ?? 3;
+    dailyFormularios = data['dailyFormularios'] ?? 3;
   }
 }

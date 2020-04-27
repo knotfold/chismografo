@@ -26,6 +26,15 @@ class Controller with ChangeNotifier {
   notify() {
     notifyListeners();
   }
+  //generales
+    String uid = '';
+  String name = '';
+  String email = '';
+  String imageUrl = '';
+  String activeToken;
+  bool loading = false;
+  String sexo;
+  String tipo;
 
   //cosas para responder un formulario
   FormularioModel toFillForm;
@@ -43,6 +52,35 @@ class Controller with ChangeNotifier {
 
   PageController pageController = PageController();
   TextEditingController textEditingController = TextEditingController();
+
+  Future<bool> gastarMonedas() async {
+    bool status = true;
+    loading = true;
+    notifyListeners();
+    if(usuarioAct.coins < 5){
+      return false;
+    }
+    var newCoins = usuarioAct.coins - 5;
+
+    await usuarioAct.reference.updateData({
+      'coins' : newCoins
+    }).catchError((onError){
+      print('error');
+      status = false;
+      return false;
+    });
+
+    if(!status){
+      return false;
+    }
+
+    usuarioAct.coins = usuarioAct.coins - 5;
+    loading = false;
+
+    notifyListeners();
+
+    return true;
+  }
 
  Future<bool> buyCoins(int amount) async {
     if (await checkPayment()) {
@@ -95,6 +133,8 @@ class Controller with ChangeNotifier {
       print(onError);
       return false;
     });
+
+    
     preguntas.clear();
     participantes.clear();
     privado = true;
@@ -113,14 +153,7 @@ class Controller with ChangeNotifier {
         dateTime.year.toString();
   }
 
-  String uid = '';
-  String name = '';
-  String email = '';
-  String imageUrl = '';
-  String activeToken;
-  bool loading = false;
-  String sexo;
-  String tipo;
+
 
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

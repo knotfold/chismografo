@@ -28,6 +28,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     'foto': null,
     'usuarioSearch': null,
     'monedasFree':false,
+    'dailyAnswers' : 3,
+    'dailyFormularios': 3,
   };
 
   // _launchURL() async {
@@ -131,7 +133,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       height: 15,
                     ),
                     TextFormField(
-                      enabled: false,
+                   
                       initialValue:
                           controller.name.isEmpty ? null : controller.name,
                       onSaved: (String value) {
