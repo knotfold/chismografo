@@ -228,7 +228,7 @@ class _PerfilState extends State<Perfil> {
                 ),
 
               ),
-
+            ),
             SizedBox(
               height: 25,
             ),
