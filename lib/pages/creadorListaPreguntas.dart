@@ -55,7 +55,7 @@ class _CreadorLPState extends State<CreadorLP> {
                       showDialog(
                           context: context,
                           child: AlertDialog(
-                            title: Text('No puedes tener mas de 15 preguntas'),
+                            title: Text('No puedes tener más de 15 preguntas'),
                           ));
                       return;
                     }

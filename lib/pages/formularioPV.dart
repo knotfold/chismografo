@@ -88,7 +88,7 @@ class _FormularioPVState extends State<FormularioPV> {
                           context: context,
                           child: AlertDialog(
                             title: Text(
-                                'Debes de contestar todas las preguntas de la libreta. No se puede contestar no se, o algo parecido y las respuestas deben de tener mino 5 letras'),
+                                'Debes de contestar todas las preguntas de la libreta. No se puede contestar no sé o algo parecido y las respuestas deben de tener mínimo 5 letras'),
                           ));
                       controller.vRespuestas.clear();
                       return;
