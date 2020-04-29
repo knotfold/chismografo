@@ -24,6 +24,7 @@ class Amigos extends StatelessWidget {
                   ? Icon(
                       Icons.face,
                       size: 30,
+                      // color: Colors.black,
                     )
                   : Stack(
                       children: <Widget>[
@@ -31,6 +32,7 @@ class Amigos extends StatelessWidget {
                           child: Icon(
                             Icons.add_alert,
                             size: 30,
+                            // color: Colors.black,
                           ),
                           width: 30,
                           height: 30,
@@ -56,11 +58,18 @@ class Amigos extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Amigos',
-              style: TextStyle(fontSize: 25),
+            Row(
+              children: <Widget>[
+             
+                Text(
+                  'Amigos',
+                  style: TextStyle(fontSize: 23),
+                ),
+              ],
             ),
+            SizedBox(height: 20,),
             StreamBuilder(
               stream: Firestore.instance
                   .collection('usuarios')

@@ -58,7 +58,7 @@ class _LogInState extends State<LogIn> {
                           //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight:Radius.circular(10))
                           //  ),
                           padding: const EdgeInsets.fromLTRB(0, 100, 0, 100),
-                          color: backgroundColor,
+                          color: primaryColor,
                           width: double.maxFinite,
                           child: Column(
                             children: <Widget>[

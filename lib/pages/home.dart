@@ -120,100 +120,106 @@ class _HomeState extends State<Home> {
       },
       child: Scaffold(
         body: _widgetOptions.elementAt(controller.seleccionado),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: controller.seleccionado,
-          backgroundColor: Colors.black,
-          fixedColor: Colors.black,
-          unselectedItemColor: Colors.blueGrey,
-          onTap: (int index) {
-            _onItemTapped(index, controller);
-          },
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              title: Text('Tus Libretas'),
-            ),
-            BottomNavigationBarItem(
-              icon: StreamBuilder(
-                  stream: Firestore.instance
-                      .collection('formularios')
-                      .where('invitaciones',
-                          arrayContains: controller.usuario.usuario)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData)
-                      return const Icon(Icons.collections_bookmark);
-                    List<DocumentSnapshot> documents = snapshot.data.documents;
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: primaryColor
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            // fixedColor: primaryColor,
+            currentIndex: controller.seleccionado,
+            selectedItemColor: secondaryColor,
+            unselectedItemColor: Colors.white,
+            onTap: (int index) {
+              _onItemTapped(index, controller);
+            },
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.book),
+                title: Text('Tus Libretas'),
+              ),
+              BottomNavigationBarItem(
+                icon: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('formularios')
+                        .where('invitaciones',
+                            arrayContains: controller.usuario.usuario)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return const Icon(Icons.collections_bookmark);
+                      List<DocumentSnapshot> documents = snapshot.data.documents;
 
-                    return documents.isEmpty
-                        ? Icon(Icons.collections_bookmark)
-                        : Stack(
-                            children: <Widget>[
-                              Container(
-                                  child: Icon(
-                                    Icons.collections_bookmark,
-                                  ),
-                                  width: 30,
-                                  height: 30),
-                              Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(right: 20),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: yemahuevo),
-                              )
-                            ],
-                          );
-                  }),
-              title: Text('Libretas Amigos'),
-            ),
-            BottomNavigationBarItem(
-              icon: StreamBuilder(
-                  stream: Firestore.instance
-                      .collection('usuarios')
-                      .where('solicitudesAE',
-                          arrayContains: controller.usuario.documentId)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) return const Icon(Icons.group);
+                      return documents.isEmpty
+                          ? Icon(Icons.collections_bookmark)
+                          : Stack(
+                              children: <Widget>[
+                                Container(
+                                    child: Icon(
+                                      Icons.collections_bookmark,
+                                    ),
+                                    width: 30,
+                                    height: 30),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(right: 20),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: yemahuevo),
+                                )
+                              ],
+                            );
+                    }),
+                title: Text('Libretas Amigos'),
+              ),
+              BottomNavigationBarItem(
+                icon: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('usuarios')
+                        .where('solicitudesAE',
+                            arrayContains: controller.usuario.documentId)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const Icon(Icons.group);
 
-                    List<DocumentSnapshot> documents = snapshot.data.documents;
+                      List<DocumentSnapshot> documents = snapshot.data.documents;
 
-                    return documents.isEmpty
-                        ? Icon(Icons.contacts)
-                        : Stack(
-                            children: <Widget>[
-                              Container(
-                                  child: Icon(
-                                    Icons.contacts,
-                                  ),
-                                  width: 30,
-                                  height: 30),
-                              Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(right: 20),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: yemahuevo),
-                              )
-                            ],
-                          );
-                  }),
-              title: Text('Amigos'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Perfil'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.store),
-              title: Text('Tienda'),
-            ),
-          ],
+                      return documents.isEmpty
+                          ? Icon(Icons.contacts)
+                          : Stack(
+                              children: <Widget>[
+                                Container(
+                                    child: Icon(
+                                      Icons.contacts,
+                                    ),
+                                    width: 30,
+                                    height: 30),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(right: 20),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: yemahuevo),
+                                )
+                              ],
+                            );
+                    }),
+                title: Text('Amigos'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text('Perfil'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.store),
+                title: Text('Tienda'),
+              ),
+            ],
+          ),
         ),
       ),
     );

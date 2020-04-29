@@ -12,9 +12,10 @@ class TusLibretas extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'btnT1',
         isExtended: true,
+        splashColor: secondaryColor,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
-        label: Text('Crea una nueva libreta'),
-        icon: Icon(Icons.book),
+        label: Text('Crea una nueva libreta', style: TextStyle(),),
+        icon: Icon(Icons.book,),
       ),
       appBar: myAppBar(controller, context),
       body: SingleChildScrollView(
