@@ -16,7 +16,6 @@ class _PerfilState extends State<Perfil> {
     Controller controller = Provider.of<Controller>(context);
     TextEditingController textEditingController = TextEditingController();
     return Scaffold(
-        backgroundColor: backgroundColor,
         appBar: myAppBar(controller, context),
         body: ListView(
           addSemanticIndexes: true,
@@ -62,12 +61,10 @@ class _PerfilState extends State<Perfil> {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: buttonColors,
                           radius: 17,
                           child: Icon(
                             Icons.photo_camera,
                             size: 18,
-                            color: Colors.white,
                           ),
                           // IconButton(
                           //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
@@ -130,7 +127,6 @@ class _PerfilState extends State<Perfil> {
                                         height: 15,
                                       ),
                                       FloatingActionButton.extended(
-                                        backgroundColor: Colors.white,
                                         onPressed: () async {
                                           controller.loading = true;
                                           controller.notify();
@@ -146,12 +142,10 @@ class _PerfilState extends State<Perfil> {
                                         },
                                         label: Text(
                                           'Actualizar',
-                                          style: TextStyle(color: buttonColors),
                                         ),
                                         icon: Icon(
                                           Icons.edit,
                                           size: 20,
-                                          color: buttonColors,
                                         ),
                                       )
                                     ],
@@ -178,7 +172,10 @@ class _PerfilState extends State<Perfil> {
                           SizedBox(
                             width: 15,
                           ),
-                          Icon(Icons.mail, color: buttonColors, size: 20),
+                          Icon(
+                            Icons.mail,
+                            size: 20,
+                          ),
                           SizedBox(
                             width: 15,
                           ),
@@ -208,7 +205,10 @@ class _PerfilState extends State<Perfil> {
                   SizedBox(
                     width: 20,
                   ),
-                  Icon(Icons.assistant, color: buttonColors, size: 20),
+                  Icon(
+                    Icons.assistant,
+                    size: 20,
+                  ),
                   SizedBox(
                     width: 10,
                   ),
@@ -225,7 +225,6 @@ class _PerfilState extends State<Perfil> {
                           'Éste es tu nombre de usuario, tus amigos pueden encontrarte\nfácilmente dentro de la aplicación con él.',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -242,10 +241,16 @@ class _PerfilState extends State<Perfil> {
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: FlatButton.icon(
-                      icon: Icon(Icons.stars, size: 20, color: buttonColors),
+
+                      icon: Icon(
+                        Icons.stars,
+                        size: 20,
+                        color: Colors.black,
+                      ),
                       label: Text(
-                        'Monedas Grátis',
+                        'Monedas Gratis',
                         style: TextStyle(
+                          color: Colors.black,
                           fontSize: 18,
                         ),
                       ),
@@ -266,12 +271,14 @@ class _PerfilState extends State<Perfil> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Icon(Icons.stars,
-                                            color: Colors.white, size: 20),
-                                        Text('Monedas Grátis',
+                                        Icon(
+                                          Icons.stars,
+                                          size: 20,
+                                        ),
+                                        Text('Monedas Gratis',
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white))
+                                              fontSize: 18,
+                                            ))
                                       ],
                                     ),
                                     SizedBox(
@@ -299,7 +306,7 @@ class _PerfilState extends State<Perfil> {
               margin: EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
               child: FlatButton.icon(
-                  icon: Icon(Icons.group_add, size: 20, color: buttonColors),
+                  icon: Icon(Icons.group_add, size: 20, ),
                   label: Text(
                     'Inivtar amigos',
                     style: TextStyle(
@@ -317,7 +324,6 @@ class _PerfilState extends State<Perfil> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 4,
-                backgroundColor: buttonColors,
                 onPressed: () async {
                   await controller.signOut();
                   Navigator.of(context)
@@ -350,7 +356,6 @@ class _PerfilState extends State<Perfil> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       elevation: 4,
-                      backgroundColor: buttonColors,
                       onPressed: () async {
                         Firestore.instance
                             .collection('reset')
@@ -418,7 +423,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil2',
-                          backgroundColor: Colors.white,
                           onPressed: () async {
                             imagen = await controller.getImage(context);
                             setState(() {
@@ -427,11 +431,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Galeria',
-                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.photo_library,
-                            color: buttonColors,
                           ),
                         )
                       ],
@@ -440,7 +442,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil3',
-                          backgroundColor: Colors.white,
                           onPressed: () async {
                             imagen = await controller.getImageCamera(context);
                             setState(() {
@@ -449,11 +450,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Camara',
-                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.photo_camera,
-                            color: buttonColors,
                           ),
                         )
                       ],
@@ -463,7 +462,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil4',
-                          backgroundColor: Colors.white,
                           onPressed: () async {
                             controller.loading = true;
                             controller.notify();
@@ -511,11 +509,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Guardar',
-                            style: TextStyle(color: buttonColors),
                           ),
                           icon: Icon(
                             Icons.save,
-                            color: buttonColors,
                           ),
                         )
                       ],
@@ -651,7 +647,6 @@ class _ListaAmigosState extends State<ListaAmigos> {
                             },
                             child: Text(
                               'Aceptar',
-                              style: TextStyle(color: buttonColors),
                             ))
               ],
             );

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,16 +47,11 @@ class Controller with ChangeNotifier {
   List<Respuesta> vRespuestas = [];
   TextEditingController textECR = TextEditingController();
 
+    PageController pageController2 = PageController();
+    int sdtP;
+
+
   //finnnn
-
-  //Cosas para llenar  una libreta
-  List<String> preguntas = [];
-  List<String> participantes = [];
-  bool privado = true;
-  String nombreLibreta;
-
-  PageController pageController = PageController();
-  TextEditingController textEditingController = TextEditingController();
 
   Future<bool> gastarMonedas() async {
     bool status = true;
@@ -100,16 +96,26 @@ class Controller with ChangeNotifier {
 
   Future<bool> checkPayment() async {
     bool status = true;
-   
-   
-  
 
     print('purchased');
     return status;
   }
 
+  //Cosas para llenar  una libreta
+  List<String> preguntas = [];
+  List<String> participantes = [];
+  bool privado = true;
+  String nombreLibreta;
+
+  PageController pageController = PageController();
+  TextEditingController textEditingController = TextEditingController();
+
+  File image;
+
   crearFormulario(BuildContext context) async {
     List<Pregunta> preguntasM = [];
+    loading = true;
+    notify();
     print('first');
     if (preguntas.length < 3) {
       showDialog(
@@ -124,6 +130,29 @@ class Controller with ChangeNotifier {
     preguntas.forEach((pregunta) {
       preguntasM.add(Pregunta.fromString(pregunta));
     });
+
+    String url;
+    
+    if(image != null){
+ final String fileName =
+        usuarioAct.correo + '/libretas/' + DateTime.now().toString();
+
+    StorageReference storageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+
+    final StorageUploadTask uploadTask = storageRef.putFile(
+      image,
+    );
+
+    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+
+    url = (await downloadUrl.ref.getDownloadURL());
+    print('URL Is $url');
+    }else{
+      url = '';
+    }
+   
+
     print('second');
     print(preguntasM.length);
     FormularioModel formularioModel = FormularioModel(
@@ -132,7 +161,8 @@ class Controller with ChangeNotifier {
         preguntas: preguntasM,
         priv: privado,
         nombre: textEditingController.text,
-        creadorUsuario: usuario.usuario);
+        creadorUsuario: usuario.usuario,
+        imagen: url);
 
     print('third');
     await Firestore.instance
@@ -143,11 +173,13 @@ class Controller with ChangeNotifier {
       return false;
     });
 
+    loading = false;
     preguntas.clear();
     participantes.clear();
     privado = true;
     nombreLibreta = '';
     textEditingController.clear();
+    image = null;
     return true;
   }
 

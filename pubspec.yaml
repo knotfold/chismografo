@@ -75,6 +75,8 @@ flutter:
   assets:
 
     - assets/google-logo.png
+    - assets/greyperson.png
+    - assets/file-picture-icon.png
 
     - assets/
 

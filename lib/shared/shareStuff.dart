@@ -19,8 +19,9 @@ AppBar myAppBar(Controller controller, BuildContext context) {
         child: Row(
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.info),
+              icon: Icon(Icons.live_help),
               onPressed: () {
+                controller.sdtP = 0;
                 showDialog(
                   context: context,
                   child: TutorialDialog(),
@@ -62,61 +63,144 @@ class TutorialDialog extends StatefulWidget {
 }
 
 class _TutorialDialogState extends State<TutorialDialog> {
-  PageController pageController = PageController();
 
-  Future<DocumentSnapshot> fetchTutorial() async {
+  Future<DocumentSnapshot> fetchTutorial(Controller controller) async {
+    String search;
+    switch (controller.seleccionado) {
+      case 0:
+        {
+          search = 'howtouse';
+          break;
+        }
+      case 1:
+        search = 'howtouselibretasA';
+        break;
+
+      case 2:
+        search = 'howtouseamigos';
+        break;
+
+      case 3:
+        search = 'howtouseperfil';
+        break;
+
+      case 4:
+        search = 'howtousetienda';
+        break;
+    }
     return await Firestore.instance
         .collection('howtouse')
-        .document('howtouse')
+        .document(search)
         .get();
   }
 
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of(context);
     return Dialog(
       child: Container(
         margin: EdgeInsets.all(20),
         child: FutureBuilder(
-            future: fetchTutorial(),
+            future: fetchTutorial(controller),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const CircularProgressIndicator();
-              List<dynamic> map = snapshot.data['howtouse'];
+              String search;
+              switch (controller.seleccionado) {
+                case 0:
+                  {
+                    search = 'howtouse';
+                    break;
+                  }
+                case 1:
+                  search = 'howtouselibretasA';
+                  break;
+
+                case 2:
+                  search = 'howtouseamigos';
+                  break;
+
+                case 3:
+                  search = 'howtouseperfil';
+                  break;
+
+                case 4:
+                  search = 'howtousetienda';
+                  break;
+              }
+              List<dynamic> map = snapshot.data[search];
               List<Widget> pages = [];
               print('map');
               map.forEach((f) {
                 print('for?');
                 pages.add(Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        f['titulo'],
-                        style: TextStyle(fontSize: 30),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Text(f['desc']),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Image(
-                        alignment: Alignment.topCenter,
-                        height: 300,
-                        width: 400,
-                        fit: BoxFit.fitWidth,
-                        image: NetworkImage(f['imagen']),
-                      ),
-                    ],
+                  child: SingleChildScrollView(
+                                      child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          f['titulo'],
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Text(f['desc']),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Image(
+                          alignment: Alignment.topCenter,
+                          height: 300,
+                          width: 400,
+                          fit: BoxFit.fitWidth,
+                          image: NetworkImage(f['imagen']),
+                        ),
+                      ],
+                    ),
                   ),
                 ));
               });
 
               print('duh');
-              return PageView(
-                controller: pageController,
-                children: pages,
+              return SingleChildScrollView(
+                              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      child: ListView.builder(
+                        itemCount: map.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Icon(
+                            Icons.fiber_manual_record,
+                            size: 10,
+                            color:  controller.sdtP == index
+                                ? secondaryColor
+                                : Colors.grey,
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 400,
+                      child: PageView(
+                        onPageChanged: (value){
+                          controller.sdtP = value;
+                          controller.notify();
+                          setState(() {
+                            
+                          });
+                        },
+                        controller: controller.pageController2,
+                        children: pages,
+                      ),
+                    ),
+                    
+                  ],
+                ),
               );
             }),
       ),
