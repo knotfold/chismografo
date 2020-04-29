@@ -36,7 +36,7 @@ class Store extends StatelessWidget {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que contestes una libreta',
+                    'Cinco Estrellas Gratis por cada vez que contestes una libreta',
                 opcion: 'Ir a Libretas de Amigos',
                 oportunidades: controller.usuario.dailyAnswers.toString(),
                 newIndex: 1,
@@ -44,7 +44,7 @@ class Store extends StatelessWidget {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que crees una libreta',
+                    'Cinco Estrellas Gratis por cada vez que crees una libreta',
                 opcion: 'Ir a tus libretas',
                 oportunidades: controller.usuario.dailyFormularios.toString(),
                 newIndex: 0,

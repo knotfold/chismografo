@@ -160,7 +160,7 @@ class _PerfilState extends State<Perfil> {
                           ),
                           icon: Icon(Icons.edit),
                         ),
-
+                        
                         Text(controller.usuario.nombre,
                             style: TextStyle(
                               fontSize: 18,
@@ -219,12 +219,11 @@ class _PerfilState extends State<Perfil> {
                               fontSize: 18,
                             )),
                         Text(
-                          'Éste es tu nombre de usuario, tus amigos pueden encontrarte\nfácilmente dentro de la aplicación con él.',
+                          'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
-                          
                         ),
                       ],
                     ),
@@ -243,7 +242,7 @@ class _PerfilState extends State<Perfil> {
                     child: FlatButton.icon(
                         icon: Icon(Icons.stars, size: 20, color: buttonColors),
                         label: Text(
-                          'Monedas Grátis',
+                          'Monedas Gratis',
                           style: TextStyle(
                             fontSize: 18,
                           ),

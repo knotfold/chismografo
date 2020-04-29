@@ -54,7 +54,7 @@ class Amigos extends StatelessWidget {
           }),
       appBar: myAppBar(controller, context),
       body: Container(
-        padding: EdgeInsets.all(10),
+        //padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
             Text(
