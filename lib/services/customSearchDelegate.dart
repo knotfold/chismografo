@@ -23,9 +23,10 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+
     var stream = Firestore.instance
         .collection('usuarios')
-        .where('usuarioSearch', isEqualTo: query.toLowerCase())
+        .where('usuarioSearch', isEqualTo: query.toLowerCase().trim())
         .snapshots();
 
     print(query);
@@ -59,7 +60,8 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  
+    @override
+  String get searchFieldLabel => 'Ejemplo: @usuario';
 
   @override
   Widget buildSuggestions(BuildContext context) {

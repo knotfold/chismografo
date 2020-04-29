@@ -23,6 +23,7 @@ class _CreadorLPState extends State<CreadorLP> {
               'PREGUNTAS (${controller.preguntas.length}/15)',
               style: TextStyle(fontSize: 20),
             ),
+            Text('Nota: Minimo debes de poner 3 preguntas'),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
