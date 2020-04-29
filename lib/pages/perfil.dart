@@ -94,105 +94,108 @@ class _PerfilState extends State<Perfil> {
                     ),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      //crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        //Icon(Icons.person, color: Colors.black, size: 30),
-                        IconButton(
-                          onPressed: () => showDialog(
-                            context: context,
-                            child: Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Container(
-                                margin: EdgeInsets.all(20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    TextField(
-                                      maxLength: 50,
-                                      decoration:
-                                          InputDecoration(labelText: 'Nombre'),
-                                      controller: textEditingController,
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    FloatingActionButton.extended(
-                                      backgroundColor: Colors.white,
-                                      onPressed: () async {
-                                        controller.loading = true;
-                                        controller.notify();
-                                        await controller.usuario.reference
-                                            .updateData({
-                                          'nombre': textEditingController.text
-                                        });
-                                        controller.usuario.nombre =
-                                            textEditingController.text;
-                                        controller.loading = false;
-                                        controller.notify();
-                                        Navigator.of(context).pop();
-                                      },
-                                      label: Text(
-                                        'Actualizar',
-                                        style: TextStyle(color: buttonColors),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          // SizedBox(
+                          //   height: 15,
+                          // ),
+                          //Icon(Icons.person, color: Colors.black, size: 30),
+                          IconButton(
+                            onPressed: () => showDialog(
+                              context: context,
+                              child: Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Container(
+                                  margin: EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      TextField(
+                                        maxLength: 50,
+                                        decoration: InputDecoration(
+                                            labelText: 'Nombre'),
+                                        controller: textEditingController,
                                       ),
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 20,
-                                        color: buttonColors,
+                                      SizedBox(
+                                        height: 15,
                                       ),
-                                    )
-                                  ],
+                                      FloatingActionButton.extended(
+                                        backgroundColor: Colors.white,
+                                        onPressed: () async {
+                                          controller.loading = true;
+                                          controller.notify();
+                                          await controller.usuario.reference
+                                              .updateData({
+                                            'nombre': textEditingController.text
+                                          });
+                                          controller.usuario.nombre =
+                                              textEditingController.text;
+                                          controller.loading = false;
+                                          controller.notify();
+                                          Navigator.of(context).pop();
+                                        },
+                                        label: Text(
+                                          'Actualizar',
+                                          style: TextStyle(color: buttonColors),
+                                        ),
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 20,
+                                          color: buttonColors,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
+                            icon: Icon(Icons.edit),
                           ),
-                          icon: Icon(Icons.edit),
-                        ),
 
-                        Text(controller.usuario.nombre,
-                            style: TextStyle(
-                              fontSize: 18,
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Icon(Icons.mail, color: buttonColors, size: 20),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(controller.usuario.correo,
-                            style: TextStyle(
-                              fontSize: 18,
-                            )),
-                      ],
-                    ),
-                  ],
+                          Text(controller.usuario.nombre,
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Icon(Icons.mail, color: buttonColors, size: 20),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Text(controller.usuario.correo,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             Divider(),
-
             SizedBox(
               height: 25,
             ),
@@ -224,7 +227,6 @@ class _PerfilState extends State<Perfil> {
                             fontSize: 16,
                             color: Colors.white,
                           ),
-                          
                         ),
                       ],
                     ),
@@ -232,7 +234,6 @@ class _PerfilState extends State<Perfil> {
                 ],
               ),
             ),
-
             SizedBox(
               height: 25,
             ),
@@ -241,50 +242,54 @@ class _PerfilState extends State<Perfil> {
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: FlatButton.icon(
-                        icon: Icon(Icons.stars, size: 20, color: buttonColors),
-                        label: Text(
-                          'Monedas Grátis',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
+                      icon: Icon(Icons.stars, size: 20, color: buttonColors),
+                      label: Text(
+                        'Monedas Grátis',
+                        style: TextStyle(
+                          fontSize: 18,
                         ),
-                        onPressed: () {
-                          return showDialog(
-                              context: context,
-                              child: Dialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: SingleChildScrollView(
-                                      child: Container(
-                                          margin: EdgeInsets.all(20),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Icon(Icons.stars,
-                                                      color: Colors.white,
-                                                      size: 20),
-                                                  Text('Monedas Grátis',
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white))
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Text(
-                                                  'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
-                                              FittedBox(
-                                                child: ListaAmigos(),
-                                              )
-                                            ],
-                                          )))));
-                        }),
+                      ),
+                      onPressed: () {
+                        return showDialog(
+                          context: context,
+                          child: Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: SingleChildScrollView(
+                              child: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(Icons.stars,
+                                            color: Colors.white, size: 20),
+                                        Text('Monedas Grátis',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white))
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                        'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
+                                    FittedBox(
+                                      child: ListaAmigos(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   )
                 : Container(),
             SizedBox(
@@ -334,19 +339,38 @@ class _PerfilState extends State<Perfil> {
             SizedBox(
               height: 25,
             ),
+            controller.usuario.usuario == '@GAV' ||
+                    controller.usuario.usuario == '@Cammy'
+                ? Container(
+                    margin: EdgeInsets.symmetric(horizontal: 50),
+                    child: FloatingActionButton.extended(
+                      heroTag: 'meh',
+                      icon: Icon(Icons.restore),
+                      label: Text('Reset'),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      elevation: 4,
+                      backgroundColor: buttonColors,
+                      onPressed: () async {
+                        Firestore.instance
+                            .collection('reset')
+                            .document('reset')
+                            .updateData({'reset': true});
+                      },
+                      // child: Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: <Widget>[
 
-            SizedBox(
-              height: 25,
-            ),
-            // RaisedButton(
-            //   onPressed: () async {
-            //     await controller.signOut();
-            //     Navigator.of(context)
-            //         .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-            //   },
-            //   child: Text('Cerrar Sesión'),
-
-            // ),
+                      //     Icon(
+                      //       Icons.exit_to_app,
+                      //       color: Colors.white,
+                      //     ),
+                      //     Text('Salir'),
+                      //   ],
+                      // ),
+                    ),
+                  )
+                : Container(),
           ],
         ));
   }
@@ -413,7 +437,6 @@ class _DialogContentState extends State<DialogContent> {
                       ],
                     ),
                     ButtonBar(
-                      alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil3',

@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:ffi';
+import 'package:flutter/services.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:trivia_form/pages/pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,79 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  StreamSubscription purchaseUpdatedSubscription;
+  StreamSubscription purchaseErrorSubscription;
+  String platformVersion = 'Unknown';
+  List<String> productos = ['05monedas', '10monedas', '20monedas'];
+
+  Future<void> initPlatformState(BuildContext context) async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterInappPurchase.instance.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // prepare
+    var result = await FlutterInappPurchase.instance.initConnection;
+    print('result: $result');
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+      platformVersion = platformVersion;
+    
+
+    // refresh items for android
+    try {
+      String msg = await FlutterInappPurchase.instance.consumeAllItems;
+      print('consumeAllItems: $msg');
+    } catch (err) {
+      print('consumeAllItems error: $err');
+    }
+
+    purchaseUpdatedSubscription =
+        FlutterInappPurchase.purchaseUpdated.listen((productItem) {
+      Future.delayed(Duration.zero, () async {
+        Controller controller = Provider.of<Controller>(context, listen: false);
+        await FlutterInappPurchase.instance.consumeAllItems;
+        String cantidad = productItem.productId.substring(0, 2);
+        var result = await controller.buyCoins(int.parse(cantidad));
+        if (result) {
+          showDialog(
+              context: context,
+              child: AlertDialog(
+                title: Text('Compra exitosa'),
+                content: Text('Felicidades has aquirido $cantidad monedas'),
+              ));
+        } else {
+          showDialog(
+              context: context,
+              child: AlertDialog(
+                title: Text('Error'),
+                content: Text('Error en la compra'),
+              ));
+        }
+      });
+      print('purchase-updated: $productItem');
+    });
+
+    purchaseErrorSubscription =
+        FlutterInappPurchase.purchaseError.listen((purchaseError) {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('Error en la compra vuelve a intentar'),
+            content: Text('Error en la compra :( '),
+          ));
+
+      print('purchase-error: $purchaseError');
+    });
+  }
+
   List<Widget> _widgetOptions = <Widget>[
     TusLibretas(),
     LibretasA(),
@@ -26,6 +102,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     FirebaseMessage firebaseMessage = FirebaseMessage();
+    initPlatformState(context);
   }
 
   _onItemTapped(int index, Controller controller) {
@@ -100,8 +177,7 @@ class _HomeState extends State<Home> {
                           arrayContains: controller.usuario.documentId)
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData)
-                      return const Icon(Icons.group);
+                    if (!snapshot.hasData) return const Icon(Icons.group);
 
                     List<DocumentSnapshot> documents = snapshot.data.documents;
 

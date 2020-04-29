@@ -19,7 +19,7 @@ class Amigos extends StatelessWidget {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
-              heroTag: 'btnA1',
+              heroTag: 'btnAA1',
               child: documents.isEmpty
                   ? Icon(
                       Icons.face,
@@ -180,7 +180,9 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
               shape: BeveledRectangleBorder(),
               onPressed: () => showSearch(
                 context: context,
-                delegate: CustomSearchDelegate(),
+                delegate: CustomSearchDelegate(
+                  
+                ),
               ),
               icon: Icon(
                 Icons.search,
