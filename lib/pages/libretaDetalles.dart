@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:provider/provider.dart';
@@ -276,6 +278,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text('Desbloquer respuesta'),
       content: Text(
           'Para saber quien escribió esta respuesta necesitas pagar 5 monedas'),
@@ -283,10 +286,14 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
           ? <Widget>[LinearProgressIndicator()]
           : <Widget>[
               FlatButton(
+                color: Colors.white,
+                
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('Cancelar'),
+                child: Text('Cancelar',style: TextStyle(color: buttonColors),),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
               RaisedButton(
+                color: buttonColors,
                 onPressed: () async {
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
@@ -312,7 +319,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                           actions: <Widget>[
                             RaisedButton(
                               onPressed: () => Navigator.of(context).pop(),
-                              child: Text('Aceptar'),
+                              child: Text('Aceptar',style: TextStyle(color: Colors.white),),
                             )
                           ],
                         ));
@@ -350,8 +357,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                 },
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.lock_open),
-                    Text('Desbloquear'),
+                    Icon(Icons.lock_open,color: Colors.white,),
+                    Text('Desbloquear',style: TextStyle(color: Colors.white),),
                   ],
                 ),
               )

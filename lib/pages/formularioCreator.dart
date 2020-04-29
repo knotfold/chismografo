@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/shared/colors.dart';
 import 'pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
@@ -10,7 +11,7 @@ class FormularioCreator extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-       backgroundColor: Colors.transparent,
+       backgroundColor: buttonColors,
       ),
       body: PageView(
         physics: BouncingScrollPhysics(),

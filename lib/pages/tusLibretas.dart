@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/shared/libretaCard.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -47,20 +48,22 @@ class TusLibretas extends StatelessWidget {
                             itemBuilder: (context, index) {
                               FormularioModel formularioModel =
                                   FormularioModel.fromDS(documents[index]);
-                              return ListTile(
-                                onTap: () {
-                                  controller.toFillForm = formularioModel;
-                                  Navigator.of(context)
-                                      .pushNamed('/libretaDetalles');
-                                },
-                                title: Text(
-                                  formularioModel.nombre,
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                subtitle: Text('Tu libreta'),
-                                trailing: Text(
-                                    '${formularioModel.usuarios.length} / 25'),
-                              );
+                              return  LibretaCard(formularioModel: formularioModel,controller: controller);
+                              
+                              // ListTile(
+                              //   onTap: () {
+                              //     controller.toFillForm = formularioModel;
+                              //     Navigator.of(context)
+                              //         .pushNamed('/libretaDetalles');
+                              //   },
+                              //   title: Text(
+                              //     formularioModel.nombre,
+                              //     style: TextStyle(fontSize: 20),
+                              //   ),
+                              //   subtitle: Text('Tu libreta'),
+                              //   trailing: Text(
+                              //       '${formularioModel.usuarios.length} / 25'),
+                              // );
                             });
                   },
                 ),
