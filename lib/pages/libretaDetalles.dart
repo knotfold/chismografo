@@ -1,10 +1,8 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/shared/shared.dart';
-
 class LibretaDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +13,7 @@ class LibretaDetails extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Preguntas',style: TextStyle(color: Colors.white),),
-       backgroundColor: buttonColors,
+       
         actions: <Widget>[
           Row(
             children: <Widget>[
@@ -244,7 +242,7 @@ class LibretaDetails extends StatelessWidget {
                       leading: Text((index + 1).toString(),style: TextStyle(fontSize: 20),),
 
                       title: Text(preguntas[index].pregunta),
-                      trailing: Icon(Icons.library_books),
+                      trailing: Icon(Icons.remove_red_eye),
                     ),
                   ),
                 ],
@@ -293,6 +291,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
               RaisedButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: buttonColors,
                 onPressed: () async {
                   var status = await widget.controller.gastarMonedas();
@@ -318,6 +317,9 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                           ),
                           actions: <Widget>[
                             RaisedButton(
+
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              color: buttonColors,
                               onPressed: () => Navigator.of(context).pop(),
                               child: Text('Aceptar',style: TextStyle(color: Colors.white),),
                             )

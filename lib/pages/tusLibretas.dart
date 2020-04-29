@@ -14,7 +14,7 @@ class TusLibretas extends StatelessWidget {
         heroTag: 'btnT1',
         isExtended: true,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
-        label: Text('Crea una nueva libreta'),
+        label: Text('Nueva libreta'),
         icon: Icon(Icons.book),
       ),
       appBar: myAppBar(controller, context),

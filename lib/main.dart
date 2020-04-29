@@ -20,19 +20,22 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(color: Colors.blue),
+          cardTheme:CardTheme(color:primaryLight ) ,
+          appBarTheme: AppBarTheme(color: primaryColor),
           primaryColor: Colors.black,
-          bottomAppBarColor: Colors.red,
-         bottomAppBarTheme: BottomAppBarTheme(color: Colors.red),
-          scaffoldBackgroundColor:backgroundColor,
+          bottomAppBarColor: primaryColor,
+         bottomAppBarTheme: BottomAppBarTheme(color: primaryColor),
+        
+          scaffoldBackgroundColor:Colors.white,
           backgroundColor: backgroundColor,
-          dialogBackgroundColor: color1,
+          dialogBackgroundColor: primaryColor,
+        
           textTheme: GoogleFonts.rubikTextTheme(),
           accentTextTheme: GoogleFonts.rubikTextTheme(),
           primaryTextTheme: GoogleFonts.rubikTextTheme(),
           primarySwatch: Colors.blueGrey,
-          iconTheme: IconThemeData(color: buttonColors ),
-         floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: buttonColors,elevation: 1)
+          iconTheme: IconThemeData(color: primaryDark ),
+         floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: secondaryColor,elevation: 4,shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) )
         ),
         home: LogIn(),
         routes: {

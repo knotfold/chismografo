@@ -119,12 +119,14 @@ class _HomeState extends State<Home> {
         return false;
       },
       child: Scaffold(
+    
         body: _widgetOptions.elementAt(controller.seleccionado),
         bottomNavigationBar: BottomNavigationBar(
+        
           currentIndex: controller.seleccionado,
-          backgroundColor: Colors.black,
-          fixedColor: Colors.black,
-          unselectedItemColor: Colors.blueGrey,
+          fixedColor: secondaryColor,
+          unselectedItemColor: primaryLight,
+          showSelectedLabels: true,
           onTap: (int index) {
             _onItemTapped(index, controller);
           },

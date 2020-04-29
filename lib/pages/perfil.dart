@@ -16,7 +16,6 @@ class _PerfilState extends State<Perfil> {
     Controller controller = Provider.of<Controller>(context);
     TextEditingController textEditingController = TextEditingController();
     return Scaffold(
-        backgroundColor: backgroundColor,
         appBar: myAppBar(controller, context),
         body: ListView(
           addSemanticIndexes: true,
@@ -62,12 +61,12 @@ class _PerfilState extends State<Perfil> {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: buttonColors,
+                          backgroundColor: primaryDark,
                           radius: 17,
                           child: Icon(
                             Icons.photo_camera,
                             size: 18,
-                            color: Colors.white,
+                           
                           ),
                           // IconButton(
                           //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
@@ -130,7 +129,7 @@ class _PerfilState extends State<Perfil> {
                                         height: 15,
                                       ),
                                       FloatingActionButton.extended(
-                                        backgroundColor: Colors.white,
+                                        
                                         onPressed: () async {
                                           controller.loading = true;
                                           controller.notify();
@@ -146,12 +145,12 @@ class _PerfilState extends State<Perfil> {
                                         },
                                         label: Text(
                                           'Actualizar',
-                                          style: TextStyle(color: buttonColors),
+                                         
                                         ),
                                         icon: Icon(
                                           Icons.edit,
                                           size: 20,
-                                          color: buttonColors,
+                                         
                                         ),
                                       )
                                     ],
@@ -178,7 +177,7 @@ class _PerfilState extends State<Perfil> {
                           SizedBox(
                             width: 15,
                           ),
-                          Icon(Icons.mail, color: buttonColors, size: 20),
+                          Icon(Icons.mail, size: 20),
                           SizedBox(
                             width: 15,
                           ),
@@ -208,7 +207,7 @@ class _PerfilState extends State<Perfil> {
                   SizedBox(
                     width: 20,
                   ),
-                  Icon(Icons.assistant, color: buttonColors, size: 20),
+                  Icon(Icons.assistant, size: 20),
                   SizedBox(
                     width: 10,
                   ),
@@ -225,7 +224,7 @@ class _PerfilState extends State<Perfil> {
                           'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white,
+                            color: Colors.black26,
                           ),
                         ),
                       ],
@@ -242,7 +241,7 @@ class _PerfilState extends State<Perfil> {
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: FlatButton.icon(
-                      icon: Icon(Icons.stars, size: 20, color: buttonColors),
+                      icon: Icon(Icons.stars, size: 20),
                       label: Text(
                         'Monedas Grátis',
                         style: TextStyle(
@@ -267,11 +266,11 @@ class _PerfilState extends State<Perfil> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(Icons.stars,
-                                            color: Colors.white, size: 20),
+                                           size: 20),
                                         Text('Monedas Grátis',
                                             style: TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.white))
+                                                ))
                                       ],
                                     ),
                                     SizedBox(
@@ -299,7 +298,7 @@ class _PerfilState extends State<Perfil> {
               margin: EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
               child: FlatButton.icon(
-                  icon: Icon(Icons.group_add, size: 20, color: buttonColors),
+                  icon: Icon(Icons.group_add, size: 20,color: primaryDark,),
                   label: Text(
                     'Inivtar amigos',
                     style: TextStyle(
@@ -418,7 +417,7 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil2',
-                          backgroundColor: Colors.white,
+
                           onPressed: () async {
                             imagen = await controller.getImage(context);
                             setState(() {
@@ -427,20 +426,21 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Galeria',
-                            style: TextStyle(color: buttonColors),
+                          
                           ),
                           icon: Icon(
                             Icons.photo_library,
-                            color: buttonColors,
+                            
                           ),
                         )
                       ],
                     ),
                     ButtonBar(
+                      alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil3',
-                          backgroundColor: Colors.white,
+                        
                           onPressed: () async {
                             imagen = await controller.getImageCamera(context);
                             setState(() {
@@ -449,11 +449,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Camara',
-                            style: TextStyle(color: buttonColors),
+                          
                           ),
                           icon: Icon(
                             Icons.photo_camera,
-                            color: buttonColors,
+                            
                           ),
                         )
                       ],
@@ -463,7 +463,7 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil4',
-                          backgroundColor: Colors.white,
+                          
                           onPressed: () async {
                             controller.loading = true;
                             controller.notify();
@@ -511,11 +511,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Guardar',
-                            style: TextStyle(color: buttonColors),
+                           
                           ),
                           icon: Icon(
                             Icons.save,
-                            color: buttonColors,
+                            
                           ),
                         )
                       ],
