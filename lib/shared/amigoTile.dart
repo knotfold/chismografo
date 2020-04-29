@@ -20,7 +20,7 @@ class AmigoTile extends StatelessWidget {
         );
       },
       leading: CircleAvatar(
-        radius:20 ,
+        radius:22 ,
         backgroundImage: NetworkImage(usuario.foto),
       ),
       title: Text(usuario.nombre,style: TextStyle(fontSize: 18),),

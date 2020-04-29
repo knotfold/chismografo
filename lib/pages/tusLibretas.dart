@@ -13,6 +13,7 @@ class TusLibretas extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'btnT1',
         isExtended: true,
+        splashColor: secondaryColor,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
         label: Text('Nueva libreta'),
         icon: Icon(Icons.book),

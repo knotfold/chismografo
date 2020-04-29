@@ -11,7 +11,6 @@ class FormularioCreator extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-       backgroundColor: buttonColors,
       ),
       body: PageView(
         physics: BouncingScrollPhysics(),
