@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
@@ -26,8 +29,9 @@ class Controller with ChangeNotifier {
   notify() {
     notifyListeners();
   }
+
   //generales
-    String uid = '';
+  String uid = '';
   String name = '';
   String email = '';
   String imageUrl = '';
@@ -57,20 +61,19 @@ class Controller with ChangeNotifier {
     bool status = true;
     loading = true;
     notifyListeners();
-    if(usuarioAct.coins < 5){
+    if (usuarioAct.coins < 5) {
       return false;
     }
     var newCoins = usuarioAct.coins - 5;
 
-    await usuarioAct.reference.updateData({
-      'coins' : newCoins
-    }).catchError((onError){
+    await usuarioAct.reference
+        .updateData({'coins': newCoins}).catchError((onError) {
       print('error');
       status = false;
       return false;
     });
 
-    if(!status){
+    if (!status) {
       return false;
     }
 
@@ -82,21 +85,27 @@ class Controller with ChangeNotifier {
     return true;
   }
 
- Future<bool> buyCoins(int amount) async {
+  Future<bool> buyCoins(int amount) async {
     if (await checkPayment()) {
+      print(true);
       usuarioAct.coins = usuarioAct.coins + amount;
       await usuarioAct.reference.updateData({
-        'coins' : usuarioAct.coins,
+        'coins': usuarioAct.coins,
       });
       notifyListeners();
       return true;
-      
     }
     return false;
   }
 
   Future<bool> checkPayment() async {
-    return true;
+    bool status = true;
+   
+   
+  
+
+    print('purchased');
+    return status;
   }
 
   crearFormulario(BuildContext context) async {
@@ -135,7 +144,6 @@ class Controller with ChangeNotifier {
       return false;
     });
 
-    
     preguntas.clear();
     participantes.clear();
     privado = true;
@@ -154,8 +162,6 @@ class Controller with ChangeNotifier {
         dateTime.year.toString();
   }
 
-
-
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -171,7 +177,6 @@ class Controller with ChangeNotifier {
     imageUrl = '';
     email = '';
     usuario.nombre = 'No name';
-    notifyListeners();
     print('finished');
   }
 

@@ -35,7 +35,11 @@ class FormularioModel {
   String nombre;
   DocumentReference reference;
   String fecha;
+
   String creadorfoto;
+
+  String imagen;
+
 
   FormularioModel({
     this.creadorID,
@@ -66,6 +70,7 @@ class FormularioModel {
       'creadorfoto': creadorfoto,
       'usuarios' : usuarios,
       'fecha' : DateTime.now(),
+      'imagen' : imagen
     };
   }
 
@@ -94,6 +99,7 @@ class FormularioModel {
     reference = ds.reference;
     Timestamp timestamp = ds['fecha'];
     fecha = dateString(timestamp.toDate()) ?? '';
+    imagen = ds['imagen'] ?? '';
 
   }
 }

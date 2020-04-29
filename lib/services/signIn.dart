@@ -26,9 +26,11 @@ Future<FirebaseUser> signInWithGoogle(Controller controlador1) async {
   );
   print('paso3');
 
-  final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+
+  final FirebaseUser user = (await _auth.signInWithCredential(credential).catchError((onError) {print('errosaso:' + onError.toString());})).user;
   // final FirebaseUser user = authResult.user;
   print('capturé datos de usuario');
+  print(user.email);
 //801510547545-dcsc4i7c1tuqume0vkimhkfk7dbbtjrj.apps.googleusercontent.com
   assert(!user.isAnonymous);
   assert(await user.getIdToken() != null);
