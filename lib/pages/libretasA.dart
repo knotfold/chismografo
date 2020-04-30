@@ -13,7 +13,7 @@ class LibretasA extends StatelessWidget {
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
     return Scaffold(
-       backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       floatingActionButton: StreamBuilder(
         stream: Firestore.instance
             .collection('formularios')
@@ -24,50 +24,57 @@ class LibretasA extends StatelessWidget {
           List<DocumentSnapshot> documents = snapshot.data.documents;
           return FloatingActionButton.extended(
             heroTag: 'btnA1',
-            
             onPressed: () {
-              documents.isEmpty ?  null : showDialog(
-                context: context,
-                child: Dialog(
-                  child: Container(
-                    child: ListView.builder(
-                      
-                      shrinkWrap: true,
-                      itemCount: documents.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        FormularioModel formularioModel =
-                            FormularioModel.fromDS(documents[index]);
-                        return ListTile(
-                          leading: Icon(Icons.book),
-                          title: Text(formularioModel.nombre),
-                          subtitle: Text(formularioModel.creadorUsuario),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                onPressed: () async {
-                                  controller.toFillForm = formularioModel;
-                                  Navigator.of(context).pushNamed(
-                                      '/responderLibreta',
-                                      arguments: formularioModel);
-                                },
-                                icon: Icon(Icons.check),
-                              ),
-                              IconButton(
-                                onPressed: () async {},
-                                icon: Icon(Icons.cancel),
-                              ),
-                            ],
+              documents.isEmpty
+                  ? null
+                  : showDialog(
+                      context: context,
+                      child: Dialog(
+                        child: Container(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              FormularioModel formularioModel =
+                                  FormularioModel.fromDS(documents[index]);
+                              return ListTile(
+                                leading: Icon(Icons.book),
+                                title: Text(formularioModel.nombre),
+                                subtitle: Text(formularioModel.creadorUsuario),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    IconButton(
+                                      onPressed: () async {
+                                        controller.toFillForm = formularioModel;
+                                        Navigator.of(context).pushNamed(
+                                            '/responderLibreta',
+                                            arguments: formularioModel);
+                                      },
+                                      icon: Icon(Icons.check),
+                                    ),
+                                    IconButton(
+                                      onPressed: () async {
+                                        formularioModel.reference.updateData({
+                                          'invitaciones':
+                                              FieldValue.arrayRemove(
+                                                  [controller.usuario.usuario])
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: Icon(Icons.cancel),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              );
+                        ),
+                      ),
+                    );
             },
             label:
-                Text(documents.isEmpty ? 'Sin solicitudes'   : 'Nueva solicitud'),
+                Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
             icon: documents.isEmpty
                 ? Icon(
                     Icons.tag_faces,
@@ -76,29 +83,29 @@ class LibretasA extends StatelessWidget {
                 : Stack(
                     children: <Widget>[
                       Container(
-                        
                           child: Icon(
                             Icons.fiber_new,
                             size: 30,
                           ),
                           width: 30,
                           height: 30),
-                          Container(
-                            alignment: Alignment.topRight,
-                            margin: EdgeInsets.only(left:20),
+                      Container(
+                        alignment: Alignment.topRight,
+                        margin: EdgeInsets.only(left: 20),
                         width: 10,
                         height: 10,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: yemahuevo),
-                          )
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: yemahuevo),
+                      )
                     ],
                   ),
-                  
           );
         },
       ),
       appBar: myAppBar(controller, context),
       body: SingleChildScrollView(
-              child: Container(
+        child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +126,7 @@ class LibretasA extends StatelessWidget {
                       return const CircularProgressIndicator();
                     List<DocumentSnapshot> documents = snapshot.data.documents;
                     return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: documents.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
@@ -128,9 +135,13 @@ class LibretasA extends StatelessWidget {
                           return ListTile(
                             onTap: () {
                               controller.toFillForm = formularioModel;
-                              Navigator.of(context).pushNamed('/libretaDetalles');
+                              Navigator.of(context)
+                                  .pushNamed('/libretaDetalles');
                             },
-                            title: Text(formularioModel.nombre,style: TextStyle(fontSize: 20),),
+                            title: Text(
+                              formularioModel.nombre,
+                              style: TextStyle(fontSize: 20),
+                            ),
                             subtitle: Text(formularioModel.creadorUsuario),
                             trailing:
                                 Text('${formularioModel.usuarios.length} / 25'),

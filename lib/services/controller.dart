@@ -58,6 +58,7 @@ class Controller with ChangeNotifier {
     loading = true;
     notifyListeners();
     if (usuarioAct.coins < 5) {
+      loading = false;
       return false;
     }
     var newCoins = usuarioAct.coins - 5;
