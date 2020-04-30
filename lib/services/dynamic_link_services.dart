@@ -2,7 +2,7 @@
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
-class DynamicLinkServices{
+class xDynamicLinkServices{
   Future handleDynamicLinks() async{
     //STARTUP from dynamic link Logic
 

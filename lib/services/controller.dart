@@ -63,7 +63,7 @@ class Controller with ChangeNotifier {
 
       return false;
     }
-    var newCoins = usuarioAct.coins - 1;
+    var newCoins = usuarioAct.coins - 5;
 
     await usuarioAct.reference
         .updateData({'coins': newCoins}).catchError((onError) {
@@ -76,7 +76,7 @@ class Controller with ChangeNotifier {
       return false;
     }
 
-    usuarioAct.coins = usuarioAct.coins - 1;
+    usuarioAct.coins = usuarioAct.coins - 5;
     loading = false;
 
     notifyListeners();

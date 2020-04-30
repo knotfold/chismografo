@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_form/shared/colors.dart';
-import 'pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
+import 'package:trivia_form/pages/pages.dart';
 
 class FormularioCreator extends StatelessWidget {
   @override
@@ -12,12 +11,14 @@ class FormularioCreator extends StatelessWidget {
       onWillPop: () async {
         return controller.loading ? false : true;
       },
-          child: Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           elevation: 1,
         ),
         body: PageView(
-          physics: controller.loading ? NeverScrollableScrollPhysics() : BouncingScrollPhysics() ,
+          physics: controller.loading
+              ? NeverScrollableScrollPhysics()
+              : BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           controller: controller.pageController,
           children: <Widget>[first(controller), CreadorLP(), AmigosSelector()],
@@ -29,18 +30,19 @@ class FormularioCreator extends StatelessWidget {
   Widget first(Controller controller) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-          child: Container(
+      child: Container(
         padding: EdgeInsets.all(50),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             ImageSelector(),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Text(
               'NOMBRE DE TU LIBRETA',
               style: TextStyle(fontSize: 20),
             ),
-            
             TextFormField(
               controller: controller.textEditingController,
               decoration: InputDecoration(

@@ -129,9 +129,9 @@ class _TutorialDialogState extends State<TutorialDialog> {
               }
               List<dynamic> map = snapshot.data[search];
               List<Widget> pages = [];
-              print('map');
+            
               map.forEach((f) {
-                print('for?');
+   
                 pages.add(Container(
                   child: SingleChildScrollView(
                                       child: Column(
@@ -162,7 +162,7 @@ class _TutorialDialogState extends State<TutorialDialog> {
                 ));
               });
 
-              print('duh');
+     
               return SingleChildScrollView(
                               child: Column(
                   mainAxisSize: MainAxisSize.min,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'pages/pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
-import 'pages/pages.dart';
 import 'shared/shared.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,18 +20,16 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          cardTheme: CardTheme(
-            elevation: 10
-          ),
+            cardTheme: CardTheme(elevation: 10),
             appBarTheme: AppBarTheme(color: primaryColor),
             primaryColor: primaryColor,
             colorScheme: ColorScheme(
               primary: primaryColor,
-              onPrimary: Colors.black,
+              onPrimary: Colors.white,
               onSecondary: Colors.black,
-              brightness: Brightness.dark,
+              brightness: Brightness.light,
               onBackground: Colors.black,
-              onSurface: Colors.black,
+              onSurface: Colors.white,
               primaryVariant: pDark,
               secondary: secondaryColor,
               secondaryVariant: sDark,
@@ -41,19 +38,50 @@ class MyApp extends StatelessWidget {
               surface: Colors.white,
               error: Colors.red,
             ),
+            backgroundColor: primaryColor,
+            buttonColor: secondaryColor,
             secondaryHeaderColor: secondaryColor,
             bottomAppBarColor: Colors.red,
             bottomAppBarTheme: BottomAppBarTheme(color: primaryColor),
             scaffoldBackgroundColor: Colors.white,
-            dialogBackgroundColor: color1,
-            textTheme: GoogleFonts.rubikTextTheme(),
-            accentTextTheme: GoogleFonts.rubikTextTheme(),
-            primaryTextTheme: GoogleFonts.rubikTextTheme(),
+            textTheme: GoogleFonts.rubikTextTheme(
+                TextTheme().apply(bodyColor: Colors.white)),
+            accentTextTheme: GoogleFonts.rubikTextTheme(
+                TextTheme().apply(bodyColor: Colors.white)),
+            primaryTextTheme: GoogleFonts.rubikTextTheme(
+                TextTheme().apply(bodyColor: Colors.white)),
             primarySwatch: Colors.blueGrey,
             accentIconTheme: IconThemeData(color: Colors.black),
             iconTheme: IconThemeData(color: pDark),
-            dialogTheme: DialogTheme(backgroundColor: primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+            dialogBackgroundColor: primaryColor,
+            dialogTheme: DialogTheme(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
             primaryIconTheme: IconThemeData(color: Colors.white),
+            buttonTheme: ButtonThemeData(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                colorScheme: ColorScheme(
+                  primary: primaryColor,
+                  onPrimary: Colors.white,
+                  onSecondary: Colors.black,
+                  brightness: Brightness.dark,
+                  onBackground: Colors.black,
+                  onSurface: Colors.white,
+                  primaryVariant: pDark,
+                  secondary: secondaryColor,
+                  secondaryVariant: sDark,
+                  background: Colors.white,
+                  onError: Colors.red,
+                  surface: Colors.black,
+                  error: Colors.red,
+                ),
+                disabledColor: secondaryColor,
+                highlightColor: secondaryColor,
+                buttonColor: secondaryColor),
             floatingActionButtonTheme: FloatingActionButtonThemeData(
               backgroundColor: secondaryColor,
               elevation: 5,
@@ -69,9 +97,8 @@ class MyApp extends StatelessWidget {
           '/misLibretas': (context) => TusLibretas(),
           '/libretasAmigos': (context) => LibretasA(),
           '/creadorLibreta': (context) => FormularioCreator(),
-          '/libretaDetalles' : (context) => LibretaDetails(),
-          'perfil' : (context) => Perfil(),
-
+          '/libretaDetalles': (context) => LibretaDetails(),
+          'perfil': (context) => Perfil(),
         },
       ),
     );

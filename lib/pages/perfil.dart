@@ -19,8 +19,6 @@ class _PerfilState extends State<Perfil> {
     return Scaffold(
         appBar: myAppBar(controller, context),
         body: ListView(
-          addSemanticIndexes: true,
-          addRepaintBoundaries: true,
           scrollDirection: Axis.vertical,
           children: <Widget>[
             Row(
@@ -28,11 +26,8 @@ class _PerfilState extends State<Perfil> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  color: Colors.transparent,
                   margin:
                       EdgeInsets.only(left: 20, right: 5, top: 20, bottom: 20),
-                  // height: 100,
-                  // width: 100,
                   child: GestureDetector(
                     onTap: () => showDialog(
                       child: WillPopScope(
@@ -67,7 +62,7 @@ class _PerfilState extends State<Perfil> {
                           child: Icon(
                             Icons.photo_camera,
                             size: 18,
-                           color: Colors.white,
+                            color: Colors.white,
                           ),
                           // IconButton(
                           //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
@@ -130,7 +125,6 @@ class _PerfilState extends State<Perfil> {
                                         height: 15,
                                       ),
                                       FloatingActionButton.extended(
-                                        
                                         onPressed: () async {
                                           controller.loading = true;
                                           controller.notify();
@@ -146,12 +140,10 @@ class _PerfilState extends State<Perfil> {
                                         },
                                         label: Text(
                                           'Actualizar',
-                                         
                                         ),
                                         icon: Icon(
                                           Icons.edit,
                                           size: 20,
-                                         
                                         ),
                                       )
                                     ],
@@ -224,7 +216,7 @@ class _PerfilState extends State<Perfil> {
                         Text(
                           'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 14,
                             color: sDark,
                           ),
                         ),
@@ -234,41 +226,47 @@ class _PerfilState extends State<Perfil> {
                 ],
               ),
             ),
-            SizedBox(height:10),
+            SizedBox(height: 10),
             Container(
               margin: EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
               child: FlatButton.icon(
-                  icon: Icon(Icons.group_add, size: 20,color: pDark,),
-                  label: Text(
-                    'Inivtar amigos',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black
-                    ),
-                  ),
-                  onPressed: () => DynamicLinkServices),
+                icon: Icon(
+                  Icons.group_add,
+                  size: 20,
+                  color: pDark,
+                ),
+                label: Text(
+                  'Inivtar amigos',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                onPressed: () => null,
+              ),
             ),
             !controller.usuario.monedasFree
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: FlatButton.icon(
-                      icon: Icon(Icons.stars, size: 20,color: pDark,),
+                      icon: Icon(
+                        Icons.stars,
+                        size: 20,
+                        color: pDark,
+                      ),
                       label: Text(
                         'Monedas Gratis',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
-                          
                         ),
                       ),
                       onPressed: () {
                         return showDialog(
                           context: context,
                           child: Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                            
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(20)),
                             child: SingleChildScrollView(
                               child: Container(
                                 margin: EdgeInsets.all(20),
@@ -280,12 +278,15 @@ class _PerfilState extends State<Perfil> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Icon(Icons.stars,
-                                           size: 20,color: secondaryColor,),
+                                        Icon(
+                                          Icons.stars,
+                                          size: 20,
+                                          color: secondaryColor,
+                                        ),
                                         Text('Monedas Gratis',
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                ))
+                                              fontSize: 18,
+                                            ))
                                       ],
                                     ),
                                     SizedBox(
@@ -306,7 +307,6 @@ class _PerfilState extends State<Perfil> {
                     ),
                   )
                 : Container(),
-
             SizedBox(
               height: 10,
             ),
@@ -319,7 +319,7 @@ class _PerfilState extends State<Perfil> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 4,
-                
+
                 onPressed: () async {
                   await controller.signOut();
                   Navigator.of(context)
@@ -427,11 +427,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Galeria',
-                          
                           ),
                           icon: Icon(
                             Icons.photo_library,
-                            
                           ),
                         )
                       ],
@@ -441,7 +439,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil3',
-                        
                           onPressed: () async {
                             imagen = await controller.getImageCamera(context);
                             setState(() {
@@ -450,11 +447,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Camara',
-                          
                           ),
                           icon: Icon(
                             Icons.photo_camera,
-                            
                           ),
                         )
                       ],
@@ -464,7 +459,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil4',
-                          
                           onPressed: () async {
                             controller.loading = true;
                             controller.notify();
@@ -513,11 +507,9 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Guardar',
-                           
                           ),
                           icon: Icon(
                             Icons.save,
-                            
                           ),
                         )
                       ],
@@ -597,7 +589,6 @@ class _ListaAmigosState extends State<ListaAmigos> {
             return !controller.usuario.monedasFree
                 ? Column(
                     children: <Widget>[
-
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -612,34 +603,6 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                       snapshot.data.documents[value]['coins'];
 
                                   selectedFriend = value;
-
-
-                            controller.notify();
-                          });
-                        },
-                        value: selectedFriend,
-                        isExpanded: false,
-                        hint: Text(
-                          "Selecciona a un amigo",
-                        ),
-                      )
-                    ]),
-                isLoading
-                    ? CircularProgressIndicator()
-                    : selectedFriend == '' || selectedFriend == null
-                        ? Container()
-                        : RaisedButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          color: primaryColor,
-                            onPressed: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await Firestore.instance
-                                  .collection('usuarios')
-                                  .document(friendId)
-                                  .updateData({'coins': coins + 25});
-
 
                                   controller.notify();
                                 });
@@ -665,16 +628,15 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                           content: Text(
                                               'Ten en cuenta que solo podrás realizar esta acción una vez.'),
                                           actions: <Widget>[
-                                            FlatButton(
+                                            RaisedButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text(
                                                   'No',
-                                                  style: TextStyle(
-                                                      color: buttonColors),
+                                                  style: TextStyle(),
                                                 )),
-                                            FlatButton(
+                                            RaisedButton(
                                                 onPressed: () async {
                                                   setState(() {
                                                     isLoading = true;
@@ -690,12 +652,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                                       .updateData({
                                                     'coins': controller
                                                             .usuario.coins +
-                                                        25
-                                                  });
-
-                                                  await controller
-                                                      .usuario.reference
-                                                      .updateData({
+                                                        25,
                                                     'monedasFree': true
                                                   });
 
@@ -711,37 +668,26 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                                   setState(() {
                                                     isLoading = false;
                                                     controller.usuario
-                                                      .monedasFree = true;
+                                                        .monedasFree = true;
                                                   });
-                                                 
+
+                                                  controller.notify();
+
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text(
                                                   'Sí',
-                                                  style: TextStyle(
-                                                      color: buttonColors),
                                                 ))
                                           ],
                                         ));
                                   },
                                   child: Text(
                                     'Aceptar',
-                                    style: TextStyle(color: buttonColors),
+                                    style: TextStyle(color: Colors.black),
                                   ))
                     ],
                   )
                 : Container();
-
-
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Aceptar',
-                              style: TextStyle(color: Colors.white),
-                            ))
-              ],
-            );
-
           }
         });
   }
