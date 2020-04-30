@@ -19,7 +19,6 @@ class _StoreState extends State<Store> {
     List<IAPItem> items =
         await FlutterInappPurchase.instance.getProducts(productos);
     for (var item in items) {
-      print('${item.toString()}');
     }
 
     return items;
@@ -62,7 +61,7 @@ class _StoreState extends State<Store> {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que contestes una libreta',
+                    'Cinco Estrellas Gratis por cada vez que contestes una libreta',
                 opcion: 'Ir a Libretas de Amigos',
                 oportunidades: controller.usuario.dailyAnswers.toString(),
                 newIndex: 1,
@@ -70,7 +69,7 @@ class _StoreState extends State<Store> {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que crees una libreta',
+                    'Cinco Estrellas Gratis por cada vez que crees una libreta',
                 opcion: 'Ir a tus libretas',
                 oportunidades: controller.usuario.dailyFormularios.toString(),
                 newIndex: 0,
@@ -135,7 +134,7 @@ class StoreItem extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -252,7 +251,7 @@ class StoreItemFree extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

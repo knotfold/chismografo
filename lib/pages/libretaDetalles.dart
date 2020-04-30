@@ -290,7 +290,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                 onPressed: () async {
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
-                    showDialog(
+                   await showDialog(
                         context: context,
                         child: AlertDialog(
                           title: Text('Disfruta de la verdad :)'),
@@ -317,7 +317,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                           ],
                         ));
                   } else {
-                    showDialog(
+                   await showDialog(
                         context: context,
                         child: AlertDialog(
                           title: Text(

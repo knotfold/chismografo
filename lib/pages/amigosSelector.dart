@@ -80,7 +80,7 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                     );
             },
           ),
-          Row(
+          controller.loading ? CircularProgressIndicator() : Row(
             children: <Widget>[
               FloatingActionButton.extended(
                 heroTag: 'btn1',

@@ -22,10 +22,11 @@ class TusLibretas extends StatelessWidget {
               child: Container(
           padding: EdgeInsets.all(10.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Tus Libretas',
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 22),
               ),
               Container(
                 child: StreamBuilder(
@@ -42,6 +43,7 @@ class TusLibretas extends StatelessWidget {
                     return documents.isEmpty
                         ? Text('No tienes Libretas')
                         : ListView.builder(
+
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: documents.length,
                             shrinkWrap: true,
@@ -49,6 +51,7 @@ class TusLibretas extends StatelessWidget {
                               FormularioModel formularioModel =
                                   FormularioModel.fromDS(documents[index]);
                               return ListTile(
+                                dense: true,
                                 onTap: () {
                                   controller.toFillForm = formularioModel;
                                   Navigator.of(context)
@@ -56,7 +59,7 @@ class TusLibretas extends StatelessWidget {
                                 },
                                 title: Text(
                                   formularioModel.nombre,
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                                 subtitle: Text('Tu libreta'),
                                 trailing: Text(

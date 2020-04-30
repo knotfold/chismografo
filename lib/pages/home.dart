@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
             // fixedColor: primaryColor,
             currentIndex: controller.seleccionado,
             selectedItemColor: secondaryColor,
-            unselectedItemColor: Colors.white,
+            unselectedItemColor: pLight,
             onTap: (int index) {
               _onItemTapped(index, controller);
             },

@@ -13,4 +13,5 @@ export 'perfil.dart';
 export 'info.dart';
 export 'libretaDetalles.dart';
 export 'store.dart';
+export 'pictureSelector.dart';
 
