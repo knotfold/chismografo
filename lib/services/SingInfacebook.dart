@@ -14,7 +14,11 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 //String _message = 'Log in/out by pressing the buttons below.';
 
 Future<String> login(Controller controlador) async {
-  final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+  
+  final FacebookLoginResult result = await facebookSignIn.logIn(['email']).catchError((onError) async{
+    print(onError);
+  });
+  
 
   switch (result.status) {
     case FacebookLoginStatus.loggedIn:
@@ -40,10 +44,15 @@ Future<String> login(Controller controlador) async {
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(800).height(800)&access_token=${token}');
         final profile = json.decode(graphResponse.body);
         controlador.name = (profile['first_name'] + ' ' + profile['last_name']);
+        
         controlador.email = (profile['email']);
+        if(controlador.email ==null){
+            controlador.email= '';
+        }
         controlador.imageUrl = (profile['picture']['data']['url']);
         print(profile['picture']);
         print(profile['email']);
+        print(controlador.email);
       } catch (e) {
         print("Error: $e");
         print(e.code.toString());
@@ -64,6 +73,9 @@ Future<String> login(Controller controlador) async {
             controlador.name =
                 (profile['first_name'] + ' ' + profile['last_name']);
             controlador.email = (profile['email']);
+             if(controlador.email ==null){
+            controlador.email= '';
+        }
             controlador.imageUrl = (profile['picture']['data']['url']);
             if (authGoogleResult.email == controlador.email) {
               await authGoogleResult.linkWithCredential(credential);

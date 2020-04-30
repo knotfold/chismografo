@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
+import 'package:trivia_form/shared/colors.dart';
 
 class CreadorLP extends StatefulWidget {
   @override
@@ -37,7 +38,7 @@ class _CreadorLPState extends State<CreadorLP> {
                       controller.preguntas.remove(controller.preguntas[index]);
                       controller.notify();
                     },
-                    icon: Icon(Icons.delete),
+                    icon: Icon(Icons.delete,color: pDark,),
                   ),
                 );
               },
@@ -57,6 +58,7 @@ class _CreadorLPState extends State<CreadorLP> {
                           context: context,
                           child: AlertDialog(
                             title: Text('No puedes tener más de 15 preguntas'),
+                            
                           ));
                       return;
                     }
@@ -64,16 +66,18 @@ class _CreadorLPState extends State<CreadorLP> {
                       context: context,
                       child: Dialog(
                         child: Container(
-                          color: Colors.grey[100],
+                          
                           padding: EdgeInsets.all(10),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               TextField(
+                                style: TextStyle(color: Colors.white),
                                 controller: textEditingController,
                                 decoration: InputDecoration(
                                   labelText: 'Nueva Pregunta',
+                                  labelStyle: TextStyle(color: Colors.white)
                                 ),
                               ),
                               SizedBox(
@@ -82,7 +86,7 @@ class _CreadorLPState extends State<CreadorLP> {
                               FloatingActionButton.extended(
                                 heroTag: 'btn2',
                                 icon: Icon(Icons.add),
-                                label: Text('Agregar Nueva Pregunta'),
+                                label: Text('Agregar Pregunta'),
                                 onPressed: () {
                                   if (textEditingController.text.isEmpty ||
                                       textEditingController.text.trim() == '') {
@@ -109,12 +113,22 @@ class _CreadorLPState extends State<CreadorLP> {
                   heroTag: 'btn3',
                   onPressed: () {
                     controller.pageController.jumpToPage(0);
+                    
                   },
                   label: Text('Back'),
                 ),
                 FloatingActionButton.extended(
                   heroTag: 'btn4',
                   onPressed: () {
+                    if(controller.preguntas.length < 3){
+                       showDialog(
+                          context: context,
+                          child: AlertDialog(
+                            title: Text('No puedes tener menos de 3 preguntas'),
+                            
+                          ));
+                      return;
+                    }
                     controller.pageController.jumpToPage(2);
                   },
                   label: Text('Next'),

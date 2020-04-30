@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:trivia_form/shared/colors.dart';
 
 class RegistroUsuario extends StatefulWidget {
   @override
@@ -169,7 +170,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         if (value == null || value.isEmpty) {
                           return 'llenar el campo correo electrónico es obligatorio';
                         } else if (!emailValid) {
-                          return 'El correo electrónico es inválido';
+                          return 'El correo electrónico no es valido';
                         } else if (correov == false) {
                           return 'Correo existente';
                         }
@@ -205,6 +206,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       decoration: InputDecoration(
                           labelText: '* Usuario',
                           border: OutlineInputBorder(
+                            
                               borderRadius: BorderRadius.circular(10))),
                     ),
                     SizedBox(

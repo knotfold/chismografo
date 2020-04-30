@@ -72,30 +72,32 @@ class Amigos extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20,),
-            StreamBuilder(
-              stream: Firestore.instance
-                  .collection('usuarios')
-                  .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
-                List<DocumentSnapshot> documents = snapshot.data.documents;
-                print(documents.length);
-                return documents.isEmpty
-                    ? Text(
-                        'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
-                    : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          UsuarioModel usuario =
-                              UsuarioModel.fromDocumentSnapshot(
-                                  documents[index]);
-                          return AmigoTile(usuario: usuario);
-                        },
-                      );
-              },
+            Expanded(
+                          child: StreamBuilder(
+                stream: Firestore.instance
+                    .collection('usuarios')
+                    .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const CircularProgressIndicator();
+                  List<DocumentSnapshot> documents = snapshot.data.documents;
+                  print(documents.length);
+                  return documents.isEmpty
+                      ? Text(
+                          'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
+                      : ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: documents.length,
+                          itemBuilder: (context, index) {
+                            UsuarioModel usuario =
+                                UsuarioModel.fromDocumentSnapshot(
+                                    documents[index]);
+                            return AmigoTile(usuario: usuario);
+                          },
+                        );
+                },
+              ),
             ),
           ],
         ),
