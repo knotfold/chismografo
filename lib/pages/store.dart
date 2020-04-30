@@ -137,15 +137,16 @@ class StoreItem extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(width: 4, color: backgroundColor)),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Icon(
                     Icons.attach_money,
-                    size: 70,
+                    size: 50,
                   ),
                   Text(
                     precio,
-                    style: TextStyle(fontSize: 80),
+                    style: TextStyle(fontSize: 60),
                   ),
                 ],
               ),

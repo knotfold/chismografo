@@ -49,7 +49,9 @@ class MyApp extends StatelessWidget {
             accentTextTheme: GoogleFonts.rubikTextTheme(),
             primaryTextTheme: GoogleFonts.rubikTextTheme(),
             primarySwatch: Colors.blueGrey,
-            iconTheme: IconThemeData(color: Colors.black),
+            accentIconTheme: IconThemeData(color: Colors.black),
+            iconTheme: IconThemeData(color: pDark),
+            dialogTheme: DialogTheme(backgroundColor: primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
             primaryIconTheme: IconThemeData(color: Colors.white),
             floatingActionButtonTheme: FloatingActionButtonThemeData(
               backgroundColor: secondaryColor,

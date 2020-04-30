@@ -52,12 +52,13 @@ class _MiniProfileState extends State<MiniProfile> {
                           widget.usuario.nombre,
                           style: TextStyle(fontSize: 20),
                         )),
+                   
                         controller.usuario.documentId ==
                                 widget.usuario.documentId
                             ? Container()
                             : verifyMyFRequest(controller)
-                                ? Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                ? Expanded(
+                                    //margin: EdgeInsets.symmetric(horizontal: 5),
                                     child: RaisedButton(
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -65,7 +66,7 @@ class _MiniProfileState extends State<MiniProfile> {
                                       color: buttonColors,
                                       child: Text(
                                         'Cancelar Solicitud',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.white,fontSize: 10.0),
                                       ),
                                       onPressed: () async {
                                         print(widget.usuario.documentId.length);

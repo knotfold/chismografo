@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +38,8 @@ class LibretaDetails extends StatelessWidget {
               showDialog(
                   context: context,
                   child: Dialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    backgroundColor: backgroundColor,
+                   // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                   
                     child: Container(
                       padding: EdgeInsets.all(10),
                       child: Column(
@@ -163,103 +165,113 @@ class LibretaDetails extends StatelessWidget {
             
               padding: EdgeInsets.only(left: 15,right: 15,bottom: 15,top: 25),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // Text(
-                  //   'Preguntas',
-                  //   style: TextStyle(fontSize: 25),
-                  // ),
-                  
-                  ListView.separated(
-                    separatorBuilder: (context,index)=>Divider(height: 2,thickness: 1.5,color: Colors.brown[100],),
-                    shrinkWrap: true,
-                    itemCount: preguntas.length,
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () {
-                        List<dynamic> respuestas = preguntas[index].respuestas;
-                        respuestas.shuffle();
-                        showDialog(
-                            context: context,
-                            child: Dialog(
-                              backgroundColor: backgroundColor,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              child: Container(
-                                padding: EdgeInsets.all(25),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                   Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: <Widget>[
-                                      
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    // Text(
+                    //   'Preguntas',
+                    //   style: TextStyle(fontSize: 25),
+                    // ),
+                    Text(controller.toFillForm.nombre,style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+                    SizedBox(height: 20,),
+                    ListView.separated(
+                      separatorBuilder: (context,index)=>Divider(height: 2,thickness: 1.5,color: Colors.white,),
+                      shrinkWrap: true,
+                      itemCount: preguntas.length,
+                      itemBuilder: (context, index) => Card(
+                        elevation: 1,
+                        color: Colors.white,
+                                              child: ListTile(
+                              onTap: () {
+              List<dynamic> respuestas = preguntas[index].respuestas;
+              respuestas.shuffle();
+              showDialog(
+                  context: context,
+                  child: Dialog(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    child: Container(
+                        padding: EdgeInsets.all(25),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             children: <Widget>[
+                        
 
-                                     ],
-                                   ),
-                                    Text(
-                                      preguntas[index].pregunta,
-                                      style: TextStyle(fontSize: 25),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    
-                                     Divider(height: 30,color: Colors.white54,),
-                                     
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, ind) {
-                                        return ListTile(
-                                          trailing: IconButton(
-                                            icon: Icon(Icons.lock_open),
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                child: DesbloquearDialog(
-                                                  controller: controller,
-                                                  respuestas: respuestas,
-                                                  usuario: respuestas[ind]
-                                                      ['usuario'],
-                                                  respuesta: respuestas[ind]
-                                                      ['respuesta'],
-                                                  pregunta:
-                                                      preguntas[index].pregunta,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          title: Text(
-                                              respuestas[ind]['respuesta']),
-                                        );
-                                      },
-                                      itemCount: respuestas.length,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
-                      },
-
-                      leading: Text((index + 1).toString(),style: TextStyle(fontSize: 20),),
-
-                      title: Text(preguntas[index].pregunta),
-                      trailing: Icon(Icons.remove_red_eye),
+                             ],
+                           ),
+                            Text(
+                        preguntas[index].pregunta,
+                        style: TextStyle(fontSize: 25),
+                        textAlign: TextAlign.center,
+                            ),
+                            
+                             Divider(height: 20,color: Colors.white54,),
+                             
+                            ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, ind) {
+                          return ListTile(
+                            trailing: IconButton(
+                              
+                              color: Colors.white,
+                            
+                              
+                              icon: Icon(Icons.lock_open),
+                              onPressed: () {
+              showDialog(
+                context: context,
+                child: DesbloquearDialog(
+                  controller: controller,
+                  respuestas: respuestas,
+                  usuario: respuestas[ind]
+                        ['usuario'],
+                  respuesta: respuestas[ind]
+                        ['respuesta'],
+                  pregunta:
+                        preguntas[index].pregunta,
+                ),
+              );
+                              },
+                            ),
+                            title: Text(
+              respuestas[ind]['respuesta']),
+                          );
+                        },
+                        itemCount: respuestas.length,
+                            ),
+                          ],
+                        ),
                     ),
-                  ),
-                ],
-              ),
+                  ));
+                              },
+
+                              leading: Text((index + 1).toString(),style: TextStyle(fontSize: 20),),
+
+                              title: Text(preguntas[index].pregunta),
+                              
+                              trailing: Icon(Icons.remove_red_eye,color: pDark,),
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
             ),
     );
   }
 }
 
 class DesbloquearDialog extends StatefulWidget {
-  const DesbloquearDialog(
+   DesbloquearDialog(
       {Key key,
       @required this.controller,
       @required this.respuestas,
       this.pregunta,
       this.respuesta,
-      this.usuario})
+      this.usuario,
+      })
       : super(key: key);
 
   final Controller controller;
@@ -267,6 +279,7 @@ class DesbloquearDialog extends StatefulWidget {
   final String usuario;
   final String respuesta;
   final String pregunta;
+  final List<String> textos = ['Disfruta la verdad :)','A veces es mejor no saber todo','¿Por qué no mantenerlo en secreto?','La verdad en ocaciones no es lo mejor',];
 
   @override
   _DesbloquearDialogState createState() => _DesbloquearDialogState();
@@ -279,11 +292,12 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text('Desbloquer respuesta'),
       content: Text(
-          'Para saber quien escribió esta respuesta necesitas pagar 5 monedas'),
+          'Para saber quien escribió esta respuesta necesitas pagar  5 monedas'),
       actions: widget.controller.loading
           ? <Widget>[LinearProgressIndicator()]
           : <Widget>[
               FlatButton(
+                
                 color: Colors.white,
                 
                 onPressed: () => Navigator.of(context).pop(),
@@ -291,33 +305,41 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
               RaisedButton(
+                elevation: 10,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 color: buttonColors,
                 onPressed: () async {
+                  var _random= new Random();
+                  var randonText = widget.textos[_random.nextInt(widget.textos.length)];
+                  //(widget.textos.toList()..shuffle()).first;
+                  print(randonText);
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
                     showDialog(
                         context: context,
                         child: AlertDialog(
-                          title: Text('Disfruta de la verdad :)'),
+                          title: Text(randonText),
                           content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
+                              Divider(thickness: 1,height: 5,color: pLight,),
                               Text(
                                 '${widget.pregunta}',
-                                style: TextStyle(fontSize: 30),
-                              ),
-                              Text(
-                                '${widget.usuario} :',
                                 style: TextStyle(fontSize: 20),
                               ),
-                              Text('${widget.respuesta}'),
+                              SizedBox(height: 10,),
+                              Text(
+                              '${widget.usuario} :',
+                              style: TextStyle(fontSize: 20),
+                                ),
+                                Text('${widget.respuesta}',textAlign: TextAlign.center,),
+                              
                             ],
                           ),
                           actions: <Widget>[
                             RaisedButton(
-
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: buttonColors,
                               onPressed: () => Navigator.of(context).pop(),
@@ -328,32 +350,42 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   } else {
                     showDialog(
                         context: context,
-                        child: AlertDialog(
-                          title: Text(
-                            '¡No tienes suficientes monedas!',
-                            style: TextStyle(fontSize: 30),
-                          ),
-                          content: Text(
-                              '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('Cancelar'),
-                              onPressed: () => Navigator.of(context).pop(),
+                        child: WillPopScope(onWillPop: () async=>false,
+                         
+                        
+                                                  child: AlertDialog(
+                            title: Text(
+                              '¡No tienes suficientes monedas!',
+                              style: TextStyle(fontSize: 30),
                             ),
-                            RaisedButton(
-                              onPressed: () {
-                                widget.controller.seleccionado = 4;
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    '/home', ModalRoute.withName('/'));
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.store),
-                                  Text('Ir a la tienda'),
-                                ],
+                            content: Text(
+                                '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),
+                            actions: <Widget>[
+                              FlatButton(
+                                
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                color: Colors.white,
+                                child: Text('Cancelar',style: TextStyle(color: pDark,)),
+                                onPressed: () => Navigator.of(context).pop(),
                               ),
-                            )
-                          ],
+                              RaisedButton(
+                                elevation: 10,
+                                color: primaryColor,
+                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                onPressed: () {
+                                  widget.controller.seleccionado = 4;
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      '/home', ModalRoute.withName('/'));
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(Icons.store,color: Colors.white,),
+                                    Text('Ir a la tienda',style: TextStyle(color: Colors.white),),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ));
                   }
                 },

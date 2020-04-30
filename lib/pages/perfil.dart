@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/services/dynamic_link_services.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -61,12 +62,12 @@ class _PerfilState extends State<Perfil> {
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: primaryDark,
-                          radius: 17,
+                          backgroundColor: pDark,
+                          radius: 15,
                           child: Icon(
                             Icons.photo_camera,
                             size: 18,
-                           
+                           color: Colors.white,
                           ),
                           // IconButton(
                           //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
@@ -223,8 +224,8 @@ class _PerfilState extends State<Perfil> {
                         Text(
                           'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black26,
+                            fontSize: 10,
+                            color: sDark,
                           ),
                         ),
                       ],
@@ -233,19 +234,32 @@ class _PerfilState extends State<Perfil> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 25,
+            SizedBox(height:10),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              alignment: Alignment.centerLeft,
+              child: FlatButton.icon(
+                  icon: Icon(Icons.group_add, size: 20,color: pDark,),
+                  label: Text(
+                    'Inivtar amigos',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black
+                    ),
+                  ),
+                  onPressed: () => DynamicLinkServices),
             ),
             !controller.usuario.monedasFree
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
                     alignment: Alignment.centerLeft,
                     child: FlatButton.icon(
-                      icon: Icon(Icons.stars, size: 20),
+                      icon: Icon(Icons.stars, size: 20,color: pDark,),
                       label: Text(
-                        'Monedas Grátis',
+                        'Monedas Gratis',
                         style: TextStyle(
                           fontSize: 18,
+                          color: Colors.black
                         ),
                       ),
                       onPressed: () {
@@ -266,7 +280,7 @@ class _PerfilState extends State<Perfil> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(Icons.stars,
-                                           size: 20),
+                                           size: 20,color: secondaryColor,),
                                         Text('Monedas Grátis',
                                             style: TextStyle(
                                                 fontSize: 18,
@@ -292,20 +306,7 @@ class _PerfilState extends State<Perfil> {
                   )
                 : Container(),
             SizedBox(
-              height: 25,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              alignment: Alignment.centerLeft,
-              child: FlatButton.icon(
-                  icon: Icon(Icons.group_add, size: 20,color: primaryDark,),
-                  label: Text(
-                    'Inivtar amigos',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  onPressed: () => null),
+              height: 10,
             ),
             Container(
               alignment: Alignment.bottomRight,
@@ -316,7 +317,7 @@ class _PerfilState extends State<Perfil> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 4,
-                backgroundColor: buttonColors,
+                
                 onPressed: () async {
                   await controller.signOut();
                   Navigator.of(context)
@@ -625,6 +626,8 @@ class _ListaAmigosState extends State<ListaAmigos> {
                     : selectedFriend == '' || selectedFriend == null
                         ? Container()
                         : RaisedButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          color: primaryColor,
                             onPressed: () async {
                               setState(() {
                                 isLoading = true;
@@ -651,7 +654,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
                             },
                             child: Text(
                               'Aceptar',
-                              style: TextStyle(color: buttonColors),
+                              style: TextStyle(color: Colors.white),
                             ))
               ],
             );
