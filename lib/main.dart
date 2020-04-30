@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
+import 'pages/pages.dart';
 import 'shared/shared.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -68,7 +69,9 @@ class MyApp extends StatelessWidget {
           '/misLibretas': (context) => TusLibretas(),
           '/libretasAmigos': (context) => LibretasA(),
           '/creadorLibreta': (context) => FormularioCreator(),
-          '/libretaDetalles': (context) => LibretaDetails(),
+          '/libretaDetalles' : (context) => LibretaDetails(),
+          'perfil' : (context) => Perfil(),
+
         },
       ),
     );

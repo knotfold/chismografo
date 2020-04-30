@@ -319,7 +319,9 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text('Desbloquer respuesta'),
       content: Text(
+
           'Para saber quien escribió esta respuesta necesitas pagar  5 monedas'),
+
       actions: widget.controller.loading
           ? <Widget>[LinearProgressIndicator()]
           : <Widget>[
@@ -420,12 +422,18 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   } else {
                     await showDialog(
                         context: context,
-                        child: WillPopScope(
-                          onWillPop: () async => false,
-                          child: AlertDialog(
-                            title: Text(
-                              '¡No tienes suficientes monedas!',
-                              style: TextStyle(fontSize: 30),
+
+                        child: AlertDialog(
+                          title: Text(
+                            '¡No tienes suficientes monedas!',
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          content: Text(
+                              '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Cancelar'),
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
                             content: Text(
                                 '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),

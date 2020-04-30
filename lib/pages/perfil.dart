@@ -306,6 +306,7 @@ class _PerfilState extends State<Perfil> {
                     ),
                   )
                 : Container(),
+
             SizedBox(
               height: 10,
             ),
@@ -505,9 +506,10 @@ class _DialogContentState extends State<DialogContent> {
                                 downloadUrl.ref.path;
 
                             controller.loading = false;
+
                             controller.notify();
 
-                            Navigator.of(context).pop();
+                            Navigator.pop(context);
                           },
                           label: Text(
                             'Guardar',
@@ -592,23 +594,25 @@ class _ListaAmigosState extends State<ListaAmigos> {
                 ),
               );
             }
-            return Column(
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            return !controller.usuario.monedasFree
+                ? Column(
                     children: <Widget>[
-                      DropdownButton(
-                        items: listItems,
-                        onChanged: (value) {
-                          setState(() {
-                            friendId =
-                                snapshot.data.documents[value].documentID;
 
-                            coins = snapshot.data.documents[value]['coins'];
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            DropdownButton(
+                              items: listItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  friendId =
+                                      snapshot.data.documents[value].documentID;
 
-                            selectedFriend = value;
+                                  coins =
+                                      snapshot.data.documents[value]['coins'];
 
-                            setState(() {});
+                                  selectedFriend = value;
+
 
                             controller.notify();
                           });
@@ -636,18 +640,98 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                   .document(friendId)
                                   .updateData({'coins': coins + 25});
 
-                              await controller.usuario.reference
-                                  .updateData({'monedasFree': true});
 
-                              controller.usuario.monedasFree = true;
+                                  controller.notify();
+                                });
+                              },
+                              value: selectedFriend,
+                              isExpanded: false,
+                              hint: Text(
+                                "Selecciona a un amigo",
+                              ),
+                            )
+                          ]),
+                      isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : selectedFriend == '' || selectedFriend == null
+                              ? Container()
+                              : RaisedButton(
+                                  onPressed: () async {
+                                    showDialog(
+                                        context: context,
+                                        child: AlertDialog(
+                                          title: Text(
+                                              '¿Estas seguro de esta decisión?'),
+                                          content: Text(
+                                              'Ten en cuenta que solo podrás realizar esta acción una vez.'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                      color: buttonColors),
+                                                )),
+                                            FlatButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  await Firestore.instance
+                                                      .collection('usuarios')
+                                                      .document(friendId)
+                                                      .updateData({
+                                                    'coins': coins + 25
+                                                  });
+                                                  await controller
+                                                      .usuario.reference
+                                                      .updateData({
+                                                    'coins': controller
+                                                            .usuario.coins +
+                                                        25
+                                                  });
 
-                              controller.notify();
-                              print(selectedFriend);
-                              print(friendId);
+                                                  await controller
+                                                      .usuario.reference
+                                                      .updateData({
+                                                    'monedasFree': true
+                                                  });
 
-                              setState(() {
-                                isLoading = false;
-                              });
+                                                  controller.usuario
+                                                      .monedasFree = true;
+
+                                                  controller.usuario.coins =
+                                                      controller.usuario.coins +
+                                                          25;
+
+                                                  controller.notify();
+
+                                                  setState(() {
+                                                    isLoading = false;
+                                                    controller.usuario
+                                                      .monedasFree = true;
+                                                  });
+                                                 
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  'Sí',
+                                                  style: TextStyle(
+                                                      color: buttonColors),
+                                                ))
+                                          ],
+                                        ));
+                                  },
+                                  child: Text(
+                                    'Aceptar',
+                                    style: TextStyle(color: buttonColors),
+                                  ))
+                    ],
+                  )
+                : Container();
+
 
                               Navigator.of(context).pop();
                             },
@@ -657,6 +741,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
                             ))
               ],
             );
+
           }
         });
   }

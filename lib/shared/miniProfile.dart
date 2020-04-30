@@ -195,14 +195,37 @@ class _MiniProfileState extends State<MiniProfile> {
                                     Text(
                                         'Si este usuario te invito a usar esta App, nosotros les agradeceremos regalandole 25 monedas a cada uno. Solo puedes elgir una vez y a una persona'),
                                     RaisedButton(
+
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
                                         color: buttonColors,
+
                                         onPressed: () async {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
+                                          showDialog(
+                                              context: context,
+                                              child: AlertDialog(
+                                                title: Text(
+                                                    '¿Estas seguro de esta decisión?'),
+                                                content: Text(
+                                                    'Ten en cuenta que solo podrás realizar esta acción una vez.'),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        'No',
+                                                        style: TextStyle(
+                                                            color:buttonColors),
+                                                      )),
+                                                  FlatButton(
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          isLoading = true;
+                                                        });
+
 
                                           await Firestore.instance
                                               .collection('usuarios')
@@ -218,24 +241,51 @@ class _MiniProfileState extends State<MiniProfile> {
                                                 controller.usuario.coins + 25
                                           });
 
-                                          await controller.usuario.reference
-                                              .updateData(
-                                                  {'monedasFree': true});
 
-                                          controller.usuario.monedasFree = true;
+                                                        await controller
+                                                            .usuario.reference
+                                                            .updateData({
+                                                          'coins': controller
+                                                                  .usuario
+                                                                  .coins +
+                                                              25
+                                                        });
+
+                                                        await controller
+                                                            .usuario.reference
+                                                            .updateData({
+                                                          'monedasFree': true
+                                                        });
 
                                           controller.usuario.coins =
                                               controller.usuario.coins + 25;
 
-                                          controller.notify();
 
-                                          print(widget.usuario.documentId);
+                                                        controller.usuario
+                                                            .coins = controller
+                                                                .usuario.coins +
+                                                            25;
 
-                                          setState(() {
-                                            isLoading = false;
-                                          });
+                                                        controller.notify();
 
-                                          // Navigator.of(context).pop();
+                                                        print(widget.usuario
+                                                            .documentId);
+
+                                                        setState(() {
+                                                          isLoading = false;
+                                                        });
+
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        'Sí',
+                                                        style: TextStyle(
+                                                            color:buttonColors),
+                                                      ))
+                                                ],
+                                              ));
+
                                         },
                                         child: Text(
                                           'Regalar monedas ',
