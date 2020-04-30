@@ -282,7 +282,7 @@ class _PerfilState extends State<Perfil> {
                                       children: <Widget>[
                                         Icon(Icons.stars,
                                            size: 20,color: secondaryColor,),
-                                        Text('Monedas Grátis',
+                                        Text('Monedas Gratis',
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 ))

@@ -102,12 +102,14 @@ class LibretasA extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+               SizedBox(height: 10,),
               Text(
                 'Libretas Amigos',
                 style: TextStyle(fontSize: 22),
               ),
+               
               SizedBox(
                 height: 20,
               ),

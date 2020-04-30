@@ -66,7 +66,7 @@ class _MiniProfileState extends State<MiniProfile> {
                                       color: buttonColors,
                                       child: Text(
                                         'Cancelar Solicitud',
-                                        style: TextStyle(color: Colors.white,fontSize: 10.0),
+                                        style: TextStyle(color: Colors.white,fontSize: 13.0),
                                       ),
                                       onPressed: () async {
                                         print(widget.usuario.documentId.length);

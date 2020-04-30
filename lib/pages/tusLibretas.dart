@@ -23,12 +23,14 @@ class TusLibretas extends StatelessWidget {
               child: Container(
           padding: EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: 10,),
               Text(
                 'Tus Libretas',
                 style: TextStyle(fontSize: 22),
               ),
+               SizedBox(height: 20,),
               Container(
                 child: StreamBuilder(
                   stream: Firestore.instance
