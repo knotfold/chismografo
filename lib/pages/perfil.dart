@@ -236,69 +236,64 @@ class _PerfilState extends State<Perfil> {
             SizedBox(
               height: 25,
             ),
-            !controller.usuario.monedasFree
-                ? Container(
-                    margin: EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child: FlatButton.icon(
-
-                      icon: Icon(
-                        Icons.stars,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      label: Text(
-                        'Monedas Gratis',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
-                      ),
-                      onPressed: () {
-                        return showDialog(
-                          context: context,
-                          child: Dialog(
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              alignment: Alignment.centerLeft,
+              child: FlatButton.icon(
+                  icon: Icon(Icons.stars, size: 20, color: buttonColors),
+                  label: Text(
+                    'Monedas Gratis',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  onPressed: () {
+                    return showDialog(
+                        context: context,
+                        child: Dialog(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             child: SingleChildScrollView(
-                              child: Container(
-                                margin: EdgeInsets.all(20),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.stars,
-                                          size: 20,
-                                        ),
-                                        Text('Monedas Gratis',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                            ))
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                        'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
-                                    FittedBox(
-                                      child: ListaAmigos(),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Container(),
+                                child: Container(
+                                    margin: EdgeInsets.all(20),
+                                    child:  Column(
+                                            children: <Widget>[
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(Icons.stars,
+                                                      color: Colors.white,
+                                                      size: 20),
+                                                  Text('Monedas Gratis',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.white))
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                             !controller.usuario.monedasFree
+                                        ? Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                      'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
+                                                  FittedBox(
+                                                    child: ListaAmigos(),
+                                                  )
+                                                ],
+                                              )
+                                              :Text(
+                                                  'Tus monedas ya fueron regaladas. Para recibir más monedas no olvides invitar a más personas')
+                                            ],
+                                          )
+                                        ))));
+                  }),
+            ),
+
             SizedBox(
               height: 25,
             ),
@@ -503,9 +498,10 @@ class _DialogContentState extends State<DialogContent> {
                                 downloadUrl.ref.path;
 
                             controller.loading = false;
+
                             controller.notify();
 
-                            Navigator.of(context).pop();
+                            Navigator.pop(context);
                           },
                           label: Text(
                             'Guardar',
@@ -588,68 +584,118 @@ class _ListaAmigosState extends State<ListaAmigos> {
                 ),
               );
             }
-            return Column(
-              children: <Widget>[
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            return !controller.usuario.monedasFree
+                ? Column(
                     children: <Widget>[
-                      DropdownButton(
-                        items: listItems,
-                        onChanged: (value) {
-                          setState(() {
-                            friendId =
-                                snapshot.data.documents[value].documentID;
 
-                            coins = snapshot.data.documents[value]['coins'];
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            DropdownButton(
+                              items: listItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  friendId =
+                                      snapshot.data.documents[value].documentID;
 
-                            selectedFriend = value;
+                                  coins =
+                                      snapshot.data.documents[value]['coins'];
 
-                            setState(() {});
+                                  selectedFriend = value;
 
-                            controller.notify();
-                          });
-                        },
-                        value: selectedFriend,
-                        isExpanded: false,
-                        hint: Text(
-                          "Selecciona a un amigo",
-                        ),
-                      )
-                    ]),
-                isLoading
-                    ? CircularProgressIndicator()
-                    : selectedFriend == '' || selectedFriend == null
-                        ? Container()
-                        : RaisedButton(
-                            onPressed: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await Firestore.instance
-                                  .collection('usuarios')
-                                  .document(friendId)
-                                  .updateData({'coins': coins + 25});
+                                  setState(() {});
 
-                              await controller.usuario.reference
-                                  .updateData({'monedasFree': true});
+                                  controller.notify();
+                                });
+                              },
+                              value: selectedFriend,
+                              isExpanded: false,
+                              hint: Text(
+                                "Selecciona a un amigo",
+                              ),
+                            )
+                          ]),
+                      isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : selectedFriend == '' || selectedFriend == null
+                              ? Container()
+                              : RaisedButton(
+                                  onPressed: () async {
+                                    showDialog(
+                                        context: context,
+                                        child: AlertDialog(
+                                          title: Text(
+                                              '¿Estas seguro de esta decisión?'),
+                                          content: Text(
+                                              'Ten en cuenta que solo podrás realizar esta acción una vez.'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                      color: buttonColors),
+                                                )),
+                                            FlatButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  await Firestore.instance
+                                                      .collection('usuarios')
+                                                      .document(friendId)
+                                                      .updateData({
+                                                    'coins': coins + 25
+                                                  });
+                                                  await controller
+                                                      .usuario.reference
+                                                      .updateData({
+                                                    'coins': controller
+                                                            .usuario.coins +
+                                                        25
+                                                  });
 
-                              controller.usuario.monedasFree = true;
+                                                  await controller
+                                                      .usuario.reference
+                                                      .updateData({
+                                                    'monedasFree': true
+                                                  });
 
-                              controller.notify();
-                              print(selectedFriend);
-                              print(friendId);
+                                                  controller.usuario
+                                                      .monedasFree = true;
 
-                              setState(() {
-                                isLoading = false;
-                              });
+                                                  controller.usuario.coins =
+                                                      controller.usuario.coins +
+                                                          25;
 
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Aceptar',
-                            ))
-              ],
-            );
+                                                  controller.notify();
+
+                                                  setState(() {
+                                                    isLoading = false;
+                                                    controller.usuario
+                                                      .monedasFree = true;
+                                                  });
+                                                 
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  'Sí',
+                                                  style: TextStyle(
+                                                      color: buttonColors),
+                                                ))
+                                          ],
+                                        ));
+                                  },
+                                  child: Text(
+                                    'Aceptar',
+                                    style: TextStyle(color: buttonColors),
+                                  ))
+                    ],
+                  )
+                : Container();
+
           }
         });
   }

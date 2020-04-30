@@ -278,7 +278,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
     return AlertDialog(
       title: Text('Desbloquer respuesta'),
       content: Text(
-          'Para saber quien escribió esta respuesta necesitas pagar 5 monedas'),
+          'Para saber quien escribió esta respuesta necesitas pagar 1 moneda'),
       actions: widget.controller.loading
           ? <Widget>[LinearProgressIndicator()]
           : <Widget>[
@@ -325,7 +325,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                             style: TextStyle(fontSize: 30),
                           ),
                           content: Text(
-                              '¡Para ver quien escribio esta respuesta debes de utilizar 5 monedas y solo tienes ${widget.controller.usuario.coins}!'),
+                              '¡Para ver quien escribio esta respuesta debes de utilizar 1 moneda y solo tienes ${widget.controller.usuario.coins}!'),
                           actions: <Widget>[
                             FlatButton(
                               child: Text('Cancelar'),

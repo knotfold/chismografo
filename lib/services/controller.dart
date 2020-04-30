@@ -57,11 +57,13 @@ class Controller with ChangeNotifier {
     bool status = true;
     loading = true;
     notifyListeners();
+
     if (usuarioAct.coins < 5) {
       loading = false;
+
       return false;
     }
-    var newCoins = usuarioAct.coins - 5;
+    var newCoins = usuarioAct.coins - 1;
 
     await usuarioAct.reference
         .updateData({'coins': newCoins}).catchError((onError) {
@@ -74,7 +76,7 @@ class Controller with ChangeNotifier {
       return false;
     }
 
-    usuarioAct.coins = usuarioAct.coins - 5;
+    usuarioAct.coins = usuarioAct.coins - 1;
     loading = false;
 
     notifyListeners();
@@ -123,7 +125,7 @@ class Controller with ChangeNotifier {
         context: context,
         child: AlertDialog(
           title: Text('Muy Pocas Preguntas'),
-          content: Text('Tu libreta debe de tener al menos 3 Preguntas'),
+          content: Text('Tu libreta debe de tener al menos 3 preguntas'),
         ),
       );
       return false;

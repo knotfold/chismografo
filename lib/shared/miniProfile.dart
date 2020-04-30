@@ -170,46 +170,87 @@ class _MiniProfileState extends State<MiniProfile> {
                                     Text(
                                         'Si este usuario te invito a usar esta App, nosotros les agradeceremos regalandole 25 monedas a cada uno. Solo puedes elgir una vez y a una persona'),
                                     RaisedButton(
-
-
                                         onPressed: () async {
-                                          setState(() {
-                                            isLoading = true;
-                                          });
+                                          showDialog(
+                                              context: context,
+                                              child: AlertDialog(
+                                                title: Text(
+                                                    '¿Estas seguro de esta decisión?'),
+                                                content: Text(
+                                                    'Ten en cuenta que solo podrás realizar esta acción una vez.'),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        'No',
+                                                        style: TextStyle(
+                                                            color:buttonColors),
+                                                      )),
+                                                  FlatButton(
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          isLoading = true;
+                                                        });
 
-                                          await Firestore.instance
-                                              .collection('usuarios')
-                                              .document(
-                                                  widget.usuario.documentId)
-                                              .updateData({
-                                            'coins': widget.usuario.coins + 25
-                                          });
-                                          
-                                          await controller.usuario.reference
-                                              .updateData({
-                                            'coins':
-                                                controller.usuario.coins + 25
-                                          });
+                                                        await Firestore.instance
+                                                            .collection(
+                                                                'usuarios')
+                                                            .document(widget
+                                                                .usuario
+                                                                .documentId)
+                                                            .updateData({
+                                                          'coins': widget
+                                                                  .usuario
+                                                                  .coins +
+                                                              25
+                                                        });
 
-                                          await controller.usuario.reference
-                                              .updateData(
-                                                  {'monedasFree': true});
+                                                        await controller
+                                                            .usuario.reference
+                                                            .updateData({
+                                                          'coins': controller
+                                                                  .usuario
+                                                                  .coins +
+                                                              25
+                                                        });
 
-                                          controller.usuario.monedasFree = true;
+                                                        await controller
+                                                            .usuario.reference
+                                                            .updateData({
+                                                          'monedasFree': true
+                                                        });
 
-                                          controller.usuario.coins = controller.usuario.coins +25;
+                                                        controller.usuario
+                                                            .monedasFree = true;
 
-                                          controller.notify();
+                                                        controller.usuario
+                                                            .coins = controller
+                                                                .usuario.coins +
+                                                            25;
 
-                                          print(widget.usuario.documentId);
+                                                        controller.notify();
 
-                                          setState(() {
-                                            isLoading = false;
-                                          });
+                                                        print(widget.usuario
+                                                            .documentId);
 
-                                          // Navigator.of(context).pop();
+                                                        setState(() {
+                                                          isLoading = false;
+                                                        });
+
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        'Sí',
+                                                        style: TextStyle(
+                                                            color:buttonColors),
+                                                      ))
+                                                ],
+                                              ));
                                         },
-
                                         child: Text(
                                           'Regalar monedas ',
                                           style: TextStyle(color: buttonColors),
