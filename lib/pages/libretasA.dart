@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_form/pages/pages.dart';
+import 'package:trivia_form/shared/libretaCard.dart';
 
 import 'package:trivia_form/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,14 +55,7 @@ class LibretasA extends StatelessWidget {
                                       icon: Icon(Icons.check),
                                     ),
                                     IconButton(
-                                      onPressed: () async {
-                                        formularioModel.reference.updateData({
-                                          'invitaciones':
-                                              FieldValue.arrayRemove(
-                                                  [controller.usuario.usuario])
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
+                                      onPressed: () async {},
                                       icon: Icon(Icons.cancel),
                                     ),
                                   ],
@@ -108,11 +102,16 @@ class LibretasA extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+               SizedBox(height: 10,),
               Text(
                 'Libretas Amigos',
                 style: TextStyle(fontSize: 22),
+              ),
+               
+              SizedBox(
+                height: 20,
               ),
               Container(
                 child: StreamBuilder(
@@ -126,26 +125,50 @@ class LibretasA extends StatelessWidget {
                       return const CircularProgressIndicator();
                     List<DocumentSnapshot> documents = snapshot.data.documents;
                     return ListView.builder(
+                        //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        // crossAxisCount:1,crossAxisSpacing: 10,childAspectRatio: 2.5,mainAxisSpacing: 5,),
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: documents.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           FormularioModel formularioModel =
                               FormularioModel.fromDS(documents[index]);
-                          return ListTile(
-                            onTap: () {
-                              controller.toFillForm = formularioModel;
-                              Navigator.of(context)
-                                  .pushNamed('/libretaDetalles');
-                            },
-                            title: Text(
-                              formularioModel.nombre,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            subtitle: Text(formularioModel.creadorUsuario),
-                            trailing:
-                                Text('${formularioModel.usuarios.length} / 25'),
-                          );
+                          return LibretaCard(formularioModel: formularioModel,controller: controller);
+                          //     GestureDetector(
+                          //   onTap: () {
+                          //     controller.toFillForm = formularioModel;
+                          //     Navigator.of(context)
+                          //         .pushNamed('/libretaDetalles');
+                          //   },
+                          //   child: Container(
+
+                          //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),gradient: LinearGradient(colors: ([colorg1,colorg2]),begin: Alignment.topRight,end: Alignment.topLeft)),
+                          //     child: Column(
+
+                          //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: <Widget>[
+                          //         Container(
+                          //           child: Text(formularioModel.creadorUsuario),
+                          //           alignment: Alignment.topLeft,
+                          //         ),
+
+                          //         Container(
+                          //           child: Text(formularioModel.nombre,style: TextStyle(color: Colors.white)),
+                          //           alignment: Alignment.center,
+
+                          //         ),
+                          //         Container(
+                          //           margin: EdgeInsets.only(left: 175,right: 2),
+                          //           padding: EdgeInsets.only(right:5),
+                          //           decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(20)),
+                          //           child:  Text('${formularioModel.usuarios.length} / 25'),
+                          //           alignment: Alignment.bottomRight,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // );
                         });
                   },
                 ),

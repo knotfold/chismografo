@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
-    backgroundColor: buttonColors,
+    
     elevation: 0,
     title: Text(
       'Chismografo',

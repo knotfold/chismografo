@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/services/dynamic_link_services.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -61,10 +62,12 @@ class _PerfilState extends State<Perfil> {
                           ),
                         ),
                         CircleAvatar(
-                          radius: 17,
+                          backgroundColor: pDark,
+                          radius: 15,
                           child: Icon(
                             Icons.photo_camera,
                             size: 18,
+                           color: Colors.white,
                           ),
                           // IconButton(
                           //   icon: Icon(Icons.photo_camera,size: 18,color: Colors.white,),
@@ -127,6 +130,7 @@ class _PerfilState extends State<Perfil> {
                                         height: 15,
                                       ),
                                       FloatingActionButton.extended(
+                                        
                                         onPressed: () async {
                                           controller.loading = true;
                                           controller.notify();
@@ -142,10 +146,12 @@ class _PerfilState extends State<Perfil> {
                                         },
                                         label: Text(
                                           'Actualizar',
+                                         
                                         ),
                                         icon: Icon(
                                           Icons.edit,
                                           size: 20,
+                                         
                                         ),
                                       )
                                     ],
@@ -172,10 +178,7 @@ class _PerfilState extends State<Perfil> {
                           SizedBox(
                             width: 15,
                           ),
-                          Icon(
-                            Icons.mail,
-                            size: 20,
-                          ),
+                          Icon(Icons.mail, size: 20),
                           SizedBox(
                             width: 15,
                           ),
@@ -205,10 +208,7 @@ class _PerfilState extends State<Perfil> {
                   SizedBox(
                     width: 20,
                   ),
-                  Icon(
-                    Icons.assistant,
-                    size: 20,
-                  ),
+                  Icon(Icons.assistant, size: 20),
                   SizedBox(
                     width: 10,
                   ),
@@ -222,9 +222,10 @@ class _PerfilState extends State<Perfil> {
                               fontSize: 18,
                             )),
                         Text(
-                          'Éste es tu nombre de usuario, tus amigos pueden encontrarte\nfácilmente dentro de la aplicación con él.',
+                          'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 10,
+                            color: sDark,
                           ),
                         ),
                       ],
@@ -233,82 +234,81 @@ class _PerfilState extends State<Perfil> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 25,
-            ),
+            SizedBox(height:10),
             Container(
               margin: EdgeInsets.only(left: 10),
               alignment: Alignment.centerLeft,
               child: FlatButton.icon(
-                  icon: Icon(Icons.stars, size: 20, color: buttonColors),
-                  label: Text(
-                    'Monedas Gratis',
-                    style: TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                  onPressed: () {
-                    return showDialog(
-                        context: context,
-                        child: Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: SingleChildScrollView(
-                                child: Container(
-                                    margin: EdgeInsets.all(20),
-                                    child:  Column(
-                                            children: <Widget>[
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Icon(Icons.stars,
-                                                      color: Colors.white,
-                                                      size: 20),
-                                                  Text('Monedas Gratis',
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.white))
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                             !controller.usuario.monedasFree
-                                        ? Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                      'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
-                                                  FittedBox(
-                                                    child: ListaAmigos(),
-                                                  )
-                                                ],
-                                              )
-                                              :Text(
-                                                  'Tus monedas ya fueron regaladas. Para recibir más monedas no olvides invitar a más personas')
-                                            ],
-                                          )
-                                        ))));
-                  }),
-            ),
-
-            SizedBox(
-              height: 25,
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              alignment: Alignment.centerLeft,
-              child: FlatButton.icon(
-                  icon: Icon(Icons.group_add, size: 20, ),
+                  icon: Icon(Icons.group_add, size: 20,color: pDark,),
                   label: Text(
                     'Inivtar amigos',
                     style: TextStyle(
                       fontSize: 18,
+                      color: Colors.black
                     ),
                   ),
-                  onPressed: () => null),
+                  onPressed: () => DynamicLinkServices),
+            ),
+            !controller.usuario.monedasFree
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                    child: FlatButton.icon(
+                      icon: Icon(Icons.stars, size: 20,color: pDark,),
+                      label: Text(
+                        'Monedas Gratis',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          
+                        ),
+                      ),
+                      onPressed: () {
+                        return showDialog(
+                          context: context,
+                          child: Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: SingleChildScrollView(
+                              child: Container(
+                                margin: EdgeInsets.all(20),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Icon(Icons.stars,
+                                           size: 20,color: secondaryColor,),
+                                        Text('Monedas Gratis',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                ))
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                        'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elgir una vez y a una persona'),
+                                    FittedBox(
+                                      child: ListaAmigos(),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Container(),
+
+            SizedBox(
+              height: 10,
             ),
             Container(
               alignment: Alignment.bottomRight,
@@ -319,6 +319,7 @@ class _PerfilState extends State<Perfil> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 4,
+                
                 onPressed: () async {
                   await controller.signOut();
                   Navigator.of(context)
@@ -426,17 +427,21 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Galeria',
+                          
                           ),
                           icon: Icon(
                             Icons.photo_library,
+                            
                           ),
                         )
                       ],
                     ),
                     ButtonBar(
+                      alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil3',
+                        
                           onPressed: () async {
                             imagen = await controller.getImageCamera(context);
                             setState(() {
@@ -445,9 +450,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Foto Camara',
+                          
                           ),
                           icon: Icon(
                             Icons.photo_camera,
+                            
                           ),
                         )
                       ],
@@ -457,6 +464,7 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil4',
+                          
                           onPressed: () async {
                             controller.loading = true;
                             controller.notify();
@@ -505,9 +513,11 @@ class _DialogContentState extends State<DialogContent> {
                           },
                           label: Text(
                             'Guardar',
+                           
                           ),
                           icon: Icon(
                             Icons.save,
+                            
                           ),
                         )
                       ],
@@ -603,7 +613,33 @@ class _ListaAmigosState extends State<ListaAmigos> {
 
                                   selectedFriend = value;
 
-                                  setState(() {});
+
+                            controller.notify();
+                          });
+                        },
+                        value: selectedFriend,
+                        isExpanded: false,
+                        hint: Text(
+                          "Selecciona a un amigo",
+                        ),
+                      )
+                    ]),
+                isLoading
+                    ? CircularProgressIndicator()
+                    : selectedFriend == '' || selectedFriend == null
+                        ? Container()
+                        : RaisedButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          color: primaryColor,
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await Firestore.instance
+                                  .collection('usuarios')
+                                  .document(friendId)
+                                  .updateData({'coins': coins + 25});
+
 
                                   controller.notify();
                                 });
@@ -695,6 +731,16 @@ class _ListaAmigosState extends State<ListaAmigos> {
                     ],
                   )
                 : Container();
+
+
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Aceptar',
+                              style: TextStyle(color: Colors.white),
+                            ))
+              ],
+            );
 
           }
         });

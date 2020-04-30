@@ -47,15 +47,27 @@ class _MiniProfileState extends State<MiniProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(child: Text(widget.usuario.nombre)),
+                        Expanded(
+                            child: Text(
+                          widget.usuario.nombre,
+                          style: TextStyle(fontSize: 20),
+                        )),
+                   
                         controller.usuario.documentId ==
                                 widget.usuario.documentId
                             ? Container()
                             : verifyMyFRequest(controller)
-                                ? Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 5),
+                                ? Expanded(
+                                    //margin: EdgeInsets.symmetric(horizontal: 5),
                                     child: RaisedButton(
-                                      child: Text('Cancelar Solicitud'),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      color: buttonColors,
+                                      child: Text(
+                                        'Cancelar Solicitud',
+                                        style: TextStyle(color: Colors.white,fontSize: 13.0),
+                                      ),
                                       onPressed: () async {
                                         print(widget.usuario.documentId.length);
                                         await controller.usuario.reference
@@ -99,7 +111,10 @@ class _MiniProfileState extends State<MiniProfile> {
                                               controller.notify();
                                               Navigator.of(context).pop();
                                             },
-                                            icon: Icon(Icons.check),
+                                            icon: Icon(
+                                              Icons.check,
+                                              size: 30,
+                                            ),
                                           ),
                                           IconButton(
                                             onPressed: () async {
@@ -113,13 +128,19 @@ class _MiniProfileState extends State<MiniProfile> {
                                               controller.notify();
                                               Navigator.of(context).pop();
                                             },
-                                            icon: Icon(Icons.delete_forever),
+                                            icon: Icon(
+                                              Icons.delete_forever,
+                                              size: 30,
+                                            ),
                                           )
                                         ],
                                       )
                                     : verifyFriendship(controller)
                                         ? IconButton(
-                                            icon: Icon(Icons.delete_forever),
+                                            icon: Icon(
+                                              Icons.delete_forever,
+                                              size: 30,
+                                            ),
                                             onPressed: () async {
                                               await controller.usuario.reference
                                                   .updateData({
@@ -156,7 +177,10 @@ class _MiniProfileState extends State<MiniProfile> {
                                               controller.notify();
                                               setState(() {});
                                             },
-                                            icon: Icon(Icons.person_add),
+                                            icon: Icon(
+                                              Icons.person_add,
+                                              size: 30,
+                                            ),
                                           ),
                       ],
                     ),
@@ -167,9 +191,16 @@ class _MiniProfileState extends State<MiniProfile> {
                             : Center(
                                 child: Column(
                                   children: <Widget>[
+                                    
                                     Text(
                                         'Si este usuario te invito a usar esta App, nosotros les agradeceremos regalandole 25 monedas a cada uno. Solo puedes elgir una vez y a una persona'),
                                     RaisedButton(
+
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        color: buttonColors,
+
                                         onPressed: () async {
                                           showDialog(
                                               context: context,
@@ -195,18 +226,21 @@ class _MiniProfileState extends State<MiniProfile> {
                                                           isLoading = true;
                                                         });
 
-                                                        await Firestore.instance
-                                                            .collection(
-                                                                'usuarios')
-                                                            .document(widget
-                                                                .usuario
-                                                                .documentId)
-                                                            .updateData({
-                                                          'coins': widget
-                                                                  .usuario
-                                                                  .coins +
-                                                              25
-                                                        });
+
+                                          await Firestore.instance
+                                              .collection('usuarios')
+                                              .document(
+                                                  widget.usuario.documentId)
+                                              .updateData({
+                                            'coins': widget.usuario.coins + 25
+                                          });
+
+                                          await controller.usuario.reference
+                                              .updateData({
+                                            'coins':
+                                                controller.usuario.coins + 25
+                                          });
+
 
                                                         await controller
                                                             .usuario.reference
@@ -223,8 +257,9 @@ class _MiniProfileState extends State<MiniProfile> {
                                                           'monedasFree': true
                                                         });
 
-                                                        controller.usuario
-                                                            .monedasFree = true;
+                                          controller.usuario.coins =
+                                              controller.usuario.coins + 25;
+
 
                                                         controller.usuario
                                                             .coins = controller
@@ -250,10 +285,11 @@ class _MiniProfileState extends State<MiniProfile> {
                                                       ))
                                                 ],
                                               ));
+
                                         },
                                         child: Text(
                                           'Regalar monedas ',
-                                          style: TextStyle(color: buttonColors),
+                                          style: TextStyle(color: Colors.white),
                                         )),
                                   ],
                                 ),

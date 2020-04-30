@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trivia_form/shared/colors.dart';
 import 'pages.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';

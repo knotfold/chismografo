@@ -119,6 +119,7 @@ class _HomeState extends State<Home> {
         return false;
       },
       child: Scaffold(
+    
         body: _widgetOptions.elementAt(controller.seleccionado),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(

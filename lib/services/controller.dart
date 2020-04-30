@@ -165,7 +165,10 @@ class Controller with ChangeNotifier {
         priv: privado,
         nombre: textEditingController.text,
         creadorUsuario: usuario.usuario,
+        creadorfoto: usuario.foto,
+
         imagen: url);
+
 
     print('third');
     await Firestore.instance
@@ -198,9 +201,10 @@ class Controller with ChangeNotifier {
 
   signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     await googleSignIn.signOut();
     await facebookSignIn.logOut();
-
+    
     await usuario.reference.updateData({
       'tokens': FieldValue.arrayRemove([activeToken])
     });
