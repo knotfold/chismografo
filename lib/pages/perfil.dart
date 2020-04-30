@@ -258,8 +258,9 @@ class _PerfilState extends State<Perfil> {
                       label: Text(
                         'Monedas Gratis',
                         style: TextStyle(
+                          color: Colors.black,
                           fontSize: 18,
-                          color: Colors.black
+                          
                         ),
                       ),
                       onPressed: () {
@@ -350,7 +351,6 @@ class _PerfilState extends State<Perfil> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       elevation: 4,
-                      backgroundColor: buttonColors,
                       onPressed: () async {
                         Firestore.instance
                             .collection('reset')
@@ -418,7 +418,6 @@ class _DialogContentState extends State<DialogContent> {
                       children: <Widget>[
                         FloatingActionButton.extended(
                           heroTag: 'perfil2',
-
                           onPressed: () async {
                             imagen = await controller.getImage(context);
                             setState(() {

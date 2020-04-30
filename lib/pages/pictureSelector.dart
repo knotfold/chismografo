@@ -21,7 +21,7 @@ class _ImageSelectorState extends State<ImageSelector> {
         children: <Widget>[
           GestureDetector(
             onTap: () async {
-              imagen = await controller.getImage(context);
+              controller.image = await controller.getImage(context);
               setState(() {});
             },
             child: Center(
@@ -35,17 +35,17 @@ class _ImageSelectorState extends State<ImageSelector> {
                         height: 150.0,
                         child: CircleAvatar(
                           radius: 45.0,
-                          backgroundImage: imagen == null
-                              ? AssetImage('assets/dog.png')
-                              : FileImage(imagen),
+                          backgroundImage: controller.image == null
+                              ? AssetImage('assets/file-picture-icon.png')
+                              : FileImage(controller.image),
                           backgroundColor: Colors.transparent,
                         )),
                     CircleAvatar(
                       child: IconButton(
                           icon: Icon(Icons.photo_camera),
                           onPressed: () async {
-                            imagen = await controller.getImage(context);
-                            setState(() {});
+                            controller.image = await controller.getImage(context);
+                            controller.notify();
                           }),
                     )
                   ],

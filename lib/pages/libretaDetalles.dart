@@ -315,7 +315,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   print(randonText);
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
-                    showDialog(
+                   await showDialog(
                         context: context,
                         child: AlertDialog(
                           title: Text(randonText),
@@ -348,7 +348,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                           ],
                         ));
                   } else {
-                    showDialog(
+                   await showDialog(
                         context: context,
                         child: WillPopScope(onWillPop: () async=>false,
                          

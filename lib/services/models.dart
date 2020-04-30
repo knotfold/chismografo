@@ -51,7 +51,11 @@ class FormularioModel {
     this.priv,
     this.invitaciones,
     this.nombre,
-    this.creadorfoto
+
+    this.creadorfoto,
+
+    this.imagen,
+
   });
 
   Map<String, dynamic> toMap() {

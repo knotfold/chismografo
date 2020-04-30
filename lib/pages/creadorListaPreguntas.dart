@@ -64,6 +64,7 @@ class _CreadorLPState extends State<CreadorLP> {
                       context: context,
                       child: Dialog(
                         child: Container(
+                          color: Colors.grey[100],
                           padding: EdgeInsets.all(10),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,

@@ -19,7 +19,6 @@ class _StoreState extends State<Store> {
     List<IAPItem> items =
         await FlutterInappPurchase.instance.getProducts(productos);
     for (var item in items) {
-      print('${item.toString()}');
     }
 
     return items;
@@ -135,7 +134,7 @@ class StoreItem extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -253,7 +252,7 @@ class StoreItemFree extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
