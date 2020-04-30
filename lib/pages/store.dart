@@ -1,9 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/shared/shared.dart';
 import 'package:trivia_form/services/services.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 
-class Store extends StatelessWidget {
+class Store extends StatefulWidget {
+  @override
+  _StoreState createState() => _StoreState();
+}
+
+class _StoreState extends State<Store> {
+  List<String> productos = ['05monedas', '10monedas', '20monedas'];
+
+  Future<List<IAPItem>> getItems() async {
+    List<IAPItem> items =
+        await FlutterInappPurchase.instance.getProducts(productos);
+    for (var item in items) {
+    }
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
@@ -16,27 +36,32 @@ class Store extends StatelessWidget {
           padding: EdgeInsets.all(30),
           child: Column(
             children: <Widget>[
-              StoreItem(
-                cantidad: '5',
-                cantidadTexto: 'Cinco Monedas',
-                precio: '5',
-              ),
-              StoreItem(
-                cantidad: '10',
-                cantidadTexto: 'Diez Estrellas',
-                precio: '9',
-                save: '\$1',
-              ),
-              StoreItem(
-                cantidad: '20',
-                cantidadTexto: 'Diez Estrellas',
-                precio: '17',
-                save: '\$3',
+              FutureBuilder(
+                future: getItems(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const LinearProgressIndicator();
+                  List<IAPItem> products = snapshot.data;
+                  return products.isEmpty
+                      ? Text('La tiendad no esta disponible')
+                      : ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            return StoreItem(
+                              cantidad: products[index].title.substring(0, 2),
+                              cantidadTexto: products[index].title,
+                              precio: products[index].price,
+                              iapItem: products[index],
+                            );
+                          },
+                        );
+                },
               ),
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que contestes una libreta',
+                    'Cinco Estrellas Gratis por cada vez que contestes una libreta',
                 opcion: 'Ir a Libretas de Amigos',
                 oportunidades: controller.usuario.dailyAnswers.toString(),
                 newIndex: 1,
@@ -44,7 +69,7 @@ class Store extends StatelessWidget {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Grátis por cada vez que crees una libreta',
+                    'Cinco Estrellas Gratis por cada vez que crees una libreta',
                 opcion: 'Ir a tus libretas',
                 oportunidades: controller.usuario.dailyFormularios.toString(),
                 newIndex: 0,
@@ -62,13 +87,15 @@ class StoreItem extends StatelessWidget {
   final String cantidad;
   final String cantidadTexto;
   final String save;
-  const StoreItem({
-    Key key,
-    this.cantidad,
-    this.cantidadTexto,
-    this.precio,
-    this.save,
-  }) : super(key: key);
+  final IAPItem iapItem;
+  const StoreItem(
+      {Key key,
+      this.cantidad,
+      this.cantidadTexto,
+      this.precio,
+      this.save,
+      this.iapItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,26 +123,28 @@ class StoreItem extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  cantidadTexto,
-                  style: TextStyle(fontSize: 20),
+                Expanded(
+                  child: Text(
+                    cantidadTexto,
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
               ],
             ),
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(
                     Icons.attach_money,
-                    size: 80,
+                    size: 70,
                   ),
                   Text(
                     precio,
-                    style: TextStyle(fontSize: 90),
+                    style: TextStyle(fontSize: 80),
                   ),
                 ],
               ),
@@ -131,23 +160,26 @@ class StoreItem extends StatelessWidget {
             FloatingActionButton.extended(
               heroTag: 'store',
               onPressed: () async {
-                var result = await controller.buyCoins(int.parse(cantidad));
-                if (result) {
-                  showDialog(
-                      context: context,
-                      child: AlertDialog(
-                        title: Text('Compra exitosa'),
-                        content:
-                            Text('Felicidades has aquirido $cantidad monedas'),
-                      ));
-                } else {
-                  showDialog(
-                      context: context,
-                      child: AlertDialog(
-                        title: Text('Error'),
-                        content: Text('Error en la compra'),
-                      ));
-                }
+                FlutterInappPurchase.instance
+                    .requestPurchase(iapItem.productId);
+                // var result =
+                //     await controller.buyCoins(int.parse(cantidad), iapItem);
+                // if (result) {
+                //   showDialog(
+                //       context: context,
+                //       child: AlertDialog(
+                //         title: Text('Compra exitosa'),
+                //         content:
+                //             Text('Felicidades has aquirido $cantidad monedas'),
+                //       ));
+                // } else {
+                //   showDialog(
+                //       context: context,
+                //       child: AlertDialog(
+                //         title: Text('Error'),
+                //         content: Text('Error en la compra'),
+                //       ));
+                // }
               },
               label: Text('Comprar'),
               icon: Icon(Icons.credit_card),
@@ -219,7 +251,7 @@ class StoreItemFree extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  border: Border.all(width: 4, color: backgroundColor)),
+                  border: Border.all(width: 4, color: secondaryColor)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

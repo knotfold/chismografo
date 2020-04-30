@@ -7,72 +7,89 @@ class FormularioCreator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-       backgroundColor: Colors.transparent,
-      ),
-      body: PageView(
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        controller: controller.pageController,
-        children: <Widget>[
-          first(controller),
-          CreadorLP(),
-          AmigosSelector()
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        return controller.loading ? false : true;
+      },
+          child: Scaffold(
+        appBar: AppBar(
+          elevation: 1,
+        ),
+        body: PageView(
+          physics: controller.loading ? NeverScrollableScrollPhysics() : BouncingScrollPhysics() ,
+          scrollDirection: Axis.horizontal,
+          controller: controller.pageController,
+          children: <Widget>[first(controller), CreadorLP(), AmigosSelector()],
+        ),
       ),
     );
   }
 
   Widget first(Controller controller) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'NOMBRE DE TU LIBRETA',
-            style: TextStyle(fontSize: 20),
-          ),
-          TextFormField(
-            controller: controller.textEditingController,
-            decoration: InputDecoration(
-              labelText: 'Nombre',
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+          child: Container(
+        padding: EdgeInsets.all(50),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            ImageSelector(),
+            SizedBox(height: 30,),
+            Text(
+              'NOMBRE DE TU LIBRETA',
+              style: TextStyle(fontSize: 20),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text('Privacidad'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Solo Amigos', style: TextStyle(color: controller.privado ? null : Colors.grey),),
-              Switch(
-                value: controller.privado,
-                onChanged: (value){
-                  controller.privado = value;
-                  controller.notify();
-                },
+            
+            TextFormField(
+              controller: controller.textEditingController,
+              decoration: InputDecoration(
+                labelText: 'Nombre',
               ),
-              Column(children: <Widget>[
-                 Text('Amigos y Amigos', style: TextStyle(color: controller.privado ? Colors.grey : null),),
-                  Text('de mis Amigos', style: TextStyle(color: controller.privado ? Colors.grey : null),),
-              ],),
-             
-            ],
-          ),
-          FloatingActionButton.extended(
-            heroTag: 'btnT1',
-            onPressed: () {
-              controller.pageController.jumpToPage(1);
-            },
-           
-            label: Text('Siguiente'),
-          ),
-        ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text('Privacidad'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Solo Amigos',
+                  style:
+                      TextStyle(color: controller.privado ? null : Colors.grey),
+                ),
+                Switch(
+                  value: controller.privado,
+                  onChanged: (value) {
+                    controller.privado = value;
+                    controller.notify();
+                  },
+                ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'Amigos y Amigos',
+                      style: TextStyle(
+                          color: controller.privado ? Colors.grey : null),
+                    ),
+                    Text(
+                      'de mis Amigos',
+                      style: TextStyle(
+                          color: controller.privado ? Colors.grey : null),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            FloatingActionButton.extended(
+              heroTag: 'btnT1',
+              onPressed: () {
+                controller.pageController.jumpToPage(1);
+              },
+              label: Text('Siguiente'),
+            ),
+          ],
+        ),
       ),
     );
   }

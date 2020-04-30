@@ -35,6 +35,7 @@ class FormularioModel {
   String nombre;
   DocumentReference reference;
   String fecha;
+  String imagen;
 
   FormularioModel({
     this.creadorID,
@@ -46,6 +47,7 @@ class FormularioModel {
     this.priv,
     this.invitaciones,
     this.nombre,
+    this.imagen,
   });
 
   Map<String, dynamic> toMap() {
@@ -63,6 +65,7 @@ class FormularioModel {
       'creadorUsuario': creadorUsuario,
       'usuarios' : usuarios,
       'fecha' : DateTime.now(),
+      'imagen' : imagen
     };
   }
 
@@ -90,6 +93,7 @@ class FormularioModel {
     reference = ds.reference;
     Timestamp timestamp = ds['fecha'];
     fecha = dateString(timestamp.toDate()) ?? '';
+    imagen = ds['imagen'] ?? '';
 
   }
 }

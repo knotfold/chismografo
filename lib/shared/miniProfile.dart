@@ -55,8 +55,7 @@ class _MiniProfileState extends State<MiniProfile> {
                                 ? Container(
                                     margin: EdgeInsets.symmetric(horizontal: 5),
                                     child: RaisedButton(
-                                      child: Expanded(
-                                          child: Text('Cancelar Solicitud')),
+                                      child: Text('Cancelar Solicitud'),
                                       onPressed: () async {
                                         print(widget.usuario.documentId.length);
                                         await controller.usuario.reference

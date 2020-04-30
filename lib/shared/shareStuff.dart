@@ -3,41 +3,217 @@ import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/main.dart';
 import 'package:trivia_form/shared/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
-    centerTitle: true,
-    
     backgroundColor: buttonColors,
     elevation: 0,
-    title: Text('Chismografo',style: TextStyle(color: Colors.white),),
+    title: Text(
+      'Chismografo',
+      style: TextStyle(color: Colors.white),
+    ),
     actions: <Widget>[
       Container(
         margin: EdgeInsets.only(right: 15),
         child: Row(
           children: <Widget>[
-            
-                 IconButton(
-            icon: Icon(Icons.stars),
-
-            color: Colors.yellow[800],
-            onPressed: () {
-              controller.seleccionado = 4;
-              controller.notify();
-            },
-
-          ),
-          Text(
-                  controller.usuario.coins.toString(),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
-                ),
+            IconButton(
+              icon: Icon(Icons.live_help),
+              onPressed: () {
+                controller.sdtP = 0;
+                showDialog(
+                  context: context,
+                  child: TutorialDialog(),
+                );
+              },
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            IconButton(
+              icon: Icon(Icons.stars),
+              color: Colors.yellow[800],
+              onPressed: () {
+                controller.seleccionado = 4;
+                controller.notify();
+              },
+            ),
+            Text(
+              controller.usuario.coins.toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.white),
+            ),
           ],
         ),
-              
       ),
-         
     ],
   );
+}
+
+class TutorialDialog extends StatefulWidget {
+  const TutorialDialog({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _TutorialDialogState createState() => _TutorialDialogState();
+}
+
+class _TutorialDialogState extends State<TutorialDialog> {
+
+  Future<DocumentSnapshot> fetchTutorial(Controller controller) async {
+    String search;
+    switch (controller.seleccionado) {
+      case 0:
+        {
+          search = 'howtouse';
+          break;
+        }
+      case 1:
+        search = 'howtouselibretasA';
+        break;
+
+      case 2:
+        search = 'howtouseamigos';
+        break;
+
+      case 3:
+        search = 'howtouseperfil';
+        break;
+
+      case 4:
+        search = 'howtousetienda';
+        break;
+    }
+    return await Firestore.instance
+        .collection('howtouse')
+        .document(search)
+        .get();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of(context);
+    return Dialog(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        child: FutureBuilder(
+            future: fetchTutorial(controller),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const CircularProgressIndicator();
+              String search;
+              switch (controller.seleccionado) {
+                case 0:
+                  {
+                    search = 'howtouse';
+                    break;
+                  }
+                case 1:
+                  search = 'howtouselibretasA';
+                  break;
+
+                case 2:
+                  search = 'howtouseamigos';
+                  break;
+
+                case 3:
+                  search = 'howtouseperfil';
+                  break;
+
+                case 4:
+                  search = 'howtousetienda';
+                  break;
+              }
+              List<dynamic> map = snapshot.data[search];
+              List<Widget> pages = [];
+              print('map');
+              map.forEach((f) {
+                print('for?');
+                pages.add(Container(
+                  child: SingleChildScrollView(
+                                      child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          f['titulo'],
+                          style: TextStyle(fontSize: 30),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Text(f['desc']),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Image(
+                          alignment: Alignment.topCenter,
+                          height: 300,
+                          width: 400,
+                          fit: BoxFit.fitWidth,
+                          image: NetworkImage(f['imagen']),
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+              });
+
+              print('duh');
+              return SingleChildScrollView(
+                              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      child: ListView.builder(
+                        itemCount: map.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Icon(
+                            Icons.fiber_manual_record,
+                            size: 10,
+                            color:  controller.sdtP == index
+                                ? secondaryColor
+                                : Colors.grey,
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 400,
+                      child: PageView(
+                        onPageChanged: (value){
+                          controller.sdtP = value;
+                          controller.notify();
+                          setState(() {
+                            
+                          });
+                        },
+                        controller: controller.pageController2,
+                        children: pages,
+                      ),
+                    ),
+                    
+                  ],
+                ),
+              );
+            }),
+      ),
+    );
+  }
+}
+
+class TutorialPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container();
+  }
 }
 
 Drawer myDrawer(BuildContext context) {

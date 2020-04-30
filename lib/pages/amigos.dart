@@ -19,11 +19,12 @@ class Amigos extends StatelessWidget {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
             return FloatingActionButton(
-              heroTag: 'btnA1',
+              heroTag: 'btnAA1',
               child: documents.isEmpty
                   ? Icon(
                       Icons.face,
                       size: 30,
+                      // color: Colors.black,
                     )
                   : Stack(
                       children: <Widget>[
@@ -31,6 +32,7 @@ class Amigos extends StatelessWidget {
                           child: Icon(
                             Icons.add_alert,
                             size: 30,
+                            // color: Colors.black,
                           ),
                           width: 30,
                           height: 30,
@@ -56,11 +58,18 @@ class Amigos extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Amigos',
-              style: TextStyle(fontSize: 25),
+            Row(
+              children: <Widget>[
+             
+                Text(
+                  'Amigos',
+                  style: TextStyle(fontSize: 23),
+                ),
+              ],
             ),
+            SizedBox(height: 20,),
             StreamBuilder(
               stream: Firestore.instance
                   .collection('usuarios')
@@ -180,7 +189,9 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
               shape: BeveledRectangleBorder(),
               onPressed: () => showSearch(
                 context: context,
-                delegate: CustomSearchDelegate(),
+                delegate: CustomSearchDelegate(
+                  
+                ),
               ),
               icon: Icon(
                 Icons.search,
