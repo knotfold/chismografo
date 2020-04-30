@@ -533,7 +533,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text('Desbloquer respuesta'),
+      title: Text('Desbloquear respuesta'),
       content: Text(
           'Para saber quien escribió esta respuesta necesitas pagar  5 monedas'),
       actions: widget.controller.loading
