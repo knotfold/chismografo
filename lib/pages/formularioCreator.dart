@@ -1,7 +1,10 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:trivia_form/pages/pages.dart';
+import 'package:trivia_form/shared/colors.dart';
 
 class FormularioCreator extends StatelessWidget {
   @override
@@ -21,13 +24,13 @@ class FormularioCreator extends StatelessWidget {
               : BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           controller: controller.pageController,
-          children: <Widget>[first(controller), CreadorLP(), AmigosSelector()],
+          children: <Widget>[first(controller,context), CreadorLP(), AmigosSelector()],
         ),
       ),
     );
   }
 
-  Widget first(Controller controller) {
+  Widget first(Controller controller,BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
@@ -44,9 +47,11 @@ class FormularioCreator extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             TextFormField(
+          
               controller: controller.textEditingController,
               decoration: InputDecoration(
                 labelText: 'Nombre',
+                labelStyle: TextStyle(color: Colors.black),
               ),
             ),
             SizedBox(
@@ -62,10 +67,12 @@ class FormularioCreator extends StatelessWidget {
                       TextStyle(color: controller.privado ? null : Colors.grey),
                 ),
                 Switch(
+                  activeColor: pDark,
                   value: controller.privado,
                   onChanged: (value) {
                     controller.privado = value;
                     controller.notify();
+                    
                   },
                 ),
                 Column(
@@ -87,6 +94,17 @@ class FormularioCreator extends StatelessWidget {
             FloatingActionButton.extended(
               heroTag: 'btnT1',
               onPressed: () {
+                if( controller.textEditingController.text == ''){
+                  
+                          showDialog(
+                          context: context,
+                          child: AlertDialog(
+                            title: Text('El campo nombre no puede quedar vacío'),
+                            
+                          ));
+                      return;
+                }
+               
                 controller.pageController.jumpToPage(1);
               },
               label: Text('Siguiente'),

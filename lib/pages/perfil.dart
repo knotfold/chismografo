@@ -116,8 +116,13 @@ class _PerfilState extends State<Perfil> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       TextField(
+                                        style: TextStyle(color: Colors.white),
+                                        
                                         maxLength: 50,
                                         decoration: InputDecoration(
+                                          
+                                          labelStyle: TextStyle(color: Colors.white),
+                                          
                                             labelText: 'Nombre'),
                                         controller: textEditingController,
                                       ),

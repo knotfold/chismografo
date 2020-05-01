@@ -110,6 +110,7 @@ class _LogInState extends State<LogIn> {
                                 : Column(
                                     children: <Widget>[
                                       Card(
+                                        color: Colors.white,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 40),
                                         elevation: 9.0,
@@ -405,18 +406,23 @@ class _LogInState extends State<LogIn> {
       splashColor: Colors.grey,
       onPressed: () async {
         login(controller).then((value) async {
+           controller.loading = true;
           print('estoy dentro y voy a navegar con ' + controller.name);
+         
           Firestore.instance
               .collection('usuarios')
               .where('correo', isEqualTo: controller.email.trim())
               .getDocuments()
               .then((onValue) async {
             if (onValue.documents.isEmpty) {
+              
+               controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/registro_usuario');
             } else {
               controller.usuarioAct =
                   UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
               await controller.signIn();
+               controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/home');
             }
           });

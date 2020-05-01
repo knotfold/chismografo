@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
+          
             cardTheme: CardTheme(elevation: 10),
             appBarTheme: AppBarTheme(color: primaryColor),
             primaryColor: primaryColor,
@@ -54,11 +55,17 @@ class MyApp extends StatelessWidget {
             accentIconTheme: IconThemeData(color: Colors.black),
             iconTheme: IconThemeData(color: pDark),
             dialogBackgroundColor: primaryColor,
+            
             dialogTheme: DialogTheme(
+              titleTextStyle: TextStyle(color: Colors.white),
+              
               backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
+              contentTextStyle: TextStyle(color: Colors.white),
+              
+
             ),
             primaryIconTheme: IconThemeData(color: Colors.white),
             buttonTheme: ButtonThemeData(
@@ -79,6 +86,7 @@ class MyApp extends StatelessWidget {
                   surface: Colors.black,
                   error: Colors.red,
                 ),
+                
                 disabledColor: secondaryColor,
                 highlightColor: secondaryColor,
                 buttonColor: secondaryColor),
