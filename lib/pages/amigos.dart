@@ -60,44 +60,35 @@ class Amigos extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-             
-                Text(
-                  'Amigos',
-                  style: TextStyle(fontSize: 23),
-                ),
-              ],
+            Text(
+              'Amigos',
+              style: TextStyle(fontSize: 23),
             ),
             SizedBox(height: 20,),
-            Expanded(
-                          child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('usuarios')
-                    .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const CircularProgressIndicator();
-                  List<DocumentSnapshot> documents = snapshot.data.documents;
-                  print(documents.length);
-                  return documents.isEmpty
-                      ? Text(
-                          'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
-                      : ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: documents.length,
-                          itemBuilder: (context, index) {
-                            UsuarioModel usuario =
-                                UsuarioModel.fromDocumentSnapshot(
-                                    documents[index]);
-                            return AmigoTile(usuario: usuario);
-                          },
-                        );
-                },
-              ),
+            StreamBuilder(
+              stream: Firestore.instance
+                  .collection('usuarios')
+                  .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return Container(height: 50, child: const CircularProgressIndicator());
+                List<DocumentSnapshot> documents = snapshot.data.documents;
+                print(documents.length);
+                return documents.isEmpty
+                    ? Text(
+                        'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
+                    : ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: documents.length,
+                        itemBuilder: (context, index) {
+                          UsuarioModel usuario =
+                              UsuarioModel.fromDocumentSnapshot(
+                                  documents[index]);
+                          return AmigoTile(usuario: usuario);
+                        },
+                      );
+              },
             ),
           ],
         ),

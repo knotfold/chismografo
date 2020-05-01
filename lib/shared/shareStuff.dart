@@ -140,12 +140,12 @@ class _TutorialDialogState extends State<TutorialDialog> {
                       children: <Widget>[
                         Text(
                           f['titulo'],
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: 30, color: Colors.white),
                         ),
                         SizedBox(
                           height: 25,
                         ),
-                        Text(f['desc']),
+                        Text(f['desc'],style: TextStyle(color: Colors.white),),
                         SizedBox(
                           height: 25,
                         ),

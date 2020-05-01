@@ -76,7 +76,7 @@ class _CreadorLPState extends State<CreadorLP> {
                                 style: TextStyle(color: Colors.white),
                                 controller: textEditingController,
                                 decoration: InputDecoration(
-                                  labelText: 'Nueva Pregunta',
+                                  labelText: 'Escribe la pregunta',
                                   labelStyle: TextStyle(color: Colors.white)
                                 ),
                               ),

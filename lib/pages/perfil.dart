@@ -272,6 +272,7 @@ class _PerfilState extends State<Perfil> {
                             
                             // shape: RoundedRectangleBorder(
                             //     borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.white,
                             child: SingleChildScrollView(
                               child: Container(
                                 margin: EdgeInsets.all(20),

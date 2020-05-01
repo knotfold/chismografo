@@ -43,24 +43,27 @@ class LibretaDetails extends StatelessWidget {
                 onPressed: () {
                   showDialog(
                       context: context,
-                      child: Dialog(                        
+                      child: Dialog(
                         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
                         child: Container(
                           padding: EdgeInsets.all(10),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
                                 'Usuarios',
-                                style: TextStyle(fontSize: 20,color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                               controller.toFillForm.usuarios.isEmpty
                                   ? Padding(
                                       padding: const EdgeInsets.all(10.0),
-                                      child:
-                                          Text('No hay usuarios participando',style: TextStyle(color: Colors.white),),
+                                      child: Text(
+                                        'No hay usuarios participando',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     )
                                   : ListView.builder(
                                       shrinkWrap: true,
@@ -72,18 +75,27 @@ class LibretaDetails extends StatelessWidget {
                                           '-' +
                                               controller
                                                   .toFillForm.usuarios[index],
-                                          style: TextStyle(fontSize: 15,color: Colors.white),
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
                                         );
                                       },
                                     ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Text(
                                 'Invitados',
-                                style: TextStyle(fontSize: 20,color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               ),
                               controller.toFillForm.invitaciones.isEmpty
                                   ? Padding(
                                       padding: const EdgeInsets.all(10.0),
-                                      child: Text('No hay usuarios invitados',style: TextStyle(color: Colors.white),),
+                                      child: Text(
+                                        'No hay usuarios invitados',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     )
                                   : ListView.builder(
                                       shrinkWrap: true,
@@ -92,18 +104,21 @@ class LibretaDetails extends StatelessWidget {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
-                                            SizedBox(height:10),
+                                            SizedBox(height: 10),
                                             Text(
                                               '-' +
                                                   controller.toFillForm
                                                       .invitaciones[index],
-                                                      style: TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
-                                            SizedBox(height:10),
+                                            SizedBox(height: 10),
                                           ],
                                         );
                                       },
@@ -170,17 +185,19 @@ class LibretaDetails extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   child: Dialog(
-
+                                    // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
                                     child: Container(
                                       padding: EdgeInsets.all(10),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           Text(
                                             'Usuarios',
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
                                             textAlign: TextAlign.center,
                                           ),
                                           controller.toFillForm.usuarios.isEmpty
@@ -188,7 +205,10 @@ class LibretaDetails extends StatelessWidget {
                                                   padding: const EdgeInsets.all(
                                                       10.0),
                                                   child: Text(
-                                                      'No hay usuarios participando'),
+                                                    'No hay usuarios participando',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                                 )
                                               : ListView.builder(
                                                   shrinkWrap: true,
@@ -204,13 +224,19 @@ class LibretaDetails extends StatelessWidget {
                                                           controller.toFillForm
                                                               .usuarios[index],
                                                       style: TextStyle(
-                                                          fontSize: 15),
+                                                          fontSize: 15,
+                                                          color: Colors.white),
                                                     );
                                                   },
                                                 ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                           Text(
                                             'Invitados',
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
                                           ),
                                           controller.toFillForm.invitaciones
                                                   .isEmpty
@@ -218,7 +244,10 @@ class LibretaDetails extends StatelessWidget {
                                                   padding: const EdgeInsets.all(
                                                       10.0),
                                                   child: Text(
-                                                      'No hay usuarios invitados'),
+                                                    'No hay usuarios invitados',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                                 )
                                               : ListView.builder(
                                                   shrinkWrap: true,
@@ -229,11 +258,29 @@ class LibretaDetails extends StatelessWidget {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    return Text(
-                                                      '-' +
-                                                          controller.toFillForm
-                                                                  .invitaciones[
-                                                              index],
+                                                    return Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '-' +
+                                                              controller
+                                                                      .toFillForm
+                                                                      .invitaciones[
+                                                                  index],
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                      ],
                                                     );
                                                   },
                                                 ),
@@ -421,7 +468,6 @@ class LibretaDetails extends StatelessWidget {
                           showDialog(
                               context: context,
                               child: Dialog(
-                             
                                 child: Container(
                                   padding: EdgeInsets.all(25),
                                   child: Column(
@@ -465,7 +511,10 @@ class LibretaDetails extends StatelessWidget {
                                               },
                                             ),
                                             title: Text(
-                                                respuestas[ind]['respuesta'],style: TextStyle(color:Colors.white),),
+                                              respuestas[ind]['respuesta'],
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           );
                                         },
                                         itemCount: respuestas.length,
@@ -586,7 +635,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                             ),
                             Text(
                               '${widget.pregunta} :',
-                              style: TextStyle(fontSize: 25,color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.black),
                             ),
                             SizedBox(
                               height: 20,
@@ -598,7 +648,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               children: <Widget>[
                                 Text(
                                   ' ${widget.respuesta}',
-                                  style: TextStyle(fontSize: 20,color: Colors.black),
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
                               ],
                             ),
@@ -615,7 +666,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               alignment: Alignment.bottomRight,
                               child: Text(
                                 '${widget.usuario}',
-                                style: TextStyle(fontSize: 20,color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
                               ),
                             ),
                           ],
