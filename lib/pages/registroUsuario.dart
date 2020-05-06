@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:trivia_form/services/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:trivia_form/shared/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegistroUsuario extends StatefulWidget {
   @override
@@ -223,7 +224,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                           }),
                         ),
                         GestureDetector(
-                            onTap: () => {},
+                            onTap: () => _launchURL(),
                             child: Text(
                               'Aceptar terminos y condiciones',
                               style: TextStyle(
@@ -361,6 +362,16 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
               controller.signIn();
               Navigator.of(context).pushReplacementNamed('/home');
             });
+  }
+
+  _launchURL() async {
+    const url =
+        'http://gudtech.tech/es/chsm-tos/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Future _validatorEmail(String value) async {

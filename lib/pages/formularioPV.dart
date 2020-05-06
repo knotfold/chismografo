@@ -228,7 +228,7 @@ class _FormularioPVState extends State<FormularioPV> {
         value.trim() == '' ||
         value.trim().toLowerCase() == 'nose' ||
         value.trim().toLowerCase() == 'no se' ||
-        value.length < 3) {
+        value.trim().length < 3) {
       return false;
     }
     return true;
