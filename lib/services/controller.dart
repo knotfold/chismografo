@@ -53,6 +53,12 @@ class Controller with ChangeNotifier {
 
   //finnnn
 
+  Future<bool> rebuildUser() async {
+    DocumentSnapshot ds = await usuarioAct.reference.get();
+    usuarioAct = UsuarioModel.fromDocumentSnapshot(ds);
+    return true;
+  }
+
   Future<bool> gastarMonedas() async {
     bool status = true;
     loading = true;

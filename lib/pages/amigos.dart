@@ -38,9 +38,11 @@ class Amigos extends StatelessWidget {
                           height: 30,
                         ),
                         Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: yemahuevo),
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: yemahuevo),
                         )
                       ],
                     ),
@@ -55,42 +57,50 @@ class Amigos extends StatelessWidget {
             );
           }),
       appBar: myAppBar(controller, context),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Amigos',
-              style: TextStyle(fontSize: 23),
-            ),
-            SizedBox(height: 20,),
-            StreamBuilder(
-              stream: Firestore.instance
-                  .collection('usuarios')
-                  .where('amigos', arrayContains: controller.usuario.documentId).orderBy('nombre')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return Container(height: 50, child: const CircularProgressIndicator());
-                List<DocumentSnapshot> documents = snapshot.data.documents;
-                print(documents.length);
-                return documents.isEmpty
-                    ? Text(
-                        'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
-                    : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          UsuarioModel usuario =
-                              UsuarioModel.fromDocumentSnapshot(
-                                  documents[index]);
-                          return AmigoTile(usuario: usuario);
-                        },
-                      );
-              },
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Amigos',
+                style: TextStyle(fontSize: 23),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              StreamBuilder(
+                stream: Firestore.instance
+                    .collection('usuarios')
+                    .where('amigos',
+                        arrayContains: controller.usuario.documentId)
+                    .orderBy('nombre')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData)
+                    return Container(
+                        height: 50, child: const CircularProgressIndicator());
+                  List<DocumentSnapshot> documents = snapshot.data.documents;
+                  print(documents.length);
+                  return documents.isEmpty
+                      ? Text(
+                          'No tienes amigos :C , Haz click en el botón de abajo para buscar mas amigos')
+                      : ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: documents.length,
+                          itemBuilder: (context, index) {
+                            UsuarioModel usuario =
+                                UsuarioModel.fromDocumentSnapshot(
+                                    documents[index]);
+                            return AmigoTile(usuario: usuario);
+                          },
+                        );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -108,93 +118,114 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    return Dialog(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              'Solicitudes de Amistad',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            widget.documents.isEmpty
-                ? Text('No tienes solicitudes')
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.documents.length,
-                    itemBuilder: (context, index) {
-                      UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
-                          widget.documents[index]);
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(usuario.foto),
-                        ),
-                        title: Text(usuario.nombre),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              onPressed: () async {
-                                await controller.usuario.reference.updateData({
-                                  'amigos': FieldValue.arrayUnion(
-                                      [usuario.documentId])
-                                });
-                                await usuario.reference.updateData({
-                                  'solicitudesAE': FieldValue.arrayRemove(
-                                      [controller.usuario.documentId]),
-                                  'amigos': FieldValue.arrayUnion(
-                                      [controller.usuario.documentId])
-                                });
-                                controller.usuario.amigos
-                                    .add(usuario.documentId);
-                                controller.usuario.solicitudesAE
-                                    .remove(usuario.documentId);
-
-                                controller.notify();
-                                Navigator.of(context).pop();
-                              },
-                              icon: Icon(Icons.check),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                await usuario.reference.updateData({
-                                  'solicitudesAE': FieldValue.arrayRemove(
-                                      [controller.usuario.documentId])
-                                });
-
-                                Navigator.of(context).pop();
-                              },
-                              icon: Icon(Icons.delete_forever),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-            SizedBox(
-              height: 20,
-            ),
-            FloatingActionButton.extended(
-              heroTag: 'btnA1',
-              elevation: 0,
-              shape: BeveledRectangleBorder(),
-              onPressed: () => showSearch(
-                context: context,
-                delegate: CustomSearchDelegate(
-                  
+    return WillPopScope(
+          onWillPop: () async {
+            return !controller.loading;
+          },
+          child: Dialog(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Solicitudes de Amistad',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              widget.documents.isEmpty
+                  ? Text(
+                      'No tienes solicitudes',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: widget.documents.length,
+                      itemBuilder: (context, index) {
+                        UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
+                            widget.documents[index]);
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(usuario.foto),
+                          ),
+                          title: Text(usuario.nombre,
+                              style: TextStyle(color: Colors.white)),
+                          trailing: controller.loading
+                              ? CircularProgressIndicator()
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    IconButton(
+                                      onPressed: () async {
+                                        controller.loading = true;
+                                        controller.notify();
+                                        await controller.usuario.reference
+                                            .updateData({
+                                          'amigos': FieldValue.arrayUnion(
+                                              [usuario.documentId])
+                                        });
+                                        await usuario.reference.updateData({
+                                          'solicitudesAE': FieldValue.arrayRemove(
+                                              [controller.usuario.documentId]),
+                                          'amigos': FieldValue.arrayUnion(
+                                              [controller.usuario.documentId])
+                                        });
+                                        controller.usuario.amigos
+                                            .add(usuario.documentId);
+                                        controller.usuario.solicitudesAE
+                                            .remove(usuario.documentId);
+                                        controller.loading = false;
+                                        controller.notify();
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () async {
+                                        controller.loading = true;
+                                        controller.notify();
+                                        await usuario.reference.updateData({
+                                          'solicitudesAE': FieldValue.arrayRemove(
+                                              [controller.usuario.documentId])
+                                        });
+                                        controller.loading = false;
+                                        controller.notify();
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: Icon(
+                                        Icons.delete_forever,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                        );
+                      },
+                    ),
+              SizedBox(
+                height: 20,
+              ),
+              FloatingActionButton.extended(
+                heroTag: 'btnA1',
+                elevation: 0,
+                shape: BeveledRectangleBorder(),
+                onPressed: () => showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
                 ),
-              ),
-              icon: Icon(
-                Icons.search,
-                size: 17,
-              ),
-              label: Text('Buscar Amigos'),
-            )
-          ],
+                icon: Icon(
+                  Icons.search,
+                  size: 17,
+                ),
+                label: Text('Buscar Amigos'),
+              )
+            ],
+          ),
         ),
       ),
     );
