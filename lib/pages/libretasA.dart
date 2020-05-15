@@ -124,9 +124,8 @@ class LibretasA extends StatelessWidget {
                     if (!snapshot.hasData)
                       return const CircularProgressIndicator();
                     List<DocumentSnapshot> documents = snapshot.data.documents;
-                    return ListView.builder(
-                        //gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        // crossAxisCount:1,crossAxisSpacing: 10,childAspectRatio: 2.5,mainAxisSpacing: 5,),
+                    return documents.isEmpty ? Text('No estas participando en ninguna libreta de tus amigos :(') : ListView.builder(
+                       
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: documents.length,
                         shrinkWrap: true,
