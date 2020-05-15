@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/shared/shared.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 

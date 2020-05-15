@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/pages/pages.dart';
-import 'package:trivia_form/shared/colors.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/pages/pages.dart';
+import 'package:ChisMe/shared/colors.dart';
 
 class FormularioCreator extends StatelessWidget {
   @override

@@ -2,16 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/shared/shared.dart';
+import 'package:ChisMe/shared/shared.dart';
 
 class LibretaDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
     List<Pregunta> preguntas = controller.toFillForm.preguntas;
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -580,6 +579,7 @@ class DesbloquearDialog extends StatefulWidget {
 class _DesbloquearDialogState extends State<DesbloquearDialog> {
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text('Desbloquear respuesta'),
@@ -604,6 +604,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                     borderRadius: BorderRadius.circular(20)),
                 color: buttonColors,
                 onPressed: () async {
+                  controller.loading = true;
+                  controller.notify();
                   var _random = new Random();
                   var randonText =
                       widget.textos[_random.nextInt(widget.textos.length)];
@@ -611,6 +613,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   print(randonText);
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
+                      controller.loading = false;
                     await showDialog(
                       context: context,
                       child: AlertDialog(
@@ -686,7 +689,9 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                         ],
                       ),
                     );
+                   
                   } else {
+                      controller.loading = false;
                     await showDialog(
                       context: context,
                       child: AlertDialog(
@@ -734,6 +739,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                       ),
                     );
                   }
+
                 },
                 child: Row(
                   children: <Widget>[

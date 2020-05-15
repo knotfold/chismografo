@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:trivia_form/shared/shared.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/shared/shared.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
 
 class AmigosSelector extends StatefulWidget {
@@ -13,7 +13,6 @@ class _AmigosSelectorState extends State<AmigosSelector> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    // TODO: implement build
     return Container(
         padding: EdgeInsets.all(10.0),
         child: Column(

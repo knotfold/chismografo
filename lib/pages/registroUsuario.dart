@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:trivia_form/shared/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RegistroUsuario extends StatefulWidget {
@@ -16,14 +15,14 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
   final TextEditingController textEditingControllerFecha =
       TextEditingController();
   DateTime date = DateTime.now();
-  File imagen = null;
+  File imagen;
   bool isLoadig = false;
   final _usuarioform = GlobalKey<FormState>();
   bool tos = false;
   String tipotemp = '';
   bool correov = true;
   bool usuariov = true;
-  Map<String, dynamic> form_usuario = {
+  Map<String, dynamic> formUsuario = {
     'nombre': null,
     'usuario': null,
     'correo': null,
@@ -139,7 +138,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       initialValue:
                           controller.name.isEmpty ? null : controller.name,
                       onSaved: (String value) {
-                        form_usuario['nombre'] = value;
+                        formUsuario['nombre'] = value;
                       },
                       validator: (String value) {
                         if (value.isEmpty) {
@@ -148,6 +147,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         if (value.length < 5) {
                           return 'Se requiere al menos un apellido';
                         }
+                        return null;
                       },
                       decoration: InputDecoration(
                           labelText: '* Nombre completo',
@@ -162,7 +162,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       initialValue:
                           controller.email.isEmpty ? null : controller.email,
                       onSaved: (String value) {
-                        form_usuario['correo'] = value.trim();
+                        formUsuario['correo'] = value.trim();
                       },
                       validator: (String value) {
                         bool emailValid = RegExp(
@@ -175,6 +175,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         } else if (correov == false) {
                           return 'Correo existente';
                         }
+                        return null;
                       },
                       maxLines: 1,
                       minLines: 1,
@@ -191,8 +192,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                       maxLines: 1,
                       minLines: 1,
                       onSaved: (String value) {
-                        form_usuario['usuario'] = '@' + value.trim();
-                        form_usuario['usuarioSearch'] =
+                        formUsuario['usuario'] = '@' + value.trim();
+                        formUsuario['usuarioSearch'] =
                             '@' + value.toLowerCase().trim();
                       },
                       validator: (String value) {
@@ -203,6 +204,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         } else if (value.contains('@')) {
                           return 'Tu nombre de usuario no debe llevar "@"';
                         }
+                        return null;
                       },
                       decoration: InputDecoration(
                           labelText: '* Usuario',
@@ -240,6 +242,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         : Text(
                             '* Es necesario aceptar nuestros terminos y condiciones para concluir el registro *',
                             style: TextStyle(
+                                color: Colors.red,
                                 textBaseline: TextBaseline.alphabetic,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -293,8 +296,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               _usuarioform.currentState.save();
 
-              await _validatorUser(form_usuario['usuarioSearch']);
-              await _validatorEmail(form_usuario['correo']);
+              await _validatorUser(formUsuario['usuarioSearch']);
+              await _validatorEmail(formUsuario['correo']);
 
               setState(() {
                 isLoadig = true;
@@ -313,19 +316,19 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 return null;
               }
 
-              // if (!tos) {
-              //   setState(() {
-              //     isLoadig = false;
-              //   });
-              //   return;
-              // }
+              if (!tos) {
+                setState(() {
+                  isLoadig = false;
+                });
+                return;
+              }
               _usuarioform.currentState.save();
               setState(() {
                 isLoadig = true;
               });
 
               if (imagen != null) {
-                final String fileName = form_usuario['correo'] +
+                final String fileName = formUsuario['correo'] +
                     '/perfil/PP' +
                     DateTime.now().toString();
 
@@ -342,20 +345,20 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                 final String url = (await downloadUrl.ref.getDownloadURL());
                 print('URL Is $url');
 
-                form_usuario['foto'] = url;
-                form_usuario['fotoStorageRef'] = downloadUrl.ref.path;
+                formUsuario['foto'] = url;
+                formUsuario['fotoStorageRef'] = downloadUrl.ref.path;
               } else {
-                form_usuario['foto'] = controller.imageUrl;
+                formUsuario['foto'] = controller.imageUrl;
               }
 
               await Firestore.instance
                   .collection('usuarios')
-                  .document(form_usuario['usuario'])
-                  .setData(form_usuario);
+                  .document(formUsuario['usuario'])
+                  .setData(formUsuario);
 
               var ds = await Firestore.instance
                   .collection('usuarios')
-                  .document(form_usuario['usuario'])
+                  .document(formUsuario['usuario'])
                   .get();
 
               controller.agregausuario(UsuarioModel.fromDocumentSnapshot(ds));

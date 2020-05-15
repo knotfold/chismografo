@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:trivia_form/shared/shared.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
 
 class AmigosSelec extends StatefulWidget {
@@ -29,7 +28,6 @@ class _AmigosSelec extends State<AmigosSelec> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    // TODO: implement build
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(10.0),

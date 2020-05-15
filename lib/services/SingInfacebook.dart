@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:trivia_form/services/controller.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/controller.dart';
+import 'package:ChisMe/services/services.dart';
 
 final FacebookLogin facebookSignIn = new FacebookLogin();
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,19 +12,17 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 //String _message = 'Log in/out by pressing the buttons below.';
 
 Future<String> login(Controller controlador) async {
-  
-  final FacebookLoginResult result = await facebookSignIn.logIn(['email']).catchError((onError) async{
+  final FacebookLoginResult result =
+      await facebookSignIn.logIn(['email']).catchError((onError) async {
     print(onError);
   });
-  
 
   switch (result.status) {
     case FacebookLoginStatus.loggedIn:
-      final FacebookAccessToken accessToken = await result.accessToken;
+      final FacebookAccessToken accessToken = result.accessToken;
 
       final AuthCredential credential =
-          await FacebookAuthProvider.getCredential(
-              accessToken: accessToken.token);
+          FacebookAuthProvider.getCredential(accessToken: accessToken.token);
       try {
         final FirebaseUser user =
             (await _auth.signInWithCredential(credential)).user;
@@ -41,13 +37,13 @@ Future<String> login(Controller controlador) async {
          ''');
         final token = result.accessToken.token;
         final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(800).height(800)&access_token=${token}');
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(800).height(800)&access_token=$token');
         final profile = json.decode(graphResponse.body);
         controlador.name = (profile['first_name'] + ' ' + profile['last_name']);
-        
+
         controlador.email = (profile['email']);
-        if(controlador.email ==null){
-            controlador.email= '';
+        if (controlador.email == null) {
+          controlador.email = '';
         }
         controlador.imageUrl = (profile['picture']['data']['url']);
         print(profile['picture']);
@@ -68,14 +64,14 @@ Future<String> login(Controller controlador) async {
             // print(authGoogleResult);
             final token = result.accessToken.token;
             final graphResponse = await http.get(
-                'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(800).height(800)&access_token=${token}');
+                'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.width(800).height(800)&access_token=$token');
             final profile = json.decode(graphResponse.body);
             controlador.name =
                 (profile['first_name'] + ' ' + profile['last_name']);
             controlador.email = (profile['email']);
-             if(controlador.email ==null){
-            controlador.email= '';
-        }
+            if (controlador.email == null) {
+              controlador.email = '';
+            }
             controlador.imageUrl = (profile['picture']['data']['url']);
             if (authGoogleResult.email == controlador.email) {
               await authGoogleResult.linkWithCredential(credential);
@@ -113,16 +109,21 @@ Future<String> login(Controller controlador) async {
 
       // final FirebaseUser currentUser = await _auth.currentUser();
       //firebaseAuthWithFacebook(loginResult.getAccessToken());
-
+      return 'nice';
       break;
     case FacebookLoginStatus.cancelledByUser:
       print('Login cancelled by the user.');
+      return 'cancelled';
+
       break;
     case FacebookLoginStatus.error:
       print('Something went wrong with the login process.\n'
           'Here\'s the error Facebook gave us: ${result.errorMessage}');
+      return 'error';
+
       break;
   }
+  return '';
 }
 
 Future<Null> logOut() async {

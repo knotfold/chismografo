@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'pages/pages.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'shared/shared.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 void main() {
+  InAppPurchaseConnection.enablePendingPurchases();
   runApp(MyApp());
 }
 

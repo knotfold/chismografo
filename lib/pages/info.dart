@@ -1,24 +1,24 @@
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/shared/shared.dart';
+import 'package:ChisMe/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 class Info extends StatefulWidget {
   @override
   _InfoState createState() => _InfoState();
 }
 
 class _InfoState extends State<Info> {
-  _launchURL() async {
-    const url = 'http://gudtech.tech/es/gudpets-tos/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  // _launchURL() async {
+  //   const url = 'http://gudtech.tech/es/gudpets-tos/';
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

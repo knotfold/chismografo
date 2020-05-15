@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
-import 'shared.dart';
+import 'package:ChisMe/services/services.dart';
 
 class LibretaCard extends StatelessWidget {
   final Controller controller;
@@ -52,7 +51,7 @@ class LibretaCard extends StatelessWidget {
                           child: FadeInImage(
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.cover,
-                            placeholder: AssetImage('assets/gudtech.jpg'),
+                            placeholder: AssetImage('assets/zany-face.png'),
                             width: 50,
                             height: 50,
                             image: NetworkImage(formularioModel.imagen),
