@@ -34,12 +34,12 @@ exports.resetRewards = functions.firestore.document('/reset/{reset}'
     admin.firestore().collection('usuarios').get().then((snapshot) => {
         var listaUsuarios = snapshot.docs;
         var status = true;
-        
 
-        for(var usuario of listaUsuarios){
+
+        for (var usuario of listaUsuarios) {
             usuario.ref.update({
-                dailyAnswers : 3,
-                dailyFormularios : 3,
+                dailyAnswers: 3,
+                dailyFormularios: 3,
             }).catch((error) => {
                 console.log(error);
                 status = false;
@@ -47,13 +47,109 @@ exports.resetRewards = functions.firestore.document('/reset/{reset}'
 
         }
 
-        
-        if(status){
+
+        if (status) {
             console.log('good');
-        }else{
+        } else {
             console.log('bad');
         }
-        
+
+    })
+})
+
+exports.nuevoReporteUsuario = functions.firestore.document('/reportesUsuarios/{reporteUsuario}'
+).onUpdate((snapshot, context) => {
+    var listaTokens = [];
+
+    admin.firestore().collection('usuarios').where('gudtech', '==', 'true').get().then((snapshot) => {
+        var listaUsuarios = snapshot.docs;
+        for (var usuario of listaUsuarios) {
+
+
+            if (usuario.data().tokens != undefined) {
+                console.log('tokens definido');
+                if (usuario.data().tokens != null) {
+                    console.log('tokens no nulo');
+                    for (var token of usuario.data().tokens) {
+                        console.log('adding token');
+                        listaTokens.push(token);
+                    }
+                }
+            }
+
+
+
+
+
+
+        }
+        var payload = {
+            "notification": {
+                "title": "Nuevo reporte en la base de datos (USUARIO)",
+                "body": "Nuevo reporte de usuario",
+                "sound": "default"
+            },
+            "data": {
+                "sendername": "Nuevo reporte (USUARIO)",
+                "message": 'idk',
+            }
+        }
+
+        return admin.messaging().sendToDevice(listaTokens, payload).then((response) => {
+            console.log('Se enviaron todas las notificaciones');
+
+        }).catch((err) => {
+            console.log(err);
+        });
+
+    })
+})
+
+exports.nuevoReporteLibreta = functions.firestore.document('/reportes/{reporte}'
+).onUpdate((snapshot, context) => {
+    var listaTokens = [];
+
+    admin.firestore().collection('usuarios').where('gudtech', '==', 'true').get().then((snapshot) => {
+        var listaUsuarios = snapshot.docs;
+        for (var usuario of listaUsuarios) {
+
+
+            if (usuario.data().tokens != undefined) {
+                console.log('tokens definido');
+                if (usuario.data().tokens != null) {
+                    console.log('tokens no nulo');
+                    for (var token of usuario.data().tokens) {
+                        console.log('adding token');
+                        listaTokens.push(token);
+                    }
+                }
+            }
+
+
+
+
+
+
+        }
+        var payload = {
+            "notification": {
+                "title": "Nuevo reporte en la base de datos",
+                "body": "Nuevo reporte",
+                "sound": "default"
+            },
+            "data": {
+                "sendername": "Nuevo reporte",
+                "message": 'idk',
+            }
+        }
+
+        return admin.messaging().sendToDevice(listaTokens, payload).then((response) => {
+            console.log('Se enviaron todas las notificaciones');
+
+        }).catch((err) => {
+            console.log(err);
+        });
+
     })
 })
 

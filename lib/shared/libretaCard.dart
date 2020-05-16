@@ -1,13 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/shared.dart';
+import 'package:provider/provider.dart';
 
-class LibretaCard extends StatelessWidget {
+class LibretaCard extends StatefulWidget {
   final Controller controller;
   final FormularioModel formularioModel;
 
   const LibretaCard({Key key, this.formularioModel, this.controller})
       : super(key: key);
 
+  @override
+  _LibretaCardState createState() => _LibretaCardState();
+}
+
+class _LibretaCardState extends State<LibretaCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +46,7 @@ class LibretaCard extends StatelessWidget {
                   child: ListTile(
                     contentPadding: EdgeInsets.only(left: 10, right: 10),
                     onTap: () {
-                      controller.toFillForm = formularioModel;
+                      widget.controller.toFillForm = widget.formularioModel;
                       Navigator.of(context).pushNamed('/libretaDetalles');
                     },
                     leading: Row(
@@ -54,7 +62,7 @@ class LibretaCard extends StatelessWidget {
                             placeholder: AssetImage('assets/zany-face.png'),
                             width: 50,
                             height: 50,
-                            image: NetworkImage(formularioModel.imagen),
+                            image: NetworkImage(widget.formularioModel.imagen),
                           ),
                         ),
                         Divider(
@@ -63,14 +71,14 @@ class LibretaCard extends StatelessWidget {
                       ],
                     ),
                     title: Text(
-                      formularioModel.nombre,
+                      widget.formularioModel.nombre,
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(formularioModel.creadorUsuario,
+                        Text(widget.formularioModel.creadorUsuario,
                             style: TextStyle(color: Colors.white54)),
                         SizedBox(height: 5),
                         Row(
@@ -83,17 +91,42 @@ class LibretaCard extends StatelessWidget {
                               style: TextStyle(color: Colors.white54),
                             ),
                             Text(
-                              '${formularioModel.usuarios.length} / 25',
+                              '${widget.formularioModel.usuarios.length} / 25',
                               style: TextStyle(color: Colors.white54),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 15,
-                      color: Colors.white,
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: Colors.white,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            List<String> razones = [
+                              'Contenido Ofensivo',
+                              'Contenido Pornográfico',
+                              'Difamasión'
+                            ];
+                            showDialog(
+                                context: context,
+                                child: ReportDialog(
+                                  razones: razones,
+                                  formularioModel: widget.formularioModel,
+                                ));
+                          },
+                          icon: Icon(
+                            Icons.report,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -116,6 +149,113 @@ class LibretaCard extends StatelessWidget {
           //       '${formularioModel.usuarios.length} / 25'),
           // ),
           ),
+    );
+  }
+}
+
+class ReportDialog extends StatefulWidget {
+  const ReportDialog(
+      {Key key, @required this.razones, @required this.formularioModel})
+      : super(key: key);
+
+  final List<String> razones;
+  final FormularioModel formularioModel;
+
+  @override
+  _ReportDialogState createState() => _ReportDialogState();
+}
+
+class _ReportDialogState extends State<ReportDialog> {
+  bool value = false;
+  List<String> razones = [];
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of(context);
+    return WillPopScope(
+      onWillPop: () async{
+        return !controller.loading;
+      },
+          child: AlertDialog(
+        title: Text(
+          'Reportar Libreta',
+          style: TextStyle(fontSize: 30),
+        ),
+        content: Container(
+          height: 300,
+          width: 500,
+          child: Column(
+            children: <Widget>[
+              Text('Selecciona el/los motivos para reportar esta libreta:'),
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.razones.length,
+                  itemBuilder: (context, index) {
+                    return CheckboxListTile(
+                        title: Text(
+                          widget.razones[index],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        value: razones.contains(widget.razones[index]),
+                        onChanged: (val) {
+                          if (val) {
+                            razones.add(widget.razones[index]);
+                          } else {
+                            razones.remove((widget.razones[index]));
+                          }
+                          setState(() {});
+                        });
+                  }),
+            ],
+          ),
+        ),
+        actions: controller.loading ? <Widget>[CircularProgressIndicator()] : <Widget>[
+          FlatButton(
+            child: Text('Cancelar'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          RaisedButton(
+              child: Text('Enviar reporte'),
+              onPressed: () async {
+                if (razones.isEmpty) {
+                  return;
+                }
+
+                controller.loading = true;
+                controller.notify();
+
+                await Firestore.instance
+                    .collection('reportes')
+                    .add(widget.formularioModel.toMap());
+
+                showDialog(
+                    context: context,
+                    child: WillPopScope(
+                      onWillPop: () async {
+                        controller.loading = false;
+                        Navigator.of(context).pop();
+                        return !controller.loading;
+                      },
+                      child: AlertDialog(
+                        backgroundColor: Colors.white,
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Estamos revisando tu reporte, si tu reporte es valido, la libreta sera eliminada en aproximadamente 24 horas',
+                              style: TextStyle(color: Colors.black, fontSize: 18),
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 100,
+                            )
+                          ],
+                        ),
+                      ),
+                    ));
+              })
+        ],
+      ),
     );
   }
 }

@@ -346,6 +346,27 @@ class _LogInState extends State<LogIn> {
             print('wtff');
             return;
           }
+
+           controller.loading = true;
+          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
+
+          if(idk.exists){
+            showDialog(context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text('Cuenta bloqueada', style: TextStyle(color: Colors.black),),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',  style: TextStyle(color: Colors.black),),
+                   Icon(Icons.report, color:Colors.red, size: 100)
+                ],
+              ),
+            ));
+            await googleSignIn.signOut();
+            return;
+          }
+
           print('estoy dentro y voy a navegar con ' + controller.name);
           Firestore.instance
               .collection('usuarios')
@@ -416,6 +437,24 @@ class _LogInState extends State<LogIn> {
             return;
           }
            controller.loading = true;
+          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
+
+          if(idk.exists){
+            showDialog(context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text('Cuenta bloqueada'),
+              content: Column(
+                children: <Widget>[
+                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com'),
+                   Icon(Icons.report, color:Colors.red, size: 100)
+                ],
+              ),
+            ));
+            return;
+          }
+
+          
           print('estoy dentro y voy a navegar con ' + controller.name);
          
           Firestore.instance
