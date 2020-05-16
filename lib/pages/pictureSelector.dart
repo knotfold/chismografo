@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
-import 'package:image/image.dart';
 
 class ImageSelector extends StatefulWidget {
   @override
@@ -15,7 +14,6 @@ class _ImageSelectorState extends State<ImageSelector> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    // TODO: implement build
     return Container(
       child: Column(
         children: <Widget>[

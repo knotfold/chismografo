@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:ffi';
-import 'package:flutter/services.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-import 'package:trivia_form/pages/pages.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:ChisMe/pages/pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_form/shared/shared.dart';
+import 'package:ChisMe/shared/shared.dart';
 import 'pages.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
+import 'dart:io';
 
 class Home extends StatefulWidget {
   void pruena2() {}
@@ -17,77 +16,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  StreamSubscription purchaseUpdatedSubscription;
-  StreamSubscription purchaseErrorSubscription;
-  String platformVersion = 'Unknown';
+  StreamSubscription<List<PurchaseDetails>> _subscription;
+
   List<String> productos = ['05monedas', '10monedas', '20monedas'];
 
   Future<void> initPlatformState(BuildContext context) async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await FlutterInappPurchase.instance.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+    final Stream purchaseUpdates =
+        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdates.listen((purchases) {
+      _handlePurchaseUpdates(purchases);
+    });
+    Future.delayed(Duration.zero, () async {
+      Controller controller = Provider.of<Controller>(context, listen: false);
 
-    // prepare
-    var result = await FlutterInappPurchase.instance.initConnection;
-    print('result: $result');
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-      platformVersion = platformVersion;
-    
-
-    // refresh items for android
-    try {
-      String msg = await FlutterInappPurchase.instance.consumeAllItems;
-      print('consumeAllItems: $msg');
-    } catch (err) {
-      print('consumeAllItems error: $err');
-    }
-
-    purchaseUpdatedSubscription =
-        FlutterInappPurchase.purchaseUpdated.listen((productItem) {
-      Future.delayed(Duration.zero, () async {
-        Controller controller = Provider.of<Controller>(context, listen: false);
-        await FlutterInappPurchase.instance.consumeAllItems;
-        String cantidad = productItem.productId.substring(0, 2);
-        var result = await controller.buyCoins(int.parse(cantidad));
-        if (result) {
-          showDialog(
-              context: context,
-              child: AlertDialog(
-                title: Text('Compra exitosa'),
-                content: Text('Felicidades has aquirido $cantidad monedas'),
-              ));
-        } else {
-          showDialog(
-              context: context,
-              child: AlertDialog(
-                title: Text('Error'),
-                content: Text('Error en la compra'),
-              ));
-        }
+      Stream purchaseUpdated =
+          InAppPurchaseConnection.instance.purchaseUpdatedStream;
+      _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+        _listenToPurchaseUpdated(purchaseDetailsList, controller);
+      }, onDone: () {
+        _subscription.cancel();
+      }, onError: (error) {
+        // handle error here.
       });
-      print('purchase-updated: $productItem');
     });
+  }
 
-    purchaseErrorSubscription =
-        FlutterInappPurchase.purchaseError.listen((purchaseError) {
-      showDialog(
-          context: context,
-          child: AlertDialog(
-            title: Text('Error en la compra vuelve a intentar'),
-            content: Text('Error en la compra :( '),
-          ));
-
-      print('purchase-error: $purchaseError');
-    });
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   List<Widget> _widgetOptions = <Widget>[
@@ -101,7 +58,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessage firebaseMessage = FirebaseMessage();
     initPlatformState(context);
   }
 
@@ -119,12 +75,9 @@ class _HomeState extends State<Home> {
         return false;
       },
       child: Scaffold(
-    
         body: _widgetOptions.elementAt(controller.seleccionado),
         bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: primaryColor
-          ),
+          data: Theme.of(context).copyWith(canvasColor: primaryColor),
           child: BottomNavigationBar(
             backgroundColor: Colors.transparent,
             // fixedColor: primaryColor,
@@ -149,7 +102,8 @@ class _HomeState extends State<Home> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData)
                         return const Icon(Icons.collections_bookmark);
-                      List<DocumentSnapshot> documents = snapshot.data.documents;
+                      List<DocumentSnapshot> documents =
+                          snapshot.data.documents;
 
                       return documents.isEmpty
                           ? Icon(Icons.collections_bookmark)
@@ -185,7 +139,8 @@ class _HomeState extends State<Home> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return const Icon(Icons.group);
 
-                      List<DocumentSnapshot> documents = snapshot.data.documents;
+                      List<DocumentSnapshot> documents =
+                          snapshot.data.documents;
 
                       return documents.isEmpty
                           ? Icon(Icons.contacts)
@@ -224,5 +179,87 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void _handlePurchaseUpdates(purchases) {}
+
+  void _listenToPurchaseUpdated(purchaseDetailsList, Controller controller) {
+    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      if (purchaseDetails.status == PurchaseStatus.error) {
+        handleError(purchaseDetails.error);
+      } else if (purchaseDetails.status == PurchaseStatus.purchased) {
+        bool valid = await _verifyPurchase(purchaseDetails);
+        if (valid) {
+          deliverProduct(purchaseDetails, controller);
+        } else {
+          _handleInvalidPurchase(purchaseDetails);
+          return;
+        }
+      }
+      if (Platform.isAndroid) {
+        await InAppPurchaseConnection.instance.consumePurchase(purchaseDetails);
+      }
+      if (purchaseDetails.pendingCompletePurchase) {
+        await InAppPurchaseConnection.instance
+            .completePurchase(purchaseDetails);
+      }
+    });
+  }
+
+  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
+    // IMPORTANT!! Always verify a purchase before delivering the product.
+    // For the purpose of an example, we directly return true.
+    return Future<bool>.value(true);
+  }
+
+  void deliverProduct(
+      PurchaseDetails purchaseDetails, Controller controller) async {
+    String cantidad = purchaseDetails.productID.substring(0, 2);
+    var result = await controller.buyCoins(int.parse(cantidad));
+    if (result) {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('¡Compra exitosa!', style: TextStyle(fontSize: 20),),
+            content: Row(
+              children: <Widget>[
+                Text('Felicidades has aquirido $cantidad monedas'),
+                  Icon(
+                Icons.stars,
+                color: Colors.yellow[800],
+              ),
+              ],
+            ),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text('Error', style: TextStyle(fontSize: 20),),
+            content: Text('Error en la compra'),
+          ));
+    }
+  }
+
+  void _handleInvalidPurchase(PurchaseDetails purchaseDetails) {
+    // handle invalid purchase here if  _verifyPurchase` failed.
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Error al realizar la compra'),
+          content: Text(
+              'La compra a fallado, no se a realizado ningun cargo, por favor vuelve a intentarlo'),
+        ));
+  }
+
+  void handleError(IAPError error) {
+    print(error.details);
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Error al realizar la compra'),
+          content: Text(
+              'La compra a fallado, no se a realizado ningun cargo, por favor vuelve a intentarlo'),
+        ));
   }
 }

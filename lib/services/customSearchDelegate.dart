@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'services.dart';
-import 'package:provider/provider.dart';
-import 'package:trivia_form/shared/shared.dart';
+import 'package:ChisMe/shared/shared.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   var query1 = '';
@@ -12,7 +11,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildLeading(BuildContext context) {
-    Controller controller = Provider.of<Controller>(context);
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {

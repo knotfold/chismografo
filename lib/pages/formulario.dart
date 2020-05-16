@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/shared/shareStuff.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/shareStuff.dart';
 
 class Formulario extends StatelessWidget {
   @override

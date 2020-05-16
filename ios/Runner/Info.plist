@@ -2,8 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>music</key>
+	<string></string>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -11,59 +19,77 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>trivia_form</string>
+	<string>ChisMe</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb831678340672165</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.734736031213-mj730uarpm7l54l5roum8uq9idr6tlvd</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>831678340672165</string>
+	<key>FacebookDisplayName</key>
+	<string>SDKFacebook</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Change profile picture and setting a cover photo for a post in the app</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Not used, not required</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Change profile picture and setting a cover photo for a post in the app</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-  <key>CFBundleURLSchemes</key>
-  <array>
-    <string>fb831678340672165</string>
-  </array>
-  </dict>
-</array>
-<key>FacebookAppID</key>
-<string>831678340672165</string>
-<key>FacebookDisplayName</key>
-<string>chismografo</string>
-
-
-<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>fbapi</string>
-  <string>fbapi20130214</string>
-  <string>fbapi20130410</string>
-  <string>fbapi20130702</string>
-  <string>fbapi20131010</string>
-  <string>fbapi20131219</string>
-  <string>fbapi20140410</string>
-  <string>fbapi20140116</string>
-  <string>fbapi20150313</string>
-  <string>fbapi20150629</string>
-  <string>fbapi20160328</string>
-  <string>fbauth</string>
-  <string>fb-messenger-share-api</string>
-  <string>fbauth2</string>
-  <string>fbshareextension</string>
-</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

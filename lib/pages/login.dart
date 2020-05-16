@@ -1,9 +1,9 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/shared/colors.dart';
+import 'package:ChisMe/shared/colors.dart';
 
 //801510547545-ae7kl5f46tdf74uha67kicha4g7djk4u.apps.googleusercontent.com
 class LogIn extends StatefulWidget {
@@ -26,10 +26,12 @@ class _LogInState extends State<LogIn> {
 
       if (onValue) {
         Navigator.of(context).pushReplacementNamed('/home');
+        
       } else {
         controller.loading = false;
         isLoading2 = false;
         setState(() {});
+        return false;
       }
     });
   }
@@ -62,8 +64,9 @@ class _LogInState extends State<LogIn> {
                           width: double.maxFinite,
                           child: Column(
                             children: <Widget>[
+                              FirebaseMessage(),
                               Text(
-                                'TRIVIA',
+                                'ChisMe',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 70, fontWeight: FontWeight.bold),
@@ -337,12 +340,33 @@ class _LogInState extends State<LogIn> {
         signInWithGoogle(controller).then((value) async {
           controller.loading = true;
           controller.notify();
-          if (controller.email == null || controller.email == '') {
+          if (controller.email == null || controller.email.trim() == '') {
             controller.loading = false;
             controller.notify();
             print('wtff');
             return;
           }
+
+           controller.loading = true;
+          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
+
+          if(idk.exists){
+            showDialog(context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text('Cuenta bloqueada', style: TextStyle(color: Colors.black),),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',  style: TextStyle(color: Colors.black),),
+                   Icon(Icons.report, color:Colors.red, size: 100)
+                ],
+              ),
+            ));
+            await googleSignIn.signOut();
+            return;
+          }
+
           print('estoy dentro y voy a navegar con ' + controller.name);
           Firestore.instance
               .collection('usuarios')
@@ -406,7 +430,31 @@ class _LogInState extends State<LogIn> {
       splashColor: Colors.grey,
       onPressed: () async {
         login(controller).then((value) async {
+          if (controller.email == null || controller.email.trim() == '') {
+            controller.loading = false;
+            controller.notify();
+            print('wtff');
+            return;
+          }
            controller.loading = true;
+          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
+
+          if(idk.exists){
+            showDialog(context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text('Cuenta bloqueada'),
+              content: Column(
+                children: <Widget>[
+                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com'),
+                   Icon(Icons.report, color:Colors.red, size: 100)
+                ],
+              ),
+            ));
+            return;
+          }
+
+          
           print('estoy dentro y voy a navegar con ' + controller.name);
          
           Firestore.instance

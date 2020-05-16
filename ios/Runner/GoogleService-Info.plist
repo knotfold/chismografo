@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>734736031213-mj730uarpm7l54l5roum8uq9idr6tlvd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.734736031213-mj730uarpm7l54l5roum8uq9idr6tlvd</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>734736031213-9eq235vg43paphj50fka5ni0k6uvsgnr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDt-1clm4ufFnGxvmsVD_dDHlO5l-yzSiw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>734736031213</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gudtech.chisme</string>
+	<key>PROJECT_ID</key>
+	<string>chismografo-28b95</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chismografo-28b95.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:734736031213:ios:2bc940b7ca4cb2b0321be4</string>
+	<key>DATABASE_URL</key>
+	<string>https://chismografo-28b95.firebaseio.com</string>
+</dict>
+</plist>

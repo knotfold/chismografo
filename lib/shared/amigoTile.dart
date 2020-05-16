@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
+import 'package:ChisMe/services/services.dart';
 import 'shared.dart';
 
 class AmigoTile extends StatelessWidget {

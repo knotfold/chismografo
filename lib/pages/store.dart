@@ -1,11 +1,10 @@
 import 'dart:async';
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/shared/shared.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:ChisMe/shared/shared.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 class Store extends StatefulWidget {
   @override
@@ -14,20 +13,39 @@ class Store extends StatefulWidget {
 
 class _StoreState extends State<Store> {
   List<String> productos = ['05monedas', '10monedas', '20monedas'];
+  List<String> iosProductos = [
+    '25monedas',
+    '52monedas',
+    '80monedas',
+    'com.example.rocket_car'
+  ];
 
-  Future<List<IAPItem>> getItems() async {
-    List<IAPItem> items =
-        await FlutterInappPurchase.instance.getProducts(productos);
-    for (var item in items) {
+  Future<List<ProductDetails>> getItems() async {
+    List<ProductDetails> productDetails = [];
+    if (Platform.isAndroid) {
+      final ProductDetailsResponse response = await InAppPurchaseConnection
+          .instance
+          .queryProductDetails(productos.toSet());
+      if (response.notFoundIDs.isNotEmpty) {
+        print('error');
+      }
+      productDetails = response.productDetails;
+      return productDetails;
+    } else {
+      final ProductDetailsResponse response = await InAppPurchaseConnection
+          .instance
+          .queryProductDetails(iosProductos.toSet());
+      if (response.notFoundIDs.isNotEmpty) {
+        print('error');
+      }
+      productDetails = response.productDetails;
+      return productDetails;
     }
-
-    return items;
   }
 
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: myAppBar(controller, context),
@@ -40,9 +58,11 @@ class _StoreState extends State<Store> {
                 future: getItems(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return const LinearProgressIndicator();
-                  List<IAPItem> products = snapshot.data;
+                  print('finally');
+                  List<ProductDetails> products = snapshot.data;
                   return products.isEmpty
-                      ? Text('La tiendad no esta disponible')
+                      ? Text(
+                          'La tiendad no esta disponible, pero las recompensas gratis si :)')
                       : ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -52,7 +72,7 @@ class _StoreState extends State<Store> {
                               cantidad: products[index].title.substring(0, 2),
                               cantidadTexto: products[index].title,
                               precio: products[index].price,
-                              iapItem: products[index],
+                              productDetails: products[index],
                             );
                           },
                         );
@@ -61,7 +81,7 @@ class _StoreState extends State<Store> {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Gratis por cada vez que contestes una libreta',
+                    'Cinco Monedas Gratis por cada vez que contestes una libreta',
                 opcion: 'Ir a Libretas de Amigos',
                 oportunidades: controller.usuario.dailyAnswers.toString(),
                 newIndex: 1,
@@ -69,7 +89,7 @@ class _StoreState extends State<Store> {
               StoreItemFree(
                 cantidad: '5',
                 cantidadTexto:
-                    'Cinco Estrellas Gratis por cada vez que crees una libreta',
+                    'Cinco Monedas Gratis por cada vez que crees una libreta',
                 opcion: 'Ir a tus libretas',
                 oportunidades: controller.usuario.dailyFormularios.toString(),
                 newIndex: 0,
@@ -87,19 +107,18 @@ class StoreItem extends StatelessWidget {
   final String cantidad;
   final String cantidadTexto;
   final String save;
-  final IAPItem iapItem;
+  final ProductDetails productDetails;
   const StoreItem(
       {Key key,
       this.cantidad,
       this.cantidadTexto,
       this.precio,
       this.save,
-      this.iapItem})
+      this.productDetails})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Controller controller = Provider.of<Controller>(context);
     return Card(
       shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
@@ -139,13 +158,9 @@ class StoreItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(
-                    Icons.attach_money,
-                    size: 50,
-                  ),
                   Text(
                     precio,
-                    style: TextStyle(fontSize: 60),
+                    style: TextStyle(fontSize: 42),
                   ),
                 ],
               ),
@@ -161,26 +176,15 @@ class StoreItem extends StatelessWidget {
             FloatingActionButton.extended(
               heroTag: 'store',
               onPressed: () async {
-                FlutterInappPurchase.instance
-                    .requestPurchase(iapItem.productId);
-                // var result =
-                //     await controller.buyCoins(int.parse(cantidad), iapItem);
-                // if (result) {
-                //   showDialog(
-                //       context: context,
-                //       child: AlertDialog(
-                //         title: Text('Compra exitosa'),
-                //         content:
-                //             Text('Felicidades has aquirido $cantidad monedas'),
-                //       ));
-                // } else {
-                //   showDialog(
-                //       context: context,
-                //       child: AlertDialog(
-                //         title: Text('Error'),
-                //         content: Text('Error en la compra'),
-                //       ));
-                // }
+                final PurchaseParam purchaseParam =
+                    PurchaseParam(productDetails: productDetails);
+                if (_isConsumable(productDetails)) {
+                  InAppPurchaseConnection.instance
+                      .buyConsumable(purchaseParam: purchaseParam);
+                } else {
+                  InAppPurchaseConnection.instance
+                      .buyNonConsumable(purchaseParam: purchaseParam);
+                }
               },
               label: Text('Comprar'),
               icon: Icon(Icons.credit_card),
@@ -189,6 +193,10 @@ class StoreItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isConsumable(ProductDetails productDetails) {
+    return true;
   }
 }
 

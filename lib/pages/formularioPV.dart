@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/shared/shareStuff.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/shareStuff.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -21,7 +21,6 @@ class _FormularioPVState extends State<FormularioPV> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     Controller controller = Provider.of(context);
     return WillPopScope(
       onWillPop: () async {
@@ -228,7 +227,7 @@ class _FormularioPVState extends State<FormularioPV> {
         value.trim() == '' ||
         value.trim().toLowerCase() == 'nose' ||
         value.trim().toLowerCase() == 'no se' ||
-        value.length < 3) {
+        value.trim().length < 3) {
       return false;
     }
     return true;

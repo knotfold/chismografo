@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/shared/colors.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/colors.dart';
 
 class CreadorLP extends StatefulWidget {
   @override
@@ -76,7 +76,7 @@ class _CreadorLPState extends State<CreadorLP> {
                                 style: TextStyle(color: Colors.white),
                                 controller: textEditingController,
                                 decoration: InputDecoration(
-                                  labelText: 'Nueva Pregunta',
+                                  labelText: 'Escribe la pregunta',
                                   labelStyle: TextStyle(color: Colors.white)
                                 ),
                               ),

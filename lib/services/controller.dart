@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ChisMe/services/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'dart:io' show File, Platform;
 
 class Controller with ChangeNotifier {
@@ -52,6 +50,12 @@ class Controller with ChangeNotifier {
 
 
   //finnnn
+
+  Future<bool> rebuildUser() async {
+    DocumentSnapshot ds = await usuarioAct.reference.get();
+    usuarioAct = UsuarioModel.fromDocumentSnapshot(ds);
+    return true;
+  }
 
   Future<bool> gastarMonedas() async {
     bool status = true;

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trivia_form/services/services.dart';
-import 'package:trivia_form/main.dart';
-import 'package:trivia_form/shared/colors.dart';
+import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/shared/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 AppBar myAppBar(Controller controller, BuildContext context) {
@@ -10,7 +9,7 @@ AppBar myAppBar(Controller controller, BuildContext context) {
     
     elevation: 0,
     title: Text(
-      'Chismografo',
+      'ChisMe ;)',
       style: TextStyle(color: Colors.white),
     ),
     actions: <Widget>[
@@ -140,12 +139,12 @@ class _TutorialDialogState extends State<TutorialDialog> {
                       children: <Widget>[
                         Text(
                           f['titulo'],
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: 30, color: Colors.white),
                         ),
                         SizedBox(
                           height: 25,
                         ),
-                        Text(f['desc']),
+                        Text(f['desc'],style: TextStyle(color: Colors.white),),
                         SizedBox(
                           height: 25,
                         ),
@@ -211,7 +210,6 @@ class _TutorialDialogState extends State<TutorialDialog> {
 class TutorialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container();
   }
 }
