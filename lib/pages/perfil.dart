@@ -18,354 +18,464 @@ class _PerfilState extends State<Perfil> {
     return Scaffold(
         appBar: myAppBar(controller, context),
         body: FutureBuilder(
-         future: controller.rebuildUser(),
-          builder: (context, snapshot) {
-            if(!snapshot.hasData) return const LinearProgressIndicator();
-            return ListView(
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin:
-                          EdgeInsets.only(left: 20, right: 5, top: 20, bottom: 20),
-                      child: GestureDetector(
-                        onTap: () => showDialog(
-                          child: WillPopScope(
-                            onWillPop: () async {
-                              return controller.loading ? false : true;
-                            },
-                            child: SimpleDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              children: <Widget>[
-                                DialogContent(),
-                              ],
-                            ),
-                          ),
-                          context: context,
-                        ),
-                        child: Stack(
-                          children: <Widget>[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(260),
-                              child: FadeInImage(
-                                fit: BoxFit.cover,
-                                placeholder: AssetImage('assets/gudtech.jpg'),
-                                width: 100,
-                                height: 100,
-                                image: NetworkImage(controller.usuario.foto),
-                              ),
-                            ),
-                            CircleAvatar(
-                              backgroundColor: pDark,
-                              radius: 15,
-                              child: Icon(
-                                Icons.photo_camera,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                             
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Row(
-                            //crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              // SizedBox(
-                              //   height: 15,
-                              // ),
-                              //Icon(Icons.person, color: Colors.black, size: 30),
-                              IconButton(
-                                onPressed: () => showDialog(
-                                  context: context,
-                                  child: Dialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20)),
-                                    child: Container(
-                                      margin: EdgeInsets.all(20),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          TextField(
-                                            style: TextStyle(color: Colors.white),
-                                            
-                                            maxLength: 50,
-                                            decoration: InputDecoration(
-                                              
-                                              labelStyle: TextStyle(color: Colors.white),
-                                              
-                                                labelText: 'Nombre'),
-                                            controller: textEditingController,
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          FloatingActionButton.extended(
-                                            onPressed: () async {
-                                              controller.loading = true;
-                                              controller.notify();
-                                              await controller.usuario.reference
-                                                  .updateData({
-                                                'nombre': textEditingController.text
-                                              });
-                                              controller.usuario.nombre =
-                                                  textEditingController.text;
-                                              controller.loading = false;
-                                              controller.notify();
-                                              Navigator.of(context).pop();
-                                            },
-                                            label: Text(
-                                              'Actualizar',
-                                            ),
-                                            icon: Icon(
-                                              Icons.edit,
-                                              size: 20,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                icon: Icon(Icons.edit),
-                              ),
-
-                              Text(controller.usuario.nombre,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  )),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Icon(Icons.mail, size: 20),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                child: Text(controller.usuario.correo,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(),
-                SizedBox(
-                  height: 25,
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 40),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            future: controller.rebuildUser(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const LinearProgressIndicator();
+              return ListView(
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Icon(Icons.assistant, size: 20),
-                      SizedBox(
-                        width: 10,
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: 20, right: 5, top: 20, bottom: 20),
+                        child: GestureDetector(
+                          onTap: () => showDialog(
+                            child: WillPopScope(
+                              onWillPop: () async {
+                                return controller.loading ? false : true;
+                              },
+                              child: SimpleDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                children: <Widget>[
+                                  DialogContent(),
+                                ],
+                              ),
+                            ),
+                            context: context,
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(260),
+                                child: FadeInImage(
+                                  fit: BoxFit.cover,
+                                  placeholder: AssetImage('assets/gudtech.jpg'),
+                                  width: 100,
+                                  height: 100,
+                                  image: NetworkImage(controller.usuario.foto),
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundColor: pDark,
+                                radius: 15,
+                                child: Icon(
+                                  Icons.photo_camera,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(controller.usuario.usuario,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                )),
-                            Text(
-                              'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: sDark,
-                              ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Row(
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                // SizedBox(
+                                //   height: 15,
+                                // ),
+                                //Icon(Icons.person, color: Colors.black, size: 30),
+                                IconButton(
+                                  onPressed: () => showDialog(
+                                    context: context,
+                                    child: Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Container(
+                                        margin: EdgeInsets.all(20),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            TextField(
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                              maxLength: 50,
+                                              decoration: InputDecoration(
+                                                  labelStyle: TextStyle(
+                                                      color: Colors.white),
+                                                  labelText: 'Nombre'),
+                                              controller: textEditingController,
+                                            ),
+                                            SizedBox(
+                                              height: 15,
+                                            ),
+                                            FloatingActionButton.extended(
+                                              onPressed: () async {
+                                                controller.loading = true;
+                                                controller.notify();
+                                                await controller
+                                                    .usuario.reference
+                                                    .updateData({
+                                                  'nombre':
+                                                      textEditingController.text
+                                                });
+                                                controller.usuario.nombre =
+                                                    textEditingController.text;
+                                                controller.loading = false;
+                                                controller.notify();
+                                                Navigator.of(context).pop();
+                                              },
+                                              label: Text(
+                                                'Actualizar',
+                                              ),
+                                              icon: Icon(
+                                                Icons.edit,
+                                                size: 20,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  icon: Icon(Icons.edit),
+                                ),
+
+                                Text(controller.usuario.nombre,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Icon(Icons.mail, size: 20),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                      controller.usuario.correo ?? 'Sin correo',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      )),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
-                // SizedBox(height: 10),
-                // Container(
-                //   margin: EdgeInsets.only(left: 10),
-                //   alignment: Alignment.centerLeft,
-                //   child: FlatButton.icon(
-                //     icon: Icon(
-                //       Icons.group_add,
-                //       size: 20,
-                //       color: pDark,
-                //     ),
-                //     label: Text(
-                //       'Inivtar amigos',
-                //       style: TextStyle(fontSize: 18, color: Colors.black),
-                //     ),
-                //     onPressed: () => null,
-                //   ),
-                // ),
-                !controller.usuario.monedasFree
-                    ? Container(
-                        margin: EdgeInsets.only(left: 10),
-                        alignment: Alignment.centerLeft,
-                        child: FlatButton.icon(
-                          icon: Icon(
-                            Icons.stars,
-                            size: 20,
-                            color: pDark,
+                  Divider(),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 40),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(Icons.assistant, size: 20),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(controller.usuario.usuario,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  )),
+                              Text(
+                                'Éste es tu nombre de usuario, tus amigos pueden encontrarte fácilmente dentro de la aplicación con él.',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: sDark,
+                                ),
+                              ),
+                            ],
                           ),
-                          label: Text(
-                            'Monedas Gratis',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 10),
+                  // Container(
+                  //   margin: EdgeInsets.only(left: 10),
+                  //   alignment: Alignment.centerLeft,
+                  //   child: FlatButton.icon(
+                  //     icon: Icon(
+                  //       Icons.group_add,
+                  //       size: 20,
+                  //       color: pDark,
+                  //     ),
+                  //     label: Text(
+                  //       'Inivtar amigos',
+                  //       style: TextStyle(fontSize: 18, color: Colors.black),
+                  //     ),
+                  //     onPressed: () => null,
+                  //   ),
+                  // ),
+                  !controller.usuario.monedasFree
+                      ? Container(
+                          margin: EdgeInsets.only(left: 10),
+                          alignment: Alignment.centerLeft,
+                          child: FlatButton.icon(
+                            icon: Icon(
+                              Icons.stars,
+                              size: 20,
+                              color: pDark,
                             ),
-                          ),
-                          onPressed: () {
-                            return showDialog(
-                              context: context,
-                              child: Dialog(
-                                
-                                // shape: RoundedRectangleBorder(
-                                //     borderRadius: BorderRadius.circular(20)),
-                                backgroundColor: Colors.white,
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                    margin: EdgeInsets.all(20),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.stars,
-                                              size: 20,
-                                              color: secondaryColor,
-                                            ),
-                                            Text('Monedas Gratis',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                ))
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                            'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elegir una vez y a una persona'),
-                                        FittedBox(
-                                          child: ListaAmigos(),
-                                        )
-                                      ],
+                            label: Text(
+                              'Monedas Gratis',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            onPressed: () {
+                              return showDialog(
+                                context: context,
+                                child: Dialog(
+                                  // shape: RoundedRectangleBorder(
+                                  //     borderRadius: BorderRadius.circular(20)),
+                                  backgroundColor: Colors.white,
+                                  child: SingleChildScrollView(
+                                    child: Container(
+                                      margin: EdgeInsets.all(20),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.stars,
+                                                size: 20,
+                                                color: secondaryColor,
+                                              ),
+                                              Text('Monedas Gratis',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                  ))
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                              'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elegir una vez y a una persona'),
+                                          FittedBox(
+                                            child: ListaAmigos(),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : Container(),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: FloatingActionButton.extended(
-                    icon: Icon(Icons.power_settings_new),
-                    label: Text('Cerrar Sesión'),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 4,
-
-                    onPressed: () async {
-                      await controller.signOut();
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/', ModalRoute.withName('/'));
-                    },
-                    // child: Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: <Widget>[
-
-                    //     Icon(
-                    //       Icons.exit_to_app,
-                    //       color: Colors.white,
-                    //     ),
-                    //     Text('Salir'),
-                    //   ],
-                    // ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                controller.usuario.usuario == '@GAV' ||
-                        controller.usuario.usuario == '@Cammy'
-                    ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 50),
-                        child: FloatingActionButton.extended(
-                          heroTag: 'meh',
-                          icon: Icon(Icons.restore),
-                          label: Text('Reset'),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          elevation: 4,
-                          onPressed: () async {
-                            Firestore.instance
-                                .collection('reset')
-                                .document('reset')
-                                .updateData({'reset': true});
-                          },
-                          // child: Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: <Widget>[
-
-                          //     Icon(
-                          //       Icons.exit_to_app,
-                          //       color: Colors.white,
-                          //     ),
-                          //     Text('Salir'),
-                          //   ],
-                          // ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.centerLeft,
+                    child: FlatButton.icon(
+                      icon: Icon(
+                        Icons.cancel,
+                        size: 20,
+                        color: pDark,
+                      ),
+                      label: Text(
+                        'Usuarios Bloqueados',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
                         ),
-                      )
-                    : Container(),
-              ],
-            );
-          }
-        ));
+                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            child: Dialog(
+                              backgroundColor: Colors.white,
+                              child: Container(
+                                margin: EdgeInsets.all(5),
+                                child: StreamBuilder(
+                                  stream: Firestore.instance
+                                      .collection('usuarios')
+                                      .where('bloqueados',
+                                          arrayContains:
+                                              controller.usuario.usuario)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData)
+                                      return const LinearProgressIndicator();
+
+                                    List<DocumentSnapshot> documents =
+                                        snapshot.data.documents;
+                                    return documents.isEmpty
+                                        ? Text('No tienes usuarios bloqueados')
+                                        : ListView.builder(
+                                            itemCount: documents.length,
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              UsuarioModel usuario =
+                                                  UsuarioModel
+                                                      .fromDocumentSnapshot(
+                                                          documents[index]);
+                                              return ListTile(
+                                                subtitle: Text(usuario.usuario,
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                leading: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      usuario.foto),
+                                                ),
+                                                title: Text(usuario.nombre,
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                trailing: controller.loading
+                                                    ? CircularProgressIndicator()
+                                                    : Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          RaisedButton(
+                                                            color: Colors.white,
+                                                            onPressed:
+                                                                () async {
+                                                              controller
+                                                                      .loading =
+                                                                  true;
+                                                              controller
+                                                                  .notify();
+                                                              await usuario
+                                                                  .reference
+                                                                  .updateData({
+                                                                'bloqueados':
+                                                                    FieldValue
+                                                                        .arrayRemove([
+                                                                  controller
+                                                                      .usuario
+                                                                      .usuario
+                                                                ])
+                                                              });
+                                                              controller.loading = false;
+                                                              controller.notify();
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: Text(
+                                                              'Desbloquear',
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                              );
+                                            },
+                                          );
+                                  },
+                                ),
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: FloatingActionButton.extended(
+                      icon: Icon(Icons.power_settings_new),
+                      label: Text('Cerrar Sesión'),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      elevation: 4,
+
+                      onPressed: () async {
+                        await controller.signOut();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', ModalRoute.withName('/'));
+                      },
+                      // child: Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: <Widget>[
+
+                      //     Icon(
+                      //       Icons.exit_to_app,
+                      //       color: Colors.white,
+                      //     ),
+                      //     Text('Salir'),
+                      //   ],
+                      // ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  controller.usuario.usuario == '@GAV' ||
+                          controller.usuario.usuario == '@Cammy'
+                      ? Container(
+                          margin: EdgeInsets.symmetric(horizontal: 50),
+                          child: FloatingActionButton.extended(
+                            heroTag: 'meh',
+                            icon: Icon(Icons.restore),
+                            label: Text('Reset'),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: 4,
+                            onPressed: () async {
+                              Firestore.instance
+                                  .collection('reset')
+                                  .document('reset')
+                                  .updateData({'reset': true});
+                            },
+                            // child: Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+
+                            //     Icon(
+                            //       Icons.exit_to_app,
+                            //       color: Colors.white,
+                            //     ),
+                            //     Text('Salir'),
+                            //   ],
+                            // ),
+                          ),
+                        )
+                      : Container(),
+                ],
+              );
+            }));
   }
 }
 
@@ -514,7 +624,6 @@ class _DialogContentState extends State<DialogContent> {
         ],
       ),
     );
-    
   }
 }
 
@@ -621,7 +730,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                               'Ten en cuenta que solo podrás realizar esta acción una vez.'),
                                           actions: <Widget>[
                                             RaisedButton(
-                                              color: Colors.white,
+                                                color: Colors.white,
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
@@ -630,7 +739,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
                                                   style: TextStyle(),
                                                 )),
                                             RaisedButton(
-                                              color: Colors.white,
+                                                color: Colors.white,
                                                 onPressed: () async {
                                                   setState(() {
                                                     isLoading = true;

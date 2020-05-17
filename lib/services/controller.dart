@@ -45,9 +45,8 @@ class Controller with ChangeNotifier {
   List<Respuesta> vRespuestas = [];
   TextEditingController textECR = TextEditingController();
 
-    PageController pageController2 = PageController();
-    int sdtP;
-
+  PageController pageController2 = PageController();
+  int sdtP;
 
   //finnnn
 
@@ -139,26 +138,25 @@ class Controller with ChangeNotifier {
     });
 
     String url;
-    
-    if(image != null){
- final String fileName =
-        usuarioAct.correo + '/libretas/' + DateTime.now().toString();
 
-    StorageReference storageRef =
-        FirebaseStorage.instance.ref().child(fileName);
+    if (image != null) {
+      final String fileName =
+          usuarioAct.correo + '/libretas/' + DateTime.now().toString();
 
-    final StorageUploadTask uploadTask = storageRef.putFile(
-      image,
-    );
+      StorageReference storageRef =
+          FirebaseStorage.instance.ref().child(fileName);
 
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      final StorageUploadTask uploadTask = storageRef.putFile(
+        image,
+      );
 
-    url = (await downloadUrl.ref.getDownloadURL());
-    print('URL Is $url');
-    }else{
+      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+
+      url = (await downloadUrl.ref.getDownloadURL());
+      print('URL Is $url');
+    } else {
       url = '';
     }
-   
 
     print('second');
     print(preguntasM.length);
@@ -170,9 +168,7 @@ class Controller with ChangeNotifier {
         nombre: textEditingController.text,
         creadorUsuario: usuario.usuario,
         creadorfoto: usuario.foto,
-
         imagen: url);
-
 
     print('third');
     await Firestore.instance
@@ -208,7 +204,7 @@ class Controller with ChangeNotifier {
 
     await googleSignIn.signOut();
     await facebookSignIn.logOut();
-    
+
     await usuario.reference.updateData({
       'tokens': FieldValue.arrayRemove([activeToken])
     });
@@ -228,19 +224,28 @@ class Controller with ChangeNotifier {
   }
 
   Future<bool> signInCheck() async {
+    bool value = true;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('correo') == null) {
-      return false;
+      value = false;
+      return value;
     } else {
       await Firestore.instance
           .collection('usuarios')
           .where('correo', isEqualTo: prefs.getString('correo'))
           .getDocuments()
-          .then((onValue) {
+          .then((onValue) async {
+        bool banned = onValue.documents.first['banned'] ?? false;
+        if (banned) {
+          value = false;
+          await googleSignIn.signOut();
+          return;
+        }
         usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+        await storeToken();
       });
-      await storeToken();
-      return true;
+
+      return value;
     }
   }
 

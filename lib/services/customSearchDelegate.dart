@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'services.dart';
 import 'package:ChisMe/shared/shared.dart';
 
@@ -21,7 +22,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-
+    Controller controller = Provider.of<Controller>(context);
     var stream = Firestore.instance
         .collection('usuarios')
         .where('usuarioSearch', isEqualTo: query.toLowerCase().trim())
@@ -48,6 +49,14 @@ class CustomSearchDelegate extends SearchDelegate {
             shrinkWrap: true,
             itemCount: documents.length,
             itemBuilder: (context, index) {
+              List<dynamic> bloqueados = documents[index]['bloqueados'] ?? [];
+              String usuario = documents[index]['usuario'] ?? ''; 
+              if(bloqueados.contains(controller.usuario.usuario)){
+                return Container();
+              }
+              if(controller.usuario.bloqueados.contains(usuario)){
+                return Container();
+              }
               return AmigoTile(
                 usuario: UsuarioModel.fromDocumentSnapshot(documents[index]),
               );

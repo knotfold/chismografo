@@ -27,12 +27,12 @@ class LibretasA extends StatelessWidget {
             heroTag: 'btnA1',
             onPressed: () {
               documents.isEmpty
-                  ? print('')
+                  ? null
                   : showDialog(
                       context: context,
                       child: Dialog(
                         child: Container(
-                          child: ListView.builder(
+                          child: documents.isEmpty ? Text('No tienes solicitudes') : ListView.builder(
                             shrinkWrap: true,
                             itemCount: documents.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -70,11 +70,11 @@ class LibretasA extends StatelessWidget {
                                             onPressed: () async {
                                               controller.loading = true;
                                               controller.notify();
-                                              controller.toFillForm.reference
+                                            documents[index].reference
                                                   .updateData({
                                                 'invitaciones':
                                                     FieldValue.arrayRemove([
-                                                  controller.usuario.documentId
+                                                  controller.usuario.usuario
                                                 ])
                                               });
                                               controller.loading = false;

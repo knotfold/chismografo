@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>music</key>
-	<string></string>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -60,24 +54,26 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Change profile picture and setting a cover photo for a post in the app</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Not used, not required</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Change profile picture and setting a cover photo for a post in the app</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Referenced but the  app doesn&apos;t acces it or uses it</string>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -100,5 +96,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Referenced but the  app doesn't acces it or uses it</string>
+	<key>music</key>
+	<string></string>
 </dict>
 </plist>

@@ -88,6 +88,7 @@ class _FormularioPVState extends State<FormularioPV> {
                   ? 'Enviar Respuestas'
                   : 'Siguiente'),
               onPressed: () async {
+                //TODO: Check this mess
                 if (index == widget.formularioModel.preguntas.length) {
                   controller.vRespuestas.clear();
                   for (var respuesta in controller.respuestas) {
@@ -96,9 +97,7 @@ class _FormularioPVState extends State<FormularioPV> {
                           context: context,
                           child: AlertDialog(
                             title: Text(
-
                                 'Debes de contestar todas las preguntas de la libreta. No se puede contestar no se, o algo parecido y las respuestas deben de tener mino 3 letras'),
-
                           ));
                       controller.vRespuestas.clear();
                       return;
@@ -107,30 +106,39 @@ class _FormularioPVState extends State<FormularioPV> {
                         respuesta, controller.usuario.usuario));
                     print(respuesta);
                   }
+
                   print(controller.vRespuestas.length);
                   int tracker = 0;
 
-                  for (var respuesta in controller.vRespuestas) {
-                    controller.toFillForm.preguntas[tracker].respuestas
-                        .add(respuesta.toMap());
-                    tracker = tracker + 1;
-                  }
-
-                  controller.toFillForm.invitaciones
-                      .remove(controller.usuario.usuario);
-                  controller.toFillForm.usuarios
-                      .add(controller.usuario.usuario);
-
-                  List<Map<String, dynamic>> p = [];
-                  controller.toFillForm.preguntas.forEach((pregunta) {
-                    p.add(pregunta.toMap());
-                  });
-
                   final DocumentReference postRef =
                       controller.toFillForm.reference;
-                  Firestore.instance.runTransaction((Transaction tx) async {
+
+                  await Firestore.instance.runTransaction((Transaction tx) async {
                     DocumentSnapshot postSnapshot = await tx.get(postRef);
                     if (postSnapshot.exists) {
+                      controller.toFillForm =
+                          FormularioModel.fromDS(postSnapshot);
+
+                   
+                      for (var respuesta in controller.vRespuestas) {
+                        controller.toFillForm.preguntas[tracker].respuestas
+                            .add(respuesta.toMap());
+                        tracker = tracker + 1;
+                      }
+
+                         List<Map<String, dynamic>> p = [];
+                      controller.toFillForm.preguntas.forEach((pregunta) {
+                        p.add(pregunta.toMap());
+                      });
+
+                 
+
+
+                      controller.toFillForm.invitaciones
+                          .remove(controller.usuario.usuario);
+                      controller.toFillForm.usuarios
+                          .add(controller.usuario.usuario);
+
                       await tx.update(postRef, <String, dynamic>{
                         'preguntas': p,
                         'usuarios': controller.toFillForm.usuarios,

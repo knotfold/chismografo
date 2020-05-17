@@ -31,6 +31,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
     'monedasFree':false,
     'dailyAnswers' : 3,
     'dailyFormularios': 3,
+    'uid' : null,
   };
 
   // _launchURL() async {
@@ -157,8 +158,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                     SizedBox(
                       height: 15,
                     ),
-                    TextFormField(
-                      enabled: controller.email.isEmpty ? true : false,
+                   controller.email.isEmpty ? Container() : TextFormField(
+                      enabled: false,
                       initialValue:
                           controller.email.isEmpty ? null : controller.email,
                       onSaved: (String value) {
@@ -168,13 +169,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         bool emailValid = RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value);
-                        if (value == null || value.isEmpty) {
-                          return 'llenar el campo correo electrónico es obligatorio';
-                        } else if (!emailValid) {
-                          return 'El correo electrónico no es valido';
-                        } else if (correov == false) {
-                          return 'Correo existente';
-                        }
+                     
                         return null;
                       },
                       maxLines: 1,
@@ -298,6 +293,8 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
 
               await _validatorUser(formUsuario['usuarioSearch']);
               await _validatorEmail(formUsuario['correo']);
+
+              formUsuario['uid'] = controller.uid;
 
               setState(() {
                 isLoadig = true;

@@ -122,10 +122,10 @@ class LibretaDetails extends StatelessWidget {
                                         );
                                       },
                                     ),
-                              controller.usuario.usuario ==
-                                          controller
-                                              .toFillForm.creadorUsuario ||
-                                      controller.toFillForm.priv
+                               controller.usuario.usuario !=
+                                                      controller.toFillForm
+                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
+                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
                                   ? FloatingActionButton.extended(
                                       heroTag: 'invamigos',
                                       onPressed: () {
@@ -173,10 +173,7 @@ class LibretaDetails extends StatelessWidget {
                       'No puedes ver las respuestas de esta libreta hasta que 3 personas la hayan contestado',
                       textAlign: TextAlign.center,
                     ),
-                    controller.toFillForm.priv &&
-                            controller.usuario.documentId ==
-                                controller.toFillForm.creadorID
-                        ? IconButton(
+                    IconButton(
                             color: backgroundColor,
                             highlightColor: backgroundColor,
                             icon: Icon(Icons.group_add),
@@ -283,10 +280,11 @@ class LibretaDetails extends StatelessWidget {
                                                     );
                                                   },
                                                 ),
-                                          controller.usuario.usuario ==
+
+                                          controller.usuario.usuario !=
                                                       controller.toFillForm
-                                                          .creadorUsuario ||
-                                                  controller.toFillForm.priv
+                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
+                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
                                               ? FloatingActionButton.extended(
                                                   heroTag: 'invamigos',
                                                   onPressed: () {
@@ -311,121 +309,7 @@ class LibretaDetails extends StatelessWidget {
                                   ));
                             },
                           )
-                        : !controller.toFillForm.priv
-                            ? IconButton(
-                                color: backgroundColor,
-                                icon: Icon(Icons.group_add),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      child: Dialog(
-                                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
-                                        child: Container(
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Text(
-                                                'Usuarios',
-                                                style: TextStyle(fontSize: 20),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              controller.toFillForm.usuarios
-                                                      .isEmpty
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          'No hay usuarios participando'),
-                                                    )
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: controller
-                                                          .toFillForm
-                                                          .usuarios
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Text(
-                                                          '-' +
-                                                              controller
-                                                                      .toFillForm
-                                                                      .usuarios[
-                                                                  index],
-                                                          style: TextStyle(
-                                                              fontSize: 15),
-                                                        );
-                                                      },
-                                                    ),
-                                              Text(
-                                                'Invitados',
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                              controller.toFillForm.invitaciones
-                                                      .isEmpty
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          'No hay usuarios invitados'),
-                                                    )
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: controller
-                                                          .toFillForm
-                                                          .invitaciones
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Text(
-                                                          '-' +
-                                                              controller
-                                                                      .toFillForm
-                                                                      .invitaciones[
-                                                                  index],
-                                                        );
-                                                      },
-                                                    ),
-                                              controller.usuario.usuario ==
-                                                          controller.toFillForm
-                                                              .creadorUsuario ||
-                                                      controller.toFillForm.priv
-                                                  ? FloatingActionButton
-                                                      .extended(
-                                                      heroTag: 'invamigos',
-                                                      onPressed: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            child: Dialog(
-                                                              child: Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              20),
-                                                                  child:
-                                                                      AmigosSelec()),
-                                                            ));
-                                                      },
-                                                      label: Text(
-                                                          'Invitar Amigos'),
-                                                      icon:
-                                                          Icon(Icons.group_add),
-                                                    )
-                                                  : Container(),
-                                            ],
-                                          ),
-                                        ),
-                                      ));
-                                },
-                              )
-                            : Container(),
+                        
                   ],
                 ),
               ),
