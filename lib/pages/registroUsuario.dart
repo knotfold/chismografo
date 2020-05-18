@@ -199,6 +199,9 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                         } else if (value.contains('@')) {
                           return 'Tu nombre de usuario no debe llevar "@"';
                         }
+                        else if (value.contains(' ')) {
+                          return 'Tu nombre de usuario no debe llevar espacios';
+                        }
                         return null;
                       },
                       decoration: InputDecoration(

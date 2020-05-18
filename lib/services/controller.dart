@@ -228,6 +228,7 @@ class Controller with ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('correo') == null) {
       value = false;
+      await facebookSignIn.logOut();
       return value;
     } else {
       await Firestore.instance

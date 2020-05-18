@@ -144,7 +144,7 @@ class LibretasA extends StatelessWidget {
                   stream: Firestore.instance
                       .collection('formularios')
                       .where('usuarios',
-                          arrayContains: controller.usuario.usuario)
+                          arrayContains: controller.usuario.usuario).orderBy('fecha',descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)

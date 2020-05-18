@@ -66,36 +66,33 @@ class _MiniProfileState extends State<MiniProfile> {
               : controller.loading
         ? CircularProgressIndicator()
         : verifyMyFRequest(controller)
-            ? Expanded(
-                //margin: EdgeInsets.symmetric(horizontal: 5),
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20)),
-                  color: buttonColors,
-                  child: Text(
-                    'Cancelar Solicitud',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13.0),
-                  ),
-                  onPressed: () async {
-                    print(widget
-                        .usuario.documentId.length);
-                    await controller.usuario.reference
-                        .updateData({
-                      'solicitudesAE':
-                          FieldValue.arrayRemove([
-                        widget.usuario.documentId
-                      ])
-                    });
-                    controller.usuario.solicitudesAE
-                        .remove(widget
-                            .usuario.documentId);
-                    controller.notify();
-                  },
-                ),
-              )
+            ? RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(20)),
+              color: buttonColors,
+              child: Text(
+                'Cancelar Solicitud',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13.0),
+              ),
+              onPressed: () async {
+                print(widget
+                    .usuario.documentId.length);
+                await controller.usuario.reference
+                    .updateData({
+                  'solicitudesAE':
+                      FieldValue.arrayRemove([
+                    widget.usuario.documentId
+                  ])
+                });
+                controller.usuario.solicitudesAE
+                    .remove(widget
+                        .usuario.documentId);
+                controller.notify();
+              },
+            )
             : verifyItsFRequest(controller)
                 ? Row(
                     children: <Widget>[
@@ -241,7 +238,7 @@ class _MiniProfileState extends State<MiniProfile> {
                       ),
           ],
         ),
-        Expanded(child: Text(widget.usuario.usuario)),
+        Text(widget.usuario.usuario),
         //checar esto:
         !controller.usuario.monedasFree && controller.usuario.usuario != widget.usuario.usuario
             ? isLoading
