@@ -1,9 +1,12 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:ChisMe/shared/colors.dart';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //801510547545-ae7kl5f46tdf74uha67kicha4g7djk4u.apps.googleusercontent.com
 class LogIn extends StatefulWidget {
@@ -26,7 +29,6 @@ class _LogInState extends State<LogIn> {
 
       if (onValue) {
         Navigator.of(context).pushReplacementNamed('/home');
-        
       } else {
         controller.loading = false;
         isLoading2 = false;
@@ -312,6 +314,18 @@ class _LogInState extends State<LogIn> {
                                                   ),
                                                   _singInButtonFacebook(
                                                       controller),
+                                                  Platform.isIOS
+                                                      ? Column(
+                                                          children: [
+                                                            Divider(),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            _singInButtonApple(
+                                                                controller)
+                                                          ],
+                                                        )
+                                                      : Container()
                                                 ],
                                               ),
                                             ],
@@ -347,25 +361,20 @@ class _LogInState extends State<LogIn> {
             return;
           }
 
-           controller.loading = true;
-          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
-
-          if(idk.exists){
-            showDialog(context: context,
-            child: AlertDialog(
-              backgroundColor: Colors.white,
-              title: Text('Cuenta bloqueada', style: TextStyle(color: Colors.black),),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',  style: TextStyle(color: Colors.black),),
-                   Icon(Icons.report, color:Colors.red, size: 100)
-                ],
-              ),
-            ));
-            await googleSignIn.signOut();
-            return;
-          }
+          // showDialog(context: context,
+          // child: AlertDialog(
+          //   backgroundColor: Colors.white,
+          //   title: Text('Cuenta bloqueada', style: TextStyle(color: Colors.black),),
+          //   content: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: <Widget>[
+          //        Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',  style: TextStyle(color: Colors.black),),
+          //        Icon(Icons.report, color:Colors.red, size: 100)
+          //     ],
+          //   ),
+          // ));
+          // await googleSignIn.signOut();
+          // return;
 
           print('estoy dentro y voy a navegar con ' + controller.name);
           Firestore.instance
@@ -378,6 +387,30 @@ class _LogInState extends State<LogIn> {
 
               Navigator.of(context).pushReplacementNamed('/registro_usuario');
             } else {
+              bool banned = onValue.documents.first['banned'] ?? false;
+              if (banned) {
+                showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Cuenta bloqueada',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Icon(Icons.report, color: Colors.red, size: 100)
+                        ],
+                      ),
+                    ));
+                await googleSignIn.signOut();
+                return;
+              }
               controller.usuarioAct =
                   UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
               await controller.signIn();
@@ -430,47 +463,52 @@ class _LogInState extends State<LogIn> {
       splashColor: Colors.grey,
       onPressed: () async {
         login(controller).then((value) async {
-          if (controller.email == null || controller.email.trim() == '') {
+          if (controller.uid == null || controller.uid.trim() == '') {
             controller.loading = false;
             controller.notify();
             print('wtff');
             return;
           }
-           controller.loading = true;
-          var idk = await Firestore.instance.collection('bannedlist').document(controller.email.toLowerCase().trim()).get();
 
-          if(idk.exists){
-            showDialog(context: context,
-            child: AlertDialog(
-              backgroundColor: Colors.white,
-              title: Text('Cuenta bloqueada'),
-              content: Column(
-                children: <Widget>[
-                   Text('Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com'),
-                   Icon(Icons.report, color:Colors.red, size: 100)
-                ],
-              ),
-            ));
-            return;
-          }
-
-          
           print('estoy dentro y voy a navegar con ' + controller.name);
-         
+
           Firestore.instance
               .collection('usuarios')
-              .where('correo', isEqualTo: controller.email.trim())
+              .where('uid', isEqualTo: controller.uid.trim())
               .getDocuments()
               .then((onValue) async {
             if (onValue.documents.isEmpty) {
-              
-               controller.loading = false;
+              controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/registro_usuario');
             } else {
+              bool banned = onValue.documents.first['banned'] ?? false;
+              if (banned) {
+                showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Cuenta bloqueada',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Icon(Icons.report, color: Colors.red, size: 100)
+                        ],
+                      ),
+                    ));
+                await facebookSignIn.logOut();
+                return;
+              }
               controller.usuarioAct =
                   UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
               await controller.signIn();
-               controller.loading = false;
+              controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/home');
             }
           });
@@ -517,6 +555,140 @@ class _LogInState extends State<LogIn> {
                 padding: const EdgeInsets.only(left: 15),
                 child: Text(
                   'Acceder con Facebook',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _singInButtonApple(Controller controller) {
+    return OutlineButton(
+      splashColor: Colors.grey,
+      onPressed: () async {
+        final AuthorizationResult result = await AppleSignIn.performRequests([
+          AppleIdRequest(requestedScopes: [
+            Scope.email,
+            Scope.fullName,
+          ])
+        ]);
+
+        switch (result.status) {
+          case AuthorizationStatus.authorized:
+            controller.email = result.credential.email ?? '';
+            // Store user ID
+            if (controller.email == '' ) {
+              print('no email');
+              
+               showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Email inválido',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Si estas intentando iniciar sesión con Apple, y ocultas tu email, no podemos encontrar tu cuenta, por favor intenta otra vez sin ocultar tu email',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Icon(Icons.report, color: Colors.orange, size: 70)
+                        ],
+                      ),
+                    ));
+              return;
+            }
+
+            // if(result.credential.email.contains('')){
+
+            // }
+
+            print(result.credential.user);
+            print(result.credential.email);
+            controller.email = result.credential.email;
+
+            var idk = await Firestore.instance
+                .collection('usuarios')
+                .where('correo', isEqualTo: controller.email)
+                .getDocuments();
+            if (idk.documents.isEmpty) {
+              controller.loading = false;
+              Navigator.of(context).pushReplacementNamed('/registro_usuario');
+              return;
+            } else {
+              DocumentSnapshot ds = idk.documents.first;
+              bool banned = ds['banned'] ?? false;
+              if (banned) {
+                showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Cuenta bloqueada',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Esta cuenta esta bloqueada por inflingir las normas de la comunidad, para mas información comunicarse al correo: chismesoporte@gmail.com',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Icon(Icons.report, color: Colors.red, size: 80)
+                        ],
+                      ),
+                    ));
+                await facebookSignIn.logOut();
+                return;
+              }
+              controller.usuarioAct = UsuarioModel.fromDocumentSnapshot(ds);
+              await controller.signIn();
+              controller.loading = false;
+              Navigator.of(context).pushReplacementNamed('/home');
+            }
+
+            // Navigate to secret page (shhh!)
+
+            break;
+
+          case AuthorizationStatus.error:
+            print("Sign in failed: ${result.error.localizedDescription}");
+
+            break;
+
+          case AuthorizationStatus.cancelled:
+            print('User cancelled');
+            break;
+        }
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      highlightElevation: 6,
+      borderSide: BorderSide(color: Colors.black),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: FittedBox(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.apple,
+                size: 30,
+                color: Colors.grey,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Text(
+                  'Acceder con Apple',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,

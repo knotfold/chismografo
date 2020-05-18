@@ -122,10 +122,10 @@ class LibretaDetails extends StatelessWidget {
                                         );
                                       },
                                     ),
-                              controller.usuario.usuario ==
-                                          controller
-                                              .toFillForm.creadorUsuario ||
-                                      controller.toFillForm.priv
+                               controller.usuario.usuario !=
+                                                      controller.toFillForm
+                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
+                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
                                   ? FloatingActionButton.extended(
                                       heroTag: 'invamigos',
                                       onPressed: () {
@@ -173,10 +173,7 @@ class LibretaDetails extends StatelessWidget {
                       'No puedes ver las respuestas de esta libreta hasta que 3 personas la hayan contestado',
                       textAlign: TextAlign.center,
                     ),
-                    controller.toFillForm.priv &&
-                            controller.usuario.documentId ==
-                                controller.toFillForm.creadorID
-                        ? IconButton(
+                    IconButton(
                             color: backgroundColor,
                             highlightColor: backgroundColor,
                             icon: Icon(Icons.group_add),
@@ -283,10 +280,11 @@ class LibretaDetails extends StatelessWidget {
                                                     );
                                                   },
                                                 ),
-                                          controller.usuario.usuario ==
+
+                                          controller.usuario.usuario !=
                                                       controller.toFillForm
-                                                          .creadorUsuario ||
-                                                  controller.toFillForm.priv
+                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
+                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
                                               ? FloatingActionButton.extended(
                                                   heroTag: 'invamigos',
                                                   onPressed: () {
@@ -311,121 +309,7 @@ class LibretaDetails extends StatelessWidget {
                                   ));
                             },
                           )
-                        : !controller.toFillForm.priv
-                            ? IconButton(
-                                color: backgroundColor,
-                                icon: Icon(Icons.group_add),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      child: Dialog(
-                                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
-                                        child: Container(
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Text(
-                                                'Usuarios',
-                                                style: TextStyle(fontSize: 20),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              controller.toFillForm.usuarios
-                                                      .isEmpty
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          'No hay usuarios participando'),
-                                                    )
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: controller
-                                                          .toFillForm
-                                                          .usuarios
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Text(
-                                                          '-' +
-                                                              controller
-                                                                      .toFillForm
-                                                                      .usuarios[
-                                                                  index],
-                                                          style: TextStyle(
-                                                              fontSize: 15),
-                                                        );
-                                                      },
-                                                    ),
-                                              Text(
-                                                'Invitados',
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                              controller.toFillForm.invitaciones
-                                                      .isEmpty
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              10.0),
-                                                      child: Text(
-                                                          'No hay usuarios invitados'),
-                                                    )
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount: controller
-                                                          .toFillForm
-                                                          .invitaciones
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return Text(
-                                                          '-' +
-                                                              controller
-                                                                      .toFillForm
-                                                                      .invitaciones[
-                                                                  index],
-                                                        );
-                                                      },
-                                                    ),
-                                              controller.usuario.usuario ==
-                                                          controller.toFillForm
-                                                              .creadorUsuario ||
-                                                      controller.toFillForm.priv
-                                                  ? FloatingActionButton
-                                                      .extended(
-                                                      heroTag: 'invamigos',
-                                                      onPressed: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            child: Dialog(
-                                                              child: Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              20),
-                                                                  child:
-                                                                      AmigosSelec()),
-                                                            ));
-                                                      },
-                                                      label: Text(
-                                                          'Invitar Amigos'),
-                                                      icon:
-                                                          Icon(Icons.group_add),
-                                                    )
-                                                  : Container(),
-                                            ],
-                                          ),
-                                        ),
-                                      ));
-                                },
-                              )
-                            : Container(),
+                        
                   ],
                 ),
               ),
@@ -433,111 +317,117 @@ class LibretaDetails extends StatelessWidget {
           : Container(
               padding:
                   EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  // Text(
-                  //   'Preguntas',
-                  //   style: TextStyle(fontSize: 25),
-                  // ),
-                  Text(
-                    controller.toFillForm.nombre,
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                      height: 2,
-                      thickness: 1.5,
-                      color: Colors.white,
+              child: SingleChildScrollView(
+                              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    // Text(
+                    //   'Preguntas',
+                    //   style: TextStyle(fontSize: 25),
+                    // ),
+                    Text(
+                      controller.toFillForm.nombre,
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
                     ),
-                    shrinkWrap: true,
-                    itemCount: preguntas.length,
-                    itemBuilder: (context, index) => Card(
-                      elevation: 1,
-                      color: Colors.white,
-                      child: ListTile(
-                        onTap: () {
-                          List<dynamic> respuestas =
-                              preguntas[index].respuestas;
-                          respuestas.shuffle();
-                          showDialog(
-                              context: context,
-                              child: Dialog(
-                                child: Container(
-                                  padding: EdgeInsets.all(25),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(
-                                        preguntas[index].pregunta,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Divider(
-                                        height: 20,
-                                        color: Colors.white54,
-                                      ),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, ind) {
-                                          return ListTile(
-                                            trailing: IconButton(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ListView.separated(
+                      separatorBuilder: (context, index) => Divider(
+                        height: 2,
+                        thickness: 1.5,
+                        color: Colors.white,
+                      ),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: preguntas.length,
+                      itemBuilder: (context, index) => Card(
+                        elevation: 1,
+                        color: Colors.white,
+                        child: ListTile(
+                          onTap: () {
+                            List<dynamic> respuestas =
+                                preguntas[index].respuestas;
+                            respuestas.shuffle();
+                            showDialog(
+                                context: context,
+                                child: Dialog(
+                                  child: Container(
+                                    padding: EdgeInsets.all(15),
+                                    child: SingleChildScrollView(
+                                                                          child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                            preguntas[index].pregunta,
+                                            style: TextStyle(
                                               color: Colors.white,
-                                              icon: Icon(Icons.lock_open),
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  child: DesbloquearDialog(
-                                                    controller: controller,
-                                                    respuestas: respuestas,
-                                                    usuario: respuestas[ind]
-                                                        ['usuario'],
-                                                    respuesta: respuestas[ind]
-                                                        ['respuesta'],
-                                                    pregunta: preguntas[index]
-                                                        .pregunta,
-                                                  ),
-                                                );
-                                              },
+                                              fontSize: 25,
                                             ),
-                                            title: Text(
-                                              respuestas[ind]['respuesta'],
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          );
-                                        },
-                                        itemCount: respuestas.length,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Divider(
+                                            height: 20,
+                                            color: Colors.white54,
+                                          ),
+                                          ListView.builder(
+                                            physics: NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, ind) {
+                                              return ListTile(
+                                                trailing: IconButton(
+                                                  color: Colors.white,
+                                                  icon: Icon(Icons.lock_open),
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      child: DesbloquearDialog(
+                                                        controller: controller,
+                                                        respuestas: respuestas,
+                                                        usuario: respuestas[ind]
+                                                            ['usuario'],
+                                                        respuesta: respuestas[ind]
+                                                            ['respuesta'],
+                                                        pregunta: preguntas[index]
+                                                            .pregunta,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                title: Text(
+                                                  respuestas[ind]['respuesta'],
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              );
+                                            },
+                                            itemCount: respuestas.length,
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ));
-                        },
-                        leading: Text(
-                          (index + 1).toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        title: Text(
-                          preguntas[index].pregunta,
-                        ),
-                        trailing: Icon(
-                          Icons.remove_red_eye,
-                          color: pDark,
+                                ));
+                          },
+                          leading: Text(
+                            (index + 1).toString(),
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          title: Text(
+                            preguntas[index].pregunta,
+                          ),
+                          trailing: Icon(
+                            Icons.remove_red_eye,
+                            color: pDark,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
@@ -637,7 +527,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               height: 15,
                             ),
                             Text(
-                              '${widget.pregunta} :',
+                              '${widget.pregunta}:',
                               style:
                                   TextStyle(fontSize: 25, color: Colors.black),
                             ),
@@ -649,10 +539,12 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  ' ${widget.respuesta}',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.black),
+                                Expanded(
+                                                                  child: Text(
+                                    ' ${widget.respuesta}',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black),
+                                  ),
                                 ),
                               ],
                             ),

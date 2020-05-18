@@ -24,8 +24,10 @@ Future<String> login(Controller controlador) async {
       final AuthCredential credential =
           FacebookAuthProvider.getCredential(accessToken: accessToken.token);
       try {
+        
         final FirebaseUser user =
             (await _auth.signInWithCredential(credential)).user;
+       controlador.uid = user.uid;
         print('''
          Logged in!
          

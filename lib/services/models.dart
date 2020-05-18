@@ -58,6 +58,29 @@ class FormularioModel {
 
   });
 
+
+  Map<String, dynamic> toReport(List<String> razones) {
+    List<Map<String, dynamic>> p = [];
+    preguntas.forEach((pregunta) {
+      p.add(pregunta.toMap());
+    });
+
+    return {
+      'preguntas': p,
+      'creadorID': creadorID,
+      'priv': priv,
+      'invitaciones': invitaciones,
+      'nombre': nombre,
+      'creadorUsuario': creadorUsuario,
+      'creadorfoto': creadorfoto,
+      'usuarios' : usuarios,
+      'fecha' : DateTime.now(),
+      'imagen' : imagen,
+      'razones' : razones,
+      
+    };
+  }
+
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> p = [];
     preguntas.forEach((pregunta) {
@@ -96,7 +119,7 @@ class FormularioModel {
       preguntas.add(Pregunta.fromMap(map));
     });
     creadorID = ds['creadorID'] ?? '';
-    priv = ds['priv'] ?? '';
+    priv = ds['priv'] ?? true;
     usuarios = ds['usuarios'] ?? [];
     creadorUsuario = ds['creadorUsuario'] ?? '';
     creadorfoto = ds['creadorfoto'] ?? '';
@@ -184,6 +207,8 @@ class UsuarioModel {
   bool monedasFree;
   int dailyAnswers;
   int dailyFormularios;
+  String uid;
+  List<dynamic> bloqueados;
 
   UsuarioModel({
     this.contrasena,
@@ -201,6 +226,17 @@ class UsuarioModel {
     };
   }
 
+  Map<String, dynamic> toReport(List<String> razones) {
+    return {
+      'nombre': nombre,
+      'foto': foto,
+      'razones' : razones,
+      'correo' : correo,
+      'uid' : uid,
+      
+    };
+  }
+
   UsuarioModel.fromDocumentSnapshot(DocumentSnapshot data) {
     contrasena = data['contrasena'];
     correo = data['correo'];
@@ -215,5 +251,7 @@ class UsuarioModel {
     monedasFree = data['monedasFree'] ?? false;
     dailyAnswers = data['dailyAnswers'] ?? 3;
     dailyFormularios = data['dailyFormularios'] ?? 3;
+    uid = data['uid'];
+    bloqueados = data['bloqueados'] ?? [];
   }
 }

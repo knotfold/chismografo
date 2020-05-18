@@ -18,9 +18,10 @@ class LibretaCard extends StatefulWidget {
 class _LibretaCardState extends State<LibretaCard> {
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
-      height: 120,
+      height: 140,
       child: Card(
           color: Colors.transparent,
           elevation: 0,
@@ -106,6 +107,7 @@ class _LibretaCardState extends State<LibretaCard> {
                           size: 15,
                           color: Colors.white,
                         ),
+                        // controller.usuario.usuario == widget.formularioModel.creadorUsuario ? Container() : 
                         IconButton(
                           onPressed: () {
                             List<String> razones = [
@@ -225,7 +227,7 @@ class _ReportDialogState extends State<ReportDialog> {
 
                 await Firestore.instance
                     .collection('reportes')
-                    .add(widget.formularioModel.toMap());
+                    .add(widget.formularioModel.toReport(razones));
 
                 showDialog(
                     context: context,
@@ -233,6 +235,8 @@ class _ReportDialogState extends State<ReportDialog> {
                       onWillPop: () async {
                         controller.loading = false;
                         Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+
                         return !controller.loading;
                       },
                       child: AlertDialog(

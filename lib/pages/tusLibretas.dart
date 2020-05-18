@@ -36,7 +36,7 @@ class TusLibretas extends StatelessWidget {
                   stream: Firestore.instance
                       .collection('formularios')
                       .where('creadorID',
-                          isEqualTo: controller.usuario.documentId)
+                          isEqualTo: controller.usuario.documentId).orderBy('fecha',descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
