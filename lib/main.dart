@@ -103,6 +103,13 @@ class MyApp extends StatelessWidget {
           '/responderLibreta': (context) => FormularioPV(
                 formularioModel: ModalRoute.of(context).settings.arguments,
               ),
+          '/chat' : (context) => Chat(
+            usuarios: ModalRoute.of(context).settings.arguments,
+            nombre: ModalRoute.of(context).settings.arguments,
+            foto: ModalRoute.of(context).settings.arguments,
+            
+            
+          ),
           '/registro_usuario': (context) => RegistroUsuario(),
           '/misLibretas': (context) => TusLibretas(),
           '/libretasAmigos': (context) => LibretasA(),

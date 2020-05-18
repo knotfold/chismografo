@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
-import 'shared.dart';
+import 'package:provider/provider.dart';
+import 'package:ChisMe/services/services.dart';
 
 class AmigoTile extends StatelessWidget {
   const AmigoTile({
@@ -12,12 +13,10 @@ class AmigoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
     return ListTile(
       onTap: () {
-        showDialog(
-          context: context,
-          child: MiniProfile(usuario: usuario,),
-        );
+        Navigator.of(context).pushNamed('/chat',arguments: {[usuario.usuario, controller.usuario.usuario] , usuario.nombre, usuario.foto });
       },
       leading: CircleAvatar(
         radius:22 ,

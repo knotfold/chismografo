@@ -147,6 +147,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                         UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
                             widget.documents[index]);
                         return ListTile(
+                          
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(usuario.foto),
                           ),
