@@ -14,16 +14,23 @@ class AmigoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        showDialog(
-          context: context,
-          child: MiniProfile(usuario: usuario,),
-        );
+        return Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfileDetails(usuario: usuario)));
+        //    showDialog(
+        //   context: context,
+        //   child: MiniProfile(usuario: usuario,),
+        // );
       },
       leading: CircleAvatar(
-        radius:22 ,
+        radius: 22,
         backgroundImage: NetworkImage(usuario.foto),
       ),
-      title: Text(usuario.nombre,style: TextStyle(fontSize: 18),),
+      title: Text(
+        usuario.nombre,
+        style: TextStyle(fontSize: 18),
+      ),
       subtitle: Text(usuario.usuario),
     );
   }

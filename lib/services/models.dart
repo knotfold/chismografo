@@ -196,8 +196,10 @@ class UsuarioModel {
   String contrasena;
   String correo;
   String foto;
+  String fotoPortada;
   int coins;
   String fotoStorageRef;
+  String fotoPortadaStorageRef;
   String nombre;
   String usuario;
   DocumentReference reference;
@@ -214,6 +216,7 @@ class UsuarioModel {
     this.contrasena,
     this.correo,
     this.foto,
+    this.fotoPortada,
     this.nombre,
     this.documentId,
     this.monedasFree
@@ -241,6 +244,7 @@ class UsuarioModel {
     contrasena = data['contrasena'];
     correo = data['correo'];
     foto = data['foto'];
+    fotoPortada = data['fotoPortada']?? '';
     nombre = data['nombre'] ?? '';
     reference = data.reference;
     documentId = data.documentID;

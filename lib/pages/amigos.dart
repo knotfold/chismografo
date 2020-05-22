@@ -119,10 +119,10 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     return WillPopScope(
-          onWillPop: () async {
-            return !controller.loading;
-          },
-          child: Dialog(
+      onWillPop: () async {
+        return !controller.loading;
+      },
+      child: Dialog(
         child: Container(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -144,8 +144,9 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                       shrinkWrap: true,
                       itemCount: widget.documents.length,
                       itemBuilder: (context, index) {
-                        UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
-                            widget.documents[index]);
+                        UsuarioModel usuario =
+                            UsuarioModel.fromDocumentSnapshot(
+                                widget.documents[index]);
                         return ListTile(
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(usuario.foto),
@@ -167,8 +168,10 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                               [usuario.documentId])
                                         });
                                         await usuario.reference.updateData({
-                                          'solicitudesAE': FieldValue.arrayRemove(
-                                              [controller.usuario.documentId]),
+                                          'solicitudesAE':
+                                              FieldValue.arrayRemove([
+                                            controller.usuario.documentId
+                                          ]),
                                           'amigos': FieldValue.arrayUnion(
                                               [controller.usuario.documentId])
                                         });
@@ -190,8 +193,10 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                         controller.loading = true;
                                         controller.notify();
                                         await usuario.reference.updateData({
-                                          'solicitudesAE': FieldValue.arrayRemove(
-                                              [controller.usuario.documentId])
+                                          'solicitudesAE':
+                                              FieldValue.arrayRemove([
+                                            controller.usuario.documentId
+                                          ])
                                         });
                                         controller.loading = false;
                                         controller.notify();
