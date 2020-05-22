@@ -105,6 +105,60 @@ exports.nuevoReporteUsuario = functions.firestore.document('/reportesUsuarios/{r
     })
 })
 
+exports.nuevaPreguntaAnonima= functions.firestore.document('/usuarios/{usuario}/preguntas/{pregunta}'
+).onCreate((snapshot, context) => {
+    var formularioData = snapshot.after.data();
+    var listaTokens = [];
+
+    if (invitaciones == null) {
+        console.log('no hay preguntas nueva');
+        return;
+    }
+
+    admin.firestore().collection('usuarios').get().then((snapshot) => {
+
+        var listaUsuarios = snapshot.docs;
+        for (var usuario of listaUsuarios) {
+            for (var invitado of fomularioData.invitaciones) {
+                if (usuario.data().usuario == invitado) {
+                    if (usuario.data().tokens != undefined) {
+                        console.log('tokens definido');
+                        if (usuario.data().tokens != null) {
+                            console.log('tokens no nulo');
+                            for (var token of usuario.data().tokens) {
+                                console.log('adding token');
+                                listaTokens.push(token);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+        }
+        var payload = {
+            "notification": {
+                "title": "Tienes una pregunta Anónima :O",
+                "body": formularioData.pregunta,
+                "sound": "default"
+            },
+            "data": {
+                "sendername": formularioData.pregunta,
+                "message": 'idk',
+            }
+        }
+
+        return admin.messaging().sendToDevice(listaTokens, payload).then((response) => {
+            console.log('Se enviaron todas las notificaciones');
+
+        }).catch((err) => {
+            console.log(err);
+        });
+    })
+})
+
 exports.nuevoReporteLibreta = functions.firestore.document('/reportes/{reporte}'
 ).onUpdate((snapshot, context) => {
     var listaTokens = [];

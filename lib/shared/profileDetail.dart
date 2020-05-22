@@ -436,54 +436,397 @@ class ProfileDetails extends StatelessWidget {
                             ),
                           ),
                           usuario.documentId == controller.usuario.documentId
-                              ? GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      child: WillPopScope(
-                                        onWillPop: () async {
-                                          return controller.loading
-                                              ? false
-                                              : true;
-                                        },
-                                        child: SimpleDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          children: <Widget>[
-                                            DialogContent(
-                                              foto: 'portada',
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(top: 15),
+                                      child: StreamBuilder(
+                                          stream: controller.usuario.reference
+                                              .collection('preguntas')
+                                              .where('respuesta', isEqualTo: "")
+                                              .snapshots(),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData)
+                                              return const Icon(Icons.person);
+                                            List<DocumentSnapshot> documents =
+                                                snapshot.data.documents;
+                                            return documents.isEmpty
+                                                ? RaisedButton(
+                                                    padding: EdgeInsets.all(4),
+                                                    elevation: 4,
+                                                    color: pDark,
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          'Preguntas Anónimas',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 10),
+                                                        ),
+                                                        Icon(
+                                                          Icons.help_outline,
+                                                          size: 17,
+                                                          color: Colors.white,
+                                                        )
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      showDialog(
+                                                          context: context,
+                                                          child: Dialog(
+                                                            child: Container(
+                                                              height: 200,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(15),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Text(
+                                                                    'Preguntas',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        color: Colors
+                                                                            .white),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: StreamBuilder(
+                                                                        stream: controller.usuario.reference
+                                                                            .collection(
+                                                                              'preguntas',
+                                                                            )
+                                                                            .where('respuesta', isEqualTo: "")
+                                                                            .orderBy('fecha')
+                                                                            .snapshots(),
+                                                                        builder: (context, snapshot) {
+                                                                          if (!snapshot
+                                                                              .hasData)
+                                                                            return const CircularProgressIndicator();
+
+                                                                          List<DocumentSnapshot>
+                                                                              documents =
+                                                                              snapshot.data.documents;
+
+                                                                          return documents.isEmpty
+                                                                              ? Container(
+                                                                                  margin: EdgeInsets.only(top: 20),
+                                                                                  child: Text(
+                                                                                    'No tienes preguntas por el momento',
+                                                                                    style: TextStyle(color: Colors.white),
+                                                                                  ),
+                                                                                )
+                                                                              : ListView.builder(
+                                                                                  shrinkWrap: true,
+                                                                                  itemCount: documents.length,
+                                                                                  itemBuilder: (BuildContext context, int index) {
+                                                                                    PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+
+                                                                                    return GestureDetector(
+                                                                                      onTap: () {
+                                                                                        controller.preguntaModel = preguntaModel;
+                                                                                        print(preguntaModel.pregunta);
+                                                                                        preguntaModel.respuesta.isEmpty
+                                                                                            ? showDialog(
+                                                                                                context: context,
+                                                                                                child: SimpleDialog(
+                                                                                                  backgroundColor: Colors.white,
+                                                                                                  contentPadding: EdgeInsets.all(0),
+                                                                                                  children: <Widget>[DialogRespuesta()],
+                                                                                                ))
+                                                                                            : null;
+                                                                                      },
+                                                                                      child: ListTile(
+                                                                                          title: Text(
+                                                                                            preguntaModel.pregunta,
+                                                                                            style: TextStyle(color: Colors.white),
+                                                                                          ),
+                                                                                          trailing: Icon(
+                                                                                            preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
+                                                                                            color: Colors.white,
+                                                                                          )),
+                                                                                    );
+                                                                                  },
+                                                                                );
+                                                                        }),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ));
+                                                    },
+                                                  )
+                                                : Stack(
+                                                    children: <Widget>[
+                                                      RaisedButton(
+                                                        padding:
+                                                            EdgeInsets.all(4),
+                                                        elevation: 4,
+                                                        color: pDark,
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              'Pregunta nueva',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 10),
+                                                            ),
+                                                            Icon(
+                                                              Icons
+                                                                  .help_outline,
+                                                              size: 17,
+                                                              color:
+                                                                  Colors.white,
+                                                            )
+                                                          ],
+                                                        ),
+                                                        onPressed: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              child: Dialog(
+                                                                child:
+                                                                    Container(
+                                                                  height: 200,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              15),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text(
+                                                                        'Preguntas',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20,
+                                                                            color:
+                                                                                Colors.white),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      Expanded(
+                                                                        child: StreamBuilder(
+                                                                            stream: controller.usuario.reference
+                                                                                .collection(
+                                                                                  'preguntas',
+                                                                                )
+                                                                                .where('respuesta', isEqualTo: "")
+                                                                                .orderBy('fecha')
+                                                                                .snapshots(),
+                                                                            builder: (context, snapshot) {
+                                                                              if (!snapshot.hasData)
+                                                                                return const CircularProgressIndicator();
+
+                                                                              List<DocumentSnapshot> documents = snapshot.data.documents;
+
+                                                                              return documents.isEmpty
+                                                                                  ? Container(
+                                                                                      margin: EdgeInsets.only(top: 20),
+                                                                                      child: Text(
+                                                                                        'No tienes preguntas por el momento',
+                                                                                        style: TextStyle(color: Colors.white),
+                                                                                      ),
+                                                                                    )
+                                                                                  : ListView.builder(
+                                                                                      shrinkWrap: true,
+                                                                                      itemCount: documents.length,
+                                                                                      itemBuilder: (BuildContext context, int index) {
+                                                                                        PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+
+                                                                                        return GestureDetector(
+                                                                                          onTap: () {
+                                                                                            controller.preguntaModel = preguntaModel;
+                                                                                            print(preguntaModel.pregunta);
+                                                                                            preguntaModel.respuesta.isEmpty
+                                                                                                ? showDialog(
+                                                                                                    context: context,
+                                                                                                    child: SimpleDialog(
+                                                                                                      backgroundColor: Colors.white,
+                                                                                                      contentPadding: EdgeInsets.all(0),
+                                                                                                      children: <Widget>[DialogRespuesta()],
+                                                                                                    ))
+                                                                                                : null;
+                                                                                          },
+                                                                                          child: ListTile(
+                                                                                              title: Text(
+                                                                                                preguntaModel.pregunta,
+                                                                                                style: TextStyle(color: Colors.white),
+                                                                                              ),
+                                                                                              trailing: Icon(
+                                                                                                preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
+                                                                                                color: Colors.white,
+                                                                                              )),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                            }),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ));
+                                                        },
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            top: 4),
+                                                        // padding: EdgeInsets.only(left: 10,top: 50,right: 10),
+                                                        decoration: BoxDecoration(
+                                                            color: yemahuevo,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+
+                                                        height: 10,
+                                                        width: 10,
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                      ),
+                                                    ],
+                                                  );
+                                          }),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          child: WillPopScope(
+                                            onWillPop: () async {
+                                              return controller.loading
+                                                  ? false
+                                                  : true;
+                                            },
+                                            child: SimpleDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              children: <Widget>[
+                                                DialogContent(
+                                                  foto: 'portada',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          context: context,
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(4),
+                                        alignment: Alignment.topRight,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 16,
+                                            ),
+                                            CircleAvatar(
+                                              backgroundColor: pDark,
+                                              radius: 16,
+                                              child: Icon(
+                                                Icons.photo_camera,
+                                                size: 17,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      context: context,
-                                    );
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.topRight,
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 20,
+                                    ),
+                                  ],
+                                )
+                              : Container(
+                                  alignment: Alignment.topRight,
+                                  padding: EdgeInsets.only(top: 20, right: 15),
+                                  child: RaisedButton(
+                                    padding: EdgeInsets.all(4),
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(color: pDark),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    color: pDark,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          'Pregúntame ',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10),
                                         ),
-                                        CircleAvatar(
-                                          backgroundColor: pDark,
-                                          radius: 13,
-                                          child: Icon(
-                                            Icons.photo_camera,
-                                            size: 15,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                        Icon(
+                                          Icons.tag_faces,
+                                          size: 15,
+                                          color: Colors.white,
+                                        )
                                       ],
                                     ),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        child: SimpleDialog(
+                                          backgroundColor: Colors.white,
+                                          contentPadding: EdgeInsets.all(0),
+                                          children: <Widget>[
+                                            HazPregunta(
+                                              usuario: usuario,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
-                                )
-                              : Container(),
+                                ),
                         ],
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(10),
                         color: Colors.black12,
                         child: Column(
                           children: [
@@ -550,14 +893,310 @@ class ProfileDetails extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        height: 300,
-                        color: Colors.white60,
-                      )
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(10),
+                        color: Colors.white38,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              'Preguntas Anónimas',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            StreamBuilder(
+                                stream: usuario.reference
+                                    .collection(
+                                      'preguntas',
+                                    )
+                                    .where('respuesta')
+                                    .orderBy('fecha')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData)
+                                    return const CircularProgressIndicator();
+
+                                  List<DocumentSnapshot> documents =
+                                      snapshot.data.documents;
+
+                                  return documents.isEmpty
+                                      ? Container(
+                                          margin: EdgeInsets.only(top: 20),
+                                          child: Text(
+                                            'Este usuario no tiene preguntas por el momento',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        )
+                                      : Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: ListView.builder(
+                                              
+                                                physics:
+                                                    ClampingScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: documents.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  PreguntaModel preguntaModel =
+                                                      PreguntaModel
+                                                          .fromDocumentSnapshot(
+                                                              documents[index]);
+
+                                                  return preguntaModel
+                                                          .respuesta.isNotEmpty
+                                                      ? Column(
+                                                          children: <Widget>[
+                                                            ListTile(
+                                                              title: Text(
+                                                                preguntaModel
+                                                                    .pregunta,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              subtitle: Text(
+                                                                  preguntaModel
+                                                                      .respuesta),
+                                                              // trailing: Icon(
+                                                              //   preguntaModel.respuesta.isEmpty
+                                                              //       ? Icons.question_answer
+                                                              //       : Icons.check,
+                                                              //   color: Colors.white,
+                                                              // )
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Container();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                }),
+                          ],
+                        ),
+                      ),
+                      // Container(
+                      //   height: 300,
+                      //   color: Colors.white60,
+                      // )
                     ],
                   ),
                 );
               }),
         ));
+  }
+}
+
+class DialogRespuesta extends StatefulWidget {
+  PreguntaModel preguntaModel;
+  DialogRespuesta({this.preguntaModel});
+  @override
+  _DialogRespuestaState createState() => _DialogRespuestaState();
+}
+
+class _DialogRespuestaState extends State<DialogRespuesta> {
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    TextEditingController textEditingController = TextEditingController();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                controller.preguntaModel.pregunta,
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+                maxLength: 50,
+                style: TextStyle(color: Colors.black),
+                controller: textEditingController,
+                decoration: InputDecoration(
+                    labelText: 'Escribe una respuesta...',
+                    labelStyle: TextStyle(color: Colors.black, fontSize: 13)),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        controller.loading2
+            ? CircularProgressIndicator()
+            : Container(
+                decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20))),
+                child: FlatButton(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Responder',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.black,
+                        size: 15,
+                      )
+                    ],
+                  ),
+                  onPressed: () async {
+                    controller.loading2 = true;
+
+                    controller.notify();
+
+                    if (textEditingController.text.isEmpty ||
+                        textEditingController.text.trim() == '') {
+                      return;
+                    }
+
+                    // someMap['usuario']= controller.usuario.usuario;
+
+                    // someMap['fecha']= DateTime.now();
+
+                    // someMap['pregunta']= textEditingController.text;
+
+                    await controller.preguntaModel.reference
+                        .updateData({'respuesta': textEditingController.text});
+
+                    //  widget.usuario.reference.collection('pregnutas').add(someMap);
+
+                    // // controller.preguntas
+
+                    //     .add(textEditingController.text);
+
+                    textEditingController.clear();
+
+                    controller.loading2 = false;
+
+                    controller.notify();
+
+                    Navigator.of(context).pop();
+                  },
+                ),
+              )
+      ],
+    );
+  }
+}
+
+class HazPregunta extends StatefulWidget {
+  final UsuarioModel usuario;
+  HazPregunta({this.usuario});
+  @override
+  _HazPreguntaState createState() => _HazPreguntaState();
+}
+
+class _HazPreguntaState extends State<HazPregunta> {
+  Map<String, dynamic> someMap = {
+    "usuario": '',
+    "fecha": '',
+    'pregunta': '',
+    'respuesta': ''
+  };
+
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    TextEditingController textEditingController = TextEditingController();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Hazme una pregunta',
+                style: TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+                style: TextStyle(color: Colors.black),
+                controller: textEditingController,
+                decoration: InputDecoration(
+                    labelText: 'Escribe algo...',
+                    labelStyle: TextStyle(color: Colors.black, fontSize: 12)),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        controller.loading2
+            ? CircularProgressIndicator()
+            : Container(
+                decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20))),
+                child: FlatButton(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Enviar',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.black,
+                        size: 15,
+                      )
+                    ],
+                  ),
+                  onPressed: () async {
+                    if (textEditingController.text.isEmpty ||
+                        textEditingController.text.trim() == '') {
+                      return;
+                    }
+                    controller.loading2 = true;
+                    controller.notify();
+                    someMap['usuario'] = controller.usuario.usuario;
+                    someMap['fecha'] = DateTime.now();
+                    someMap['pregunta'] = textEditingController.text;
+
+                    await widget.usuario.reference
+                        .collection('preguntas')
+                        .add(someMap);
+                    // controller.preguntas
+                    //     .add(textEditingController.text);
+                    textEditingController.clear();
+                    controller.loading2 = false;
+                    controller.notify();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              )
+      ],
+    );
   }
 }
 

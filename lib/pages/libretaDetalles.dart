@@ -47,7 +47,7 @@ class LibretaDetails extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.all(10),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
@@ -56,6 +56,7 @@ class LibretaDetails extends StatelessWidget {
                                     fontSize: 20, color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
+                              SizedBox(height: 10,),
                               controller.toFillForm.usuarios.isEmpty
                                   ? Padding(
                                       padding: const EdgeInsets.all(10.0),
@@ -88,6 +89,7 @@ class LibretaDetails extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 20, color: Colors.white),
                               ),
+                              SizedBox(height: 10,),
                               controller.toFillForm.invitaciones.isEmpty
                                   ? Padding(
                                       padding: const EdgeInsets.all(10.0),
@@ -109,7 +111,7 @@ class LibretaDetails extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: <Widget>[
-                                            SizedBox(height: 10),
+                                            
                                             Text(
                                               '-' +
                                                   controller.toFillForm
@@ -117,7 +119,7 @@ class LibretaDetails extends StatelessWidget {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            SizedBox(height: 10),
+                                            
                                           ],
                                         );
                                       },
@@ -127,6 +129,7 @@ class LibretaDetails extends StatelessWidget {
                                                           .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
                                                       controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
                                   ? FloatingActionButton.extended(
+                                    
                                       heroTag: 'invamigos',
                                       onPressed: () {
                                         showDialog(
@@ -183,7 +186,7 @@ class LibretaDetails extends StatelessWidget {
                                   child: Dialog(
                                     // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(20),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

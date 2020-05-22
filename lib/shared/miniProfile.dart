@@ -54,49 +54,54 @@ class _MiniProfileState extends State<MiniProfile> {
                   child: WillPopScope(
                     onWillPop: () async {
                       Navigator.of(context).pop();
-                      Navigator.of(context).pop();
+                     
                       return !controller.loading;
                     },
-                    child: AlertDialog(
-                      backgroundColor: Colors.white,
-                      content: Text(
-                        '¿Seguro que deseas bloquear a este usuario?',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      actions: [
-                        RaisedButton(
-                          onPressed: () async {
-                            Navigator.of(context).pop();
-                            return;
-                          },
-                          child: Text('No'),
+                    child: WillPopScope(
+                      onWillPop: () async {
+                        return false;
+                      },
+                      child: AlertDialog(
+                        backgroundColor: Colors.white,
+                        content: Text(
+                          '¿Seguro que deseas bloquear a este usuario?',
+                          style: TextStyle(color: Colors.black),
                         ),
-                        RaisedButton(
-                          onPressed: () async {
-                            controller.loading = true;
-                            controller.notify();
-                            await controller.usuario.reference.updateData({
-                              'amigos': FieldValue.arrayRemove(
-                                  [widget.usuario.usuario]),
-                            });
-                            await widget.usuario.reference.updateData({
-                              'amigos': FieldValue.arrayRemove(
-                                  [controller.usuario.usuario]),
-                              'bloqueados': FieldValue.arrayUnion(
-                                  [controller.usuario.usuario]),
-                            });
-                            controller.loading = false;
-                            controller.notify();
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            return;
-                          },
-                          child: Text('Si'),
-                        )
-                      ],
-                      title: Text(
-                        'Bloquear Usuario',
-                        style: TextStyle(fontSize: 30, color: Colors.black),
+                        actions: [
+                          RaisedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              return;
+                            },
+                            child: Text('No'),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {
+                              controller.loading = true;
+                              controller.notify();
+                              await controller.usuario.reference.updateData({
+                                'amigos': FieldValue.arrayRemove(
+                                    [widget.usuario.usuario]),
+                              });
+                              await widget.usuario.reference.updateData({
+                                'amigos': FieldValue.arrayRemove(
+                                    [controller.usuario.usuario]),
+                                'bloqueados': FieldValue.arrayUnion(
+                                    [controller.usuario.usuario]),
+                              });
+                              controller.loading = false;
+                              controller.notify();
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                              return;
+                            },
+                            child: Text('Si'),
+                          )
+                        ],
+                        title: Text(
+                          'Bloquear Usuario',
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        ),
                       ),
                     ),
                   ));

@@ -167,7 +167,40 @@ class _HomeState extends State<Home> {
                 title: Text('Amigos'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon:StreamBuilder(
+                    stream: controller.usuario.reference
+                        .collection('preguntas')
+                        .where('respuesta',
+                            isEqualTo: "")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const Icon(Icons.person);
+
+                      List<DocumentSnapshot> documents =
+                          snapshot.data.documents;
+
+                      return documents.isEmpty
+                          ? Icon(Icons.person)
+                          : Stack(
+                              children: <Widget>[
+                                Container(
+                                    child: Icon(
+                                      Icons.person,
+                                    ),
+                                    width: 30,
+                                    height: 30),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(right: 20),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: yemahuevo),
+                                )
+                              ],
+                            );
+                    }),
                 title: Text('Perfil'),
               ),
               BottomNavigationBarItem(

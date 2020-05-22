@@ -19,6 +19,7 @@ class Controller with ChangeNotifier {
   //       'https://scontent-ssn1-1.xx.fbcdn.net/v/t1.0-9/90590478_3194401850588829_8179029891061121024_o.jpg?_nc_cat=111&_nc_sid=85a577&_nc_ohc=Ds1ApjyXdy8AX8gQWIP&_nc_ht=scontent-ssn1-1.xx&oh=5e2f518ff1449c1bc8f0f3894e32a39a&oe=5EBB0839',
   // );
   UsuarioModel usuarioAct;
+  PreguntaModel preguntaModel;
   int seleccionado = 0;
   UsuarioModel get usuario => usuarioAct;
   agregausuario(UsuarioModel usuario) {
@@ -38,6 +39,7 @@ class Controller with ChangeNotifier {
   bool loading = false;
   String sexo;
   String tipo;
+  bool loading2 = false;
 
   //cosas para responder un formulario
   FormularioModel toFillForm;

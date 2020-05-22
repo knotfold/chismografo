@@ -130,6 +130,44 @@ class FormularioModel {
 
   }
 }
+class PreguntaModel {
+String pregunta;
+ String respuesta;
+ Timestamp fecha;
+ String usuario;
+DocumentReference reference;
+  PreguntaModel({this.pregunta, this.respuesta,this.fecha,this.usuario});
+
+  PreguntaModel.fromString(String string) {
+    pregunta = string;
+    respuesta = string;
+    usuario = string;
+
+  }
+
+  // PreguntaModel.fromMap(Map<String, dynamic> map) {
+  //   pregunta = map['pregunta'];
+  //   respuestas = map['respuestas'];
+  // }
+  
+  Map<String, dynamic> toMap() {
+    return {
+      'pregunta': pregunta,
+      'respuestas': respuesta,
+      'fecha': fecha,
+      'usuario': usuario,
+    };
+  }
+   PreguntaModel.fromDocumentSnapshot(DocumentSnapshot data) {
+   
+    usuario = data['usuario'] ?? '';
+    pregunta = data['pregunta'] ?? '';
+    respuesta = data['respuesta'] ?? '';
+    fecha = data['fecha'] ?? '';
+    reference = data.reference;
+
+  }
+}
 
 class Respuesta {
   String respuesta;
