@@ -15,9 +15,11 @@ class AmigoTile extends StatelessWidget {
     return ListTile(
       onTap: () {
         return Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProfileDetails(usuario: usuario)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileDetails(usuario: usuario)),
+          
+        );
         //    showDialog(
         //   context: context,
         //   child: MiniProfile(usuario: usuario,),

@@ -54,26 +54,30 @@ class ProfileDetails extends StatelessWidget {
                                           : MediaQuery.of(context).size.height /
                                               1.55),
                                   GestureDetector(
-                                    onTap: () => showDialog(
-                                      child: WillPopScope(
-                                        onWillPop: () async {
-                                          return controller.loading
-                                              ? false
-                                              : true;
-                                        },
-                                        child: SimpleDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          children: <Widget>[
-                                            DialogContent(
-                                              foto: 'perfil',
+                                    onTap: () => usuario.documentId ==
+                                            controller.usuario.documentId
+                                        ? showDialog(
+                                            child: WillPopScope(
+                                              onWillPop: () async {
+                                                return controller.loading
+                                                    ? false
+                                                    : true;
+                                              },
+                                              child: SimpleDialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                children: <Widget>[
+                                                  DialogContent(
+                                                    foto: 'perfil',
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      context: context,
-                                    ),
+                                            context: context,
+                                          )
+                                        : null,
                                     child: usuario.documentId ==
                                             controller.usuario.documentId
                                         ? Stack(
@@ -455,7 +459,7 @@ class ProfileDetails extends StatelessWidget {
                                                 snapshot.data.documents;
                                             return documents.isEmpty
                                                 ? RaisedButton(
-                                                    padding: EdgeInsets.all(4),
+                                                    padding: EdgeInsets.all(6),
                                                     elevation: 4,
                                                     color: pDark,
                                                     child: Row(
@@ -755,16 +759,14 @@ class ProfileDetails extends StatelessWidget {
                                         );
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.all(4),
+                                        padding: EdgeInsets.only(left: 8,top: 15),
                                         alignment: Alignment.topRight,
                                         child: Column(
                                           children: [
-                                            SizedBox(
-                                              height: 16,
-                                            ),
+                                           
                                             CircleAvatar(
                                               backgroundColor: pDark,
-                                              radius: 16,
+                                              radius: 17,
                                               child: Icon(
                                                 Icons.photo_camera,
                                                 size: 17,
@@ -774,6 +776,22 @@ class ProfileDetails extends StatelessWidget {
                                           ],
                                         ),
                                       ),
+                                    ),
+                                    Container(
+                                      
+                                      padding: EdgeInsets.only(top:15),
+                                      child: IconButton(
+                                        
+                                       iconSize: 30,
+                                          icon: Icon(
+                                            
+                                            Icons.directions_run,
+                                            color: sLight,
+                                          ),
+                                          onPressed: () async {
+                                           await controller.signOut();
+                                            Navigator.pushReplacementNamed(context, 'login');
+                                          }),
                                     ),
                                   ],
                                 )
@@ -893,14 +911,40 @@ class ProfileDetails extends StatelessWidget {
                         ),
                       ),
                       Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)),
+                            color: Colors.white),
                         width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(10),
-                        color: Colors.white38,
+                        padding: EdgeInsets.all(15),
                         child: Column(
                           children: <Widget>[
-                            Text(
-                              'Preguntas Anónimas',
-                              style: TextStyle(fontSize: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  '|',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  ' Preguntas Anónimas ',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  '|',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                             StreamBuilder(
                                 stream: usuario.reference
@@ -930,7 +974,6 @@ class ProfileDetails extends StatelessWidget {
                                           children: <Widget>[
                                             Expanded(
                                               child: ListView.builder(
-                                              
                                                 physics:
                                                     ClampingScrollPhysics(),
                                                 shrinkWrap: true,
@@ -1606,12 +1649,21 @@ class AvatarAmigo extends StatelessWidget {
         SizedBox(
           width: 10,
         ),
-        Container(
-          height: 40,
-          width: 40,
-          child: CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(usuario.foto),
+        GestureDetector(
+          onTap: () {
+            return Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfileDetails(usuario: usuario)),
+                ModalRoute.withName('/home'));
+          },
+          child: Container(
+            height: 40,
+            width: 40,
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(usuario.foto),
+            ),
           ),
         ),
       ],
