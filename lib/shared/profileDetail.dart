@@ -790,7 +790,8 @@ class ProfileDetails extends StatelessWidget {
                                           ),
                                           onPressed: () async {
                                            await controller.signOut();
-                                            Navigator.pushReplacementNamed(context, 'login');
+                                             Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', ModalRoute.withName('/'));
                                           }),
                                     ),
                                   ],
