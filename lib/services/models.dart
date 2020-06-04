@@ -131,6 +131,44 @@ class FormularioModel {
 
   }
 }
+class PreguntaModel {
+String pregunta;
+ String respuesta;
+ Timestamp fecha;
+ String usuario;
+DocumentReference reference;
+  PreguntaModel({this.pregunta, this.respuesta,this.fecha,this.usuario});
+
+  PreguntaModel.fromString(String string) {
+    pregunta = string;
+    respuesta = string;
+    usuario = string;
+
+  }
+
+  // PreguntaModel.fromMap(Map<String, dynamic> map) {
+  //   pregunta = map['pregunta'];
+  //   respuestas = map['respuestas'];
+  // }
+  
+  Map<String, dynamic> toMap() {
+    return {
+      'pregunta': pregunta,
+      'respuestas': respuesta,
+      'fecha': fecha,
+      'usuario': usuario,
+    };
+  }
+   PreguntaModel.fromDocumentSnapshot(DocumentSnapshot data) {
+   
+    usuario = data['usuario'] ?? '';
+    pregunta = data['pregunta'] ?? '';
+    respuesta = data['respuesta'] ?? '';
+    fecha = data['fecha'] ?? '';
+    reference = data.reference;
+
+  }
+}
 
 class Respuesta {
   String respuesta;
@@ -197,8 +235,10 @@ class UsuarioModel {
   String contrasena;
   String correo;
   String foto;
+  String fotoPortada;
   int coins;
   String fotoStorageRef;
+  String fotoPortadaStorageRef;
   String nombre;
   String usuario;
   DocumentReference reference;
@@ -215,6 +255,7 @@ class UsuarioModel {
     this.contrasena,
     this.correo,
     this.foto,
+    this.fotoPortada,
     this.nombre,
     this.documentId,
     this.monedasFree
@@ -242,6 +283,7 @@ class UsuarioModel {
     contrasena = data['contrasena'];
     correo = data['correo'];
     foto = data['foto'];
+    fotoPortada = data['fotoPortada'] ?? '';
     nombre = data['nombre'] ?? '';
     reference = data.reference;
     documentId = data.documentID;

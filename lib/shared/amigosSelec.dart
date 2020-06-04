@@ -39,7 +39,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                 Expanded(
                                   child: Text(
                     'Selecciona a los participantes (${controller.toFillForm.invitaciones.length + controller.toFillForm.usuarios.length + controller.participantes.length}/25)',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,color: Colors.white),
                   ),
                 ),
                 FloatingActionButton.extended(
@@ -80,7 +80,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                 if (!snapshot.hasData) return const CircularProgressIndicator();
                 List<DocumentSnapshot> documents = snapshot.data.documents;
                 return documents.isEmpty
-                    ? Text('No tienes Amigos :(')
+                    ? Text('No tienes Amigos :(',style: TextStyle(color: Colors.white),)
                     : ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -95,7 +95,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                                       usuarioModel.usuario
                               ? Container()
                               : ListTile(
-                                  title: Text(usuarioModel.nombre),
+                                  title: Text(usuarioModel.nombre,style: TextStyle(color: Colors.white)),
                                   leading: CircleAvatar(
                                     backgroundImage:
                                         NetworkImage(usuarioModel.foto),
@@ -117,7 +117,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                                                 child: Dialog(
                                                   child: AlertDialog(
                                                     title: Text(
-                                                        'El limite Maximo de participantes es 25'),
+                                                        'El limite Maximo de participantes es 25',style: TextStyle(color: Colors.white)),
                                                   ),
                                                 ));
                                             return;

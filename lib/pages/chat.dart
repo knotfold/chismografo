@@ -8,6 +8,7 @@ import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:giphy_client/giphy_client.dart';
 import 'package:giphy_picker/giphy_picker.dart';
+import 'pages.dart';
 
 class Chat extends StatefulWidget {
   final dynamic usuarios;
@@ -15,8 +16,15 @@ class Chat extends StatefulWidget {
   final String foto;
   final bool group;
   final String groupID;
+  final UsuarioModel usuario;
 
-  Chat({this.usuarios, this.nombre, this.foto, this.group, this.groupID});
+  Chat(
+      {this.usuarios,
+      this.nombre,
+      this.foto,
+      this.group,
+      this.groupID,
+      this.usuario});
 
   @override
   _ChatState createState() => _ChatState();
@@ -39,11 +47,25 @@ class _ChatState extends State<Chat> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: CircleAvatar(
-              maxRadius: 18,
-              backgroundImage: NetworkImage(widget.foto),
+          GestureDetector(
+            onTap: () {
+              if (widget.group) {
+                Navigator.of(context)
+                    .pushNamed('/imageViewer', arguments: widget.foto);
+                return;
+              }
+              controller.selectedUser = widget.usuario;
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Perfil(
+                        usuario: widget.usuario,
+                      )));
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: CircleAvatar(
+                maxRadius: 18,
+                backgroundImage: NetworkImage(widget.foto),
+              ),
             ),
           ),
         ],
@@ -299,7 +321,7 @@ class _ChatState extends State<Chat> {
                               controller.notify();
                               break;
                           }
-                          if (documents!= null) {
+                          if (documents != null) {
                             _scrollController.animateTo(
                               0.0,
                               curve: Curves.easeOut,
@@ -319,18 +341,17 @@ class _ChatState extends State<Chat> {
 
   Future<String> getChat(dynamic usuarios) async {
     if (widget.group) {
-        var query = await Firestore.instance
-        .collection('chats')
-        .document(widget.groupID)
-        .get();
-        if(!query.exists){
-           await Firestore.instance
+      var query = await Firestore.instance
+          .collection('chats')
+          .document(widget.groupID)
+          .get();
+      if (!query.exists) {
+        await Firestore.instance
             .collection('chats')
             .document(widget.groupID)
             .setData({'usuarios': usuarios});
-        }
+      }
       return widget.groupID;
-
     }
     var query = await Firestore.instance
         .collection('chats')
@@ -344,10 +365,10 @@ class _ChatState extends State<Chat> {
           .get();
 
       if (!query.exists) {
-       await Firestore.instance
+        await Firestore.instance
             .collection('chats')
             .document('${usuarios[0]}-${usuarios[1]}')
-            .setData({'usuarios': usuarios}); 
+            .setData({'usuarios': usuarios});
         return '${usuarios[0]}-${usuarios[1]}';
       }
 

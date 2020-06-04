@@ -31,6 +31,7 @@ class AmigoTile extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => Chat(
+              usuario: usuario,
               usuarios: [
                 usuario.usuario,
                 controller.usuario.usuario,
@@ -41,6 +42,10 @@ class AmigoTile extends StatelessWidget {
             ),
           ),
         );
+        //    showDialog(
+        //   context: context,
+        //   child: MiniProfile(usuario: usuario,),
+        // );
       },
       leading: CircleAvatar(
         radius: 22,

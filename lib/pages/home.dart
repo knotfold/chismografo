@@ -10,12 +10,13 @@ import 'package:ChisMe/services/services.dart';
 import 'dart:io';
 
 class Home extends StatefulWidget {
-  void pruena2() {}
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  UsuarioModel usuarioModel;
+
   StreamSubscription<List<PurchaseDetails>> _subscription;
 
   List<String> productos = ['05monedas', '10monedas', '20monedas'];
@@ -28,6 +29,7 @@ class _HomeState extends State<Home> {
     });
     Future.delayed(Duration.zero, () async {
       Controller controller = Provider.of<Controller>(context, listen: false);
+      usuarioModel = controller.usuario;
 
       Stream purchaseUpdated =
           InAppPurchaseConnection.instance.purchaseUpdatedStream;
@@ -47,14 +49,6 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  List<Widget> _widgetOptions = <Widget>[
-    TusLibretas(),
-    LibretasA(),
-    Amigos(),
-    Perfil(),
-    Store(),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -70,6 +64,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
+    List<Widget> _widgetOptions = <Widget>[
+      TusLibretas(),
+      LibretasA(),
+      Amigos(),
+      Perfil(
+        usuario: usuarioModel,
+      ),
+      Store(),
+    ];
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -167,7 +170,39 @@ class _HomeState extends State<Home> {
                 title: Text('Amigos'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: StreamBuilder(
+                    stream: controller.usuario.reference
+                        .collection('preguntas')
+                        .where('respuesta', isEqualTo: "")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const Icon(Icons.person);
+
+                      List<DocumentSnapshot> documents =
+                          snapshot.data.documents;
+
+                      return documents.isEmpty
+                          ? Icon(Icons.person)
+                          : Stack(
+                              children: <Widget>[
+                                Container(
+                                    child: Icon(
+                                      Icons.person,
+                                    ),
+                                    width: 30,
+                                    height: 30),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(right: 20),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: yemahuevo),
+                                )
+                              ],
+                            );
+                    }),
                 title: Text('Perfil'),
               ),
               BottomNavigationBarItem(
@@ -220,14 +255,17 @@ class _HomeState extends State<Home> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text('¡Compra exitosa!', style: TextStyle(fontSize: 20),),
+            title: Text(
+              '¡Compra exitosa!',
+              style: TextStyle(fontSize: 20),
+            ),
             content: Row(
               children: <Widget>[
                 Text('Felicidades has aquirido $cantidad monedas'),
-                  Icon(
-                Icons.stars,
-                color: Colors.yellow[800],
-              ),
+                Icon(
+                  Icons.stars,
+                  color: Colors.yellow[800],
+                ),
               ],
             ),
           ));
@@ -235,7 +273,10 @@ class _HomeState extends State<Home> {
       showDialog(
           context: context,
           child: AlertDialog(
-            title: Text('Error', style: TextStyle(fontSize: 20),),
+            title: Text(
+              'Error',
+              style: TextStyle(fontSize: 20),
+            ),
             content: Text('Error en la compra'),
           ));
     }
