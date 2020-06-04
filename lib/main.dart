@@ -22,7 +22,22 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          
+          accentColor: secondaryColor,
+          highlightColor: secondaryColor,
+          indicatorColor: secondaryColor,
+          buttonBarTheme: ButtonBarThemeData(
+            
+          ),
+          popupMenuTheme: PopupMenuThemeData(
+            textStyle: TextStyle(color: Colors.black)
+          ),
+          tooltipTheme: TooltipThemeData(
+            textStyle: TextStyle(color:Colors.black),
+            decoration: BoxDecoration(
+              color: Colors.black
+            )
+          ),
+            brightness: Brightness.light,
             cardTheme: CardTheme(elevation: 10),
             appBarTheme: AppBarTheme(color: primaryColor),
             primaryColor: primaryColor,
@@ -59,7 +74,7 @@ class MyApp extends StatelessWidget {
             dialogBackgroundColor: primaryColor,
             
             dialogTheme: DialogTheme(
-              titleTextStyle: TextStyle(color: Colors.white),
+              titleTextStyle: TextStyle(color: Colors.black),
               
               backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
@@ -69,6 +84,7 @@ class MyApp extends StatelessWidget {
               
 
             ),
+            canvasColor: pLight,
             primaryIconTheme: IconThemeData(color: Colors.white),
             buttonTheme: ButtonThemeData(
                 shape: RoundedRectangleBorder(
@@ -103,6 +119,9 @@ class MyApp extends StatelessWidget {
           '/responderLibreta': (context) => FormularioPV(
                 formularioModel: ModalRoute.of(context).settings.arguments,
               ),
+          '/imageViewer' : (context) => ImageViewer(
+            image: ModalRoute.of(context).settings.arguments,
+          ),
           '/chat' : (context) => Chat(
             usuarios: ModalRoute.of(context).settings.arguments,
             nombre: ModalRoute.of(context).settings.arguments,

@@ -59,6 +59,7 @@ class CustomSearchDelegate extends SearchDelegate {
               }
               return AmigoTile(
                 usuario: UsuarioModel.fromDocumentSnapshot(documents[index]),
+                miniProfile: true,
               );
             },
           );

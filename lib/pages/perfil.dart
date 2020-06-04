@@ -664,132 +664,137 @@ class _ListaAmigosState extends State<ListaAmigos> {
 
               listItems.add(
                 DropdownMenuItem(
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundImage: NetworkImage(snap['foto']),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(snap['nombre']),
-                          Text(snap['usuario']),
-                        ],
-                      ),
-                    ],
+                  
+                  child: Container(
+                    child: Row(
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 10,
+                          backgroundImage: NetworkImage(snap['foto']),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(snap['nombre']),
+                            Text(snap['usuario']),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   value: i,
                 ),
               );
             }
             return !controller.usuario.monedasFree
-                ? Column(
-                    children: <Widget>[
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DropdownButton(
-                              items: listItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  friendId =
-                                      snapshot.data.documents[value].documentID;
+                ? Container(
+                  child: Column(
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              DropdownButton(
+                                items: listItems,
+                                onChanged: (value) {
+                                  setState(() {
+                                    friendId =
+                                        snapshot.data.documents[value].documentID;
 
-                                  coins =
-                                      snapshot.data.documents[value]['coins'];
+                                    coins =
+                                        snapshot.data.documents[value]['coins'];
 
-                                  selectedFriend = value;
+                                    selectedFriend = value;
 
-                                  controller.notify();
-                                });
-                              },
-                              value: selectedFriend,
-                              isExpanded: false,
-                              hint: Text(
-                                "Selecciona a un amigo",
-                              ),
-                            )
-                          ]),
-                      isLoading
-                          ? Center(child: CircularProgressIndicator())
-                          : selectedFriend == '' || selectedFriend == null
-                              ? Container()
-                              : RaisedButton(
-                                  onPressed: () async {
-                                    showDialog(
-                                        context: context,
-                                        child: AlertDialog(
-                                          title: Text(
-                                              '¿Estas seguro de esta decisión?'),
-                                          content: Text(
-                                              'Ten en cuenta que solo podrás realizar esta acción una vez.'),
-                                          actions: <Widget>[
-                                            RaisedButton(
-                                                color: Colors.white,
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  'No',
-                                                  style: TextStyle(),
-                                                )),
-                                            RaisedButton(
-                                                color: Colors.white,
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    isLoading = true;
-                                                  });
-                                                  await Firestore.instance
-                                                      .collection('usuarios')
-                                                      .document(friendId)
-                                                      .updateData({
-                                                    'coins': coins + 25
-                                                  });
-                                                  await controller
-                                                      .usuario.reference
-                                                      .updateData({
-                                                    'coins': controller
-                                                            .usuario.coins +
-                                                        25,
-                                                    'monedasFree': true
-                                                  });
+                                    controller.notify();
+                                  });
+                                },
+                                value: selectedFriend,
+                                isExpanded: false,
+                                hint: Text(
+                                  "Selecciona a un amigo",
+                                ),
+                              )
+                            ]),
+                        isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : selectedFriend == '' || selectedFriend == null
+                                ? Container()
+                                : RaisedButton(
+                                    onPressed: () async {
+                                      showDialog(
+                                          context: context,
+                                          child: AlertDialog(
+                                            title: Text(
+                                                '¿Estas seguro de esta decisión?'),
+                                            content: Text(
+                                                'Ten en cuenta que solo podrás realizar esta acción una vez.'),
+                                            actions: <Widget>[
+                                              RaisedButton(
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    'No',
+                                                    style: TextStyle(),
+                                                  )),
+                                              RaisedButton(
+                                                  color: Colors.white,
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      isLoading = true;
+                                                    });
+                                                    await Firestore.instance
+                                                        .collection('usuarios')
+                                                        .document(friendId)
+                                                        .updateData({
+                                                      'coins': coins + 25
+                                                    });
+                                                    await controller
+                                                        .usuario.reference
+                                                        .updateData({
+                                                      'coins': controller
+                                                              .usuario.coins +
+                                                          25,
+                                                      'monedasFree': true
+                                                    });
 
-                                                  controller.usuario
-                                                      .monedasFree = true;
-
-                                                  controller.usuario.coins =
-                                                      controller.usuario.coins +
-                                                          25;
-
-                                                  controller.notify();
-
-                                                  setState(() {
-                                                    isLoading = false;
                                                     controller.usuario
                                                         .monedasFree = true;
-                                                  });
 
-                                                  controller.notify();
+                                                    controller.usuario.coins =
+                                                        controller.usuario.coins +
+                                                            25;
 
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  'Sí',
-                                                ))
-                                          ],
-                                        ));
-                                  },
-                                  child: Text(
-                                    'Aceptar',
-                                    style: TextStyle(color: Colors.black),
-                                  ))
-                    ],
-                  )
+                                                    controller.notify();
+
+                                                    setState(() {
+                                                      isLoading = false;
+                                                      controller.usuario
+                                                          .monedasFree = true;
+                                                    });
+
+                                                    controller.notify();
+
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    'Sí',
+                                                  ))
+                                            ],
+                                          ));
+                                    },
+                                    child: Text(
+                                      'Aceptar',
+                                      style: TextStyle(color: Colors.black),
+                                    ))
+                      ],
+                    ),
+                )
                 : Container();
           }
         });

@@ -94,7 +94,7 @@ class Amigos extends StatelessWidget {
                             UsuarioModel usuario =
                                 UsuarioModel.fromDocumentSnapshot(
                                     documents[index]);
-                            return AmigoTile(usuario: usuario);
+                            return AmigoTile(usuario: usuario, miniProfile: false,);
                           },
                         );
                 },

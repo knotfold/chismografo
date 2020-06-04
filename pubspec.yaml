@@ -46,6 +46,12 @@ dependencies:
   firebase_messaging: ^6.0.13
   in_app_purchase: ^0.3.3+1
   apple_sign_in: ^0.1.0
+  giphy_picker: ^1.0.4
+  fluttertoast: ^4.0.1
+  cached_network_image: ^2.2.0+1
+  photo_view: ^0.9.2
+  image_downloader: ^0.19.2
+
 
 
   url_launcher: ^5.4.1

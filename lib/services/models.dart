@@ -15,6 +15,7 @@
 // 14. Cuando lo publiques en tu muro, te contesto la pregunta 11
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giphy_client/giphy_client.dart';
 
 class FormularioModel {
   // List<Map<String,dynamic>> preguntas = [
@@ -253,5 +254,23 @@ class UsuarioModel {
     dailyFormularios = data['dailyFormularios'] ?? 3;
     uid = data['uid'];
     bloqueados = data['bloqueados'] ?? [];
+  }
+}
+
+class MensajeModel {
+  String mensaje;
+  String usuario;
+  Timestamp fecha;
+  String tipo;
+  String imagen;
+  String gif;
+
+  MensajeModel.fromDS(DocumentSnapshot ds){
+    fecha = ds['fecha'] ?? Timestamp(0, 0);
+    usuario = ds['usuario'] ?? '';
+    mensaje = ds['mensaje'] ?? '';
+    tipo = ds['tipo'] ?? '';
+    imagen = ds['imagen'] ?? '';
+    gif = ds['gif'] ?? '';
   }
 }

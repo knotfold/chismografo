@@ -15,4 +15,4 @@ export 'libretaDetalles.dart';
 export 'store.dart';
 export 'pictureSelector.dart';
 export 'chat.dart';
-
+export 'imageviewer.dart';

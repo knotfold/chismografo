@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ChisMe/shared/shared.dart';
+import 'package:ChisMe/pages/pages.dart';
 
 class LibretaDetails extends StatelessWidget {
   @override
@@ -21,6 +22,20 @@ class LibretaDetails extends StatelessWidget {
         actions: <Widget>[
           Row(
             children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.chat),
+                onPressed: () {
+                  Navigator.of(context).push( MaterialPageRoute(
+            builder: (context) => Chat(
+              usuarios: controller.toFillForm.usuarios,
+              groupID: controller.toFillForm.reference.documentID,
+              nombre: controller.toFillForm.nombre,
+              foto: controller.toFillForm.imagen,
+              group: true,
+            ),
+          ),);
+                },
+              ),
               IconButton(
                 icon: Icon(Icons.stars),
                 color: Colors.yellow[800],
@@ -122,25 +137,31 @@ class LibretaDetails extends StatelessWidget {
                                         );
                                       },
                                     ),
-                               controller.usuario.usuario !=
-                                                      controller.toFillForm
-                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
-                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
-                                  ? FloatingActionButton.extended(
-                                      heroTag: 'invamigos',
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            child: Dialog(
-                                              child: Container(
-                                                  padding: EdgeInsets.all(20),
-                                                  child: AmigosSelec()),
-                                            ));
-                                      },
-                                      label: Text('Invitar Amigos'),
-                                      icon: Icon(Icons.group_add),
-                                    )
-                                  : Container(),
+                              controller.usuario.usuario !=
+                                          controller
+                                              .toFillForm.creadorUsuario &&
+                                      controller.toFillForm.priv
+                                  ? Container()
+                                  : controller.usuario.usuario ==
+                                              controller
+                                                  .toFillForm.creadorUsuario ||
+                                          !controller.toFillForm.priv
+                                      ? FloatingActionButton.extended(
+                                          heroTag: 'invamigos',
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                child: Dialog(
+                                                  child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(20),
+                                                      child: AmigosSelec()),
+                                                ));
+                                          },
+                                          label: Text('Invitar Amigos'),
+                                          icon: Icon(Icons.group_add),
+                                        )
+                                      : Container(),
                             ],
                           ),
                         ),
@@ -174,142 +195,128 @@ class LibretaDetails extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     IconButton(
-                            color: backgroundColor,
-                            highlightColor: backgroundColor,
-                            icon: Icon(Icons.group_add),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  child: Dialog(
-                                    // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Text(
-                                            'Usuarios',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          controller.toFillForm.usuarios.isEmpty
-                                              ? Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Text(
-                                                    'No hay usuarios participando',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                )
-                                              : ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount: controller
-                                                      .toFillForm
-                                                      .usuarios
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Text(
-                                                      '-' +
-                                                          controller.toFillForm
-                                                              .usuarios[index],
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white),
-                                                    );
-                                                  },
-                                                ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Invitados',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                          ),
-                                          controller.toFillForm.invitaciones
-                                                  .isEmpty
-                                              ? Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Text(
-                                                    'No hay usuarios invitados',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                )
-                                              : ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount: controller
-                                                      .toFillForm
-                                                      .invitaciones
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '-' +
-                                                              controller
-                                                                      .toFillForm
-                                                                      .invitaciones[
-                                                                  index],
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                      ],
-                                                    );
-                                                  },
-                                                ),
-
-                                          controller.usuario.usuario !=
-                                                      controller.toFillForm
-                                                          .creadorUsuario && controller.toFillForm.priv ? Container() : controller.usuario.usuario ==
-                                                      controller.toFillForm.creadorUsuario || !controller.toFillForm.priv
-                                              ? FloatingActionButton.extended(
-                                                  heroTag: 'invamigos',
-                                                  onPressed: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        child: Dialog(
-                                                          child: Container(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(20),
-                                                              child:
-                                                                  AmigosSelec()),
-                                                        ));
-                                                  },
-                                                  label: Text('Invitar Amigos'),
-                                                  icon: Icon(Icons.group_add),
-                                                )
-                                              : Container(),
-                                        ],
-                                      ),
+                      color: backgroundColor,
+                      highlightColor: backgroundColor,
+                      icon: Icon(Icons.group_add),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            child: Dialog(
+                              // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(
+                                      'Usuarios',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ));
-                            },
-                          )
-                        
+                                    controller.toFillForm.usuarios.isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              'No hay usuarios participando',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: controller
+                                                .toFillForm.usuarios.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Text(
+                                                '-' +
+                                                    controller.toFillForm
+                                                        .usuarios[index],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white),
+                                              );
+                                            },
+                                          ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      'Invitados',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                    controller.toFillForm.invitaciones.isEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              'No hay usuarios invitados',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: controller
+                                                .toFillForm.invitaciones.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    '-' +
+                                                        controller.toFillForm
+                                                                .invitaciones[
+                                                            index],
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                    controller.usuario.usuario !=
+                                                controller.toFillForm
+                                                    .creadorUsuario &&
+                                            controller.toFillForm.priv
+                                        ? Container()
+                                        : controller.usuario.usuario ==
+                                                    controller.toFillForm
+                                                        .creadorUsuario ||
+                                                !controller.toFillForm.priv
+                                            ? FloatingActionButton.extended(
+                                                heroTag: 'invamigos',
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      child: Dialog(
+                                                        child: Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    20),
+                                                            child:
+                                                                AmigosSelec()),
+                                                      ));
+                                                },
+                                                label: Text('Invitar Amigos'),
+                                                icon: Icon(Icons.group_add),
+                                              )
+                                            : Container(),
+                                  ],
+                                ),
+                              ),
+                            ));
+                      },
+                    )
                   ],
                 ),
               ),
@@ -318,7 +325,7 @@ class LibretaDetails extends StatelessWidget {
               padding:
                   EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 25),
               child: SingleChildScrollView(
-                              child: Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     // Text(
@@ -356,7 +363,7 @@ class LibretaDetails extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.all(15),
                                     child: SingleChildScrollView(
-                                                                          child: Column(
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         mainAxisSize: MainAxisSize.min,
@@ -374,7 +381,8 @@ class LibretaDetails extends StatelessWidget {
                                             color: Colors.white54,
                                           ),
                                           ListView.builder(
-                                            physics: NeverScrollableScrollPhysics(),
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
                                             itemBuilder: (context, ind) {
                                               return ListTile(
@@ -389,10 +397,12 @@ class LibretaDetails extends StatelessWidget {
                                                         respuestas: respuestas,
                                                         usuario: respuestas[ind]
                                                             ['usuario'],
-                                                        respuesta: respuestas[ind]
-                                                            ['respuesta'],
-                                                        pregunta: preguntas[index]
-                                                            .pregunta,
+                                                        respuesta:
+                                                            respuestas[ind]
+                                                                ['respuesta'],
+                                                        pregunta:
+                                                            preguntas[index]
+                                                                .pregunta,
                                                       ),
                                                     );
                                                   },
@@ -503,7 +513,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   print(randonText);
                   var status = await widget.controller.gastarMonedas();
                   if (status) {
-                      controller.loading = false;
+                    controller.loading = false;
                     await showDialog(
                       context: context,
                       child: AlertDialog(
@@ -540,7 +550,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Expanded(
-                                                                  child: Text(
+                                  child: Text(
                                     ' ${widget.respuesta}',
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.black),
@@ -581,9 +591,8 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                         ],
                       ),
                     );
-                   
                   } else {
-                      controller.loading = false;
+                    controller.loading = false;
                     await showDialog(
                       context: context,
                       child: AlertDialog(
@@ -631,7 +640,6 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                       ),
                     );
                   }
-
                 },
                 child: Row(
                   children: <Widget>[
