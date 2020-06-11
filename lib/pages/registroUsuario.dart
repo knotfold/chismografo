@@ -361,7 +361,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
                   .document(formUsuario['usuario'])
                   .get();
 
-              controller.agregausuario(UsuarioModel.fromDocumentSnapshot(ds));
+              controller.agregausuario(UsuarioModel.fromDocumentSnapshot(ds, 'meh'));
               controller.signIn();
               Navigator.of(context).pushReplacementNamed('/home');
             });

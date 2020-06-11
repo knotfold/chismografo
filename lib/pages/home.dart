@@ -140,7 +140,7 @@ class _HomeState extends State<Home> {
                             arrayContains: controller.usuario.documentId)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return const Icon(Icons.group);
+                      if (!snapshot.hasData) return const Icon(Icons.contacts);
 
                       List<DocumentSnapshot> documents =
                           snapshot.data.documents;

@@ -55,7 +55,7 @@ class Controller with ChangeNotifier {
 
   Future<bool> rebuildUser() async {
     DocumentSnapshot ds = await usuarioAct.reference.get();
-    usuarioAct = UsuarioModel.fromDocumentSnapshot(ds);
+    usuarioAct = UsuarioModel.fromDocumentSnapshot(ds, usuarioAct.usuario);
     return true;
   }
 
@@ -245,7 +245,7 @@ class Controller with ChangeNotifier {
           await googleSignIn.signOut();
           return;
         }
-        usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+        usuarioAct = UsuarioModel.fromDocumentSnapshot(onValue.documents.first, 'meh');
         await storeToken();
       });
 

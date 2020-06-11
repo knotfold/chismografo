@@ -39,7 +39,7 @@ class _AmigosSelectorState extends State<AmigosSelector> {
                     itemCount: documents.length,
                     itemBuilder: (BuildContext context, int index) {
                       UsuarioModel usuarioModel =
-                          UsuarioModel.fromDocumentSnapshot(documents[index]);
+                          UsuarioModel.fromDocumentSnapshot(documents[index], controller.usuarioAct.usuario);
                       return ListTile(
                         title: Text(usuarioModel.nombre),
                         leading: CircleAvatar(

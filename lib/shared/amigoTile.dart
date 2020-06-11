@@ -1,9 +1,9 @@
 import 'package:ChisMe/pages/chat.dart';
-import 'package:ChisMe/shared/miniProfile.dart';
+import 'package:ChisMe/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
-import 'package:ChisMe/services/services.dart';
+import 'package:ChisMe/pages/pages.dart';
 
 class AmigoTile extends StatelessWidget {
   const AmigoTile({
@@ -18,14 +18,13 @@ class AmigoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    return ListTile(
+    return  !usuario.userChat  ? Container() : ListTile(
       onTap: () {
         if (miniProfile) {
-          showDialog(
-              context: context,
-              child: MiniProfile(
-                usuario: usuario,
-              ));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Perfil(
+                    usuario: usuario,
+                  )));
           return;
         }
         Navigator.of(context).push(
@@ -47,9 +46,22 @@ class AmigoTile extends StatelessWidget {
         //   child: MiniProfile(usuario: usuario,),
         // );
       },
-      leading: CircleAvatar(
-        radius: 22,
-        backgroundImage: NetworkImage(usuario.foto),
+      leading: Stack(
+        children: <Widget>[
+         
+          CircleAvatar(
+            radius: 22,
+            backgroundImage: NetworkImage(usuario.foto),
+          ), !usuario.userCheck
+              ? Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: yemahuevo),
+                )
+              : Container(width: 10, height: 10,),
+        ],
       ),
       title: Text(
         usuario.nombre,

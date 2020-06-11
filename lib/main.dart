@@ -134,7 +134,7 @@ class MyApp extends StatelessWidget {
           '/libretasAmigos': (context) => LibretasA(),
           '/creadorLibreta': (context) => FormularioCreator(),
           '/libretaDetalles': (context) => LibretaDetails(),
-          'perfil': (context) => Perfil(),
+   
         },
       ),
     );

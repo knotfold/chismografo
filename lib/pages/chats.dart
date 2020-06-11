@@ -5,32 +5,33 @@ import 'package:ChisMe/shared/shared.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
-class Amigos extends StatefulWidget {
+class Chats extends StatefulWidget {
   @override
-  _AmigosState createState() => _AmigosState();
+  _ChatsState createState() => _ChatsState();
 }
 
-class _AmigosState extends State<Amigos> {
+class _ChatsState extends State<Chats> {
   Future myFuture;
   @override
   void initState() {
     super.initState();
+ 
   }
 
   Future<List<UsuarioModel>> buildChatList(
       List<DocumentSnapshot> list, Controller controller) async {
     List<UsuarioModel> chats = [];
-
-    for (var element in list) {
-      bool hasChat = element[controller.usuarioAct.usuario + 'Chat'] ?? false;
-      if (hasChat)
-        chats.add(
-          UsuarioModel.fromDocumentSnapshot(
-              element, controller.usuario.usuario),
-        );
+    
+    for(var element in list){
+      bool hasChat = element[controller.usuarioAct.usuario +'Chat'] ?? false;
+      if(hasChat)
+      chats.add(
+        UsuarioModel.fromDocumentSnapshot(element, controller.usuario.usuario),
+      );
     }
-    chats.sort((a, b) => b.userLastMsg.compareTo(a.userLastMsg));
+    chats.sort((a,b) => b.userLastMsg.compareTo(a.userLastMsg));
     return chats;
+  
   }
 
   @override
@@ -46,7 +47,7 @@ class _AmigosState extends State<Amigos> {
           builder: (context, snapshot) {
             if (!snapshot.hasData) return const CircularProgressIndicator();
             List<DocumentSnapshot> documents = snapshot.data.documents;
-
+            
             return FloatingActionButton(
               heroTag: 'btnAA1',
               child: documents.isEmpty
@@ -93,7 +94,7 @@ class _AmigosState extends State<Amigos> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Amigos',
+                'Chats',
                 style: TextStyle(fontSize: 23),
               ),
               AmigosHorizontalList(
@@ -108,28 +109,29 @@ class _AmigosState extends State<Amigos> {
               StreamBuilder(
                 stream: Firestore.instance
                     .collection('usuarios')
-                    .where('amigos',
+                    .where('Chats',
                         arrayContains: controller.usuario.documentId)
+                    .orderBy('nombre')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
                     return Container(
                         height: 50, child: const CircularProgressIndicator());
                   List<DocumentSnapshot> documents = snapshot.data.documents;
-                  myFuture = buildChatList(documents, controller);
-
+                   myFuture = buildChatList(documents, controller);
+                 
                   return FutureBuilder<List<UsuarioModel>>(
                       future: myFuture,
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData)
-                          return const CircularProgressIndicator();
+                        if(!snapshot.hasData) return const CircularProgressIndicator();
                         List<UsuarioModel> chats = snapshot.data;
                         return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
-                            UsuarioModel usuario = chats[index];
+                            UsuarioModel usuario =
+                                 chats[index];
                             return AmigoTile(
                               usuario: usuario,
                               miniProfile: false,
@@ -205,7 +207,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                         controller.notify();
                                         await controller.usuario.reference
                                             .updateData({
-                                          'amigos': FieldValue.arrayUnion(
+                                          'Chats': FieldValue.arrayUnion(
                                               [usuario.documentId])
                                         });
                                         await usuario.reference.updateData({
@@ -213,7 +215,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                                               FieldValue.arrayRemove([
                                             controller.usuario.documentId
                                           ]),
-                                          'amigos': FieldValue.arrayUnion(
+                                          'Chats': FieldValue.arrayUnion(
                                               [controller.usuario.documentId])
                                         });
                                         controller.usuario.amigos
@@ -268,7 +270,7 @@ class _SolicitudesAmistadState extends State<SolicitudesAmistad> {
                   Icons.search,
                   size: 17,
                 ),
-                label: Text('Buscar Amigos'),
+                label: Text('Buscar Chats'),
               )
             ],
           ),

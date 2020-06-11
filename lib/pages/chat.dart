@@ -37,7 +37,14 @@ class _ChatState extends State<Chat> {
   String roomID;
   String tipo = '0';
   var imagen;
+  Future myFuture;
+
   GiphyGif _gif;
+  @override
+  void initState() {
+    super.initState();
+    myFuture = getChat(widget.usuarios);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +93,12 @@ class _ChatState extends State<Chat> {
                 right: 10,
               ),
               child: FutureBuilder<String>(
-                  future: getChat(widget.usuarios),
+                  future: myFuture,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Container();
                     }
+                   
                     roomID = snapshot.data;
                     return StreamBuilder(
                       stream: Firestore.instance
@@ -103,6 +111,11 @@ class _ChatState extends State<Chat> {
                       builder: (context, snap) {
                         if (!snap.hasData) return Container();
                         documents = snap.data.documents;
+                         if (!widget.group) {
+                          widget.usuario.reference.updateData(
+                              {controller.usuarioAct.usuario + 'Check': true});
+                        }
+
                         return Container(
                           margin: EdgeInsets.only(bottom: 95),
                           child: ListView.builder(
@@ -228,6 +241,8 @@ class _ChatState extends State<Chat> {
                               if (textEditingController.text.isEmpty ||
                                   textEditingController.text.trim() == '')
                                 return;
+                              await updateLastMsg(
+                                  controller, widget.usuario.usuario);
                               await Firestore.instance
                                   .collection('chats')
                                   .document(roomID)
@@ -238,6 +253,11 @@ class _ChatState extends State<Chat> {
                                 'fecha': DateTime.now(),
                                 'tipo': tipo,
                               });
+
+                              // await Firestore.instance
+                              //     .collection('chats')
+                              //     .document(roomID)
+                              //     .updateData({'ultimoMsj': DateTime.now()});
                               textEditingController.clear();
                               setState(() {});
                               break;
@@ -280,7 +300,8 @@ class _ChatState extends State<Chat> {
 
                               final String url =
                                   (await downloadUrl.ref.getDownloadURL());
-
+                              await updateLastMsg(
+                                  controller, widget.usuario.usuario);
                               await Firestore.instance
                                   .collection('chats')
                                   .document(roomID)
@@ -291,6 +312,10 @@ class _ChatState extends State<Chat> {
                                 'fecha': DateTime.now(),
                                 'tipo': tipo,
                               });
+                              // await Firestore.instance
+                              //     .collection('chats')
+                              //     .document(roomID)
+                              //     .updateData({'ultimoMsj': DateTime.now()});
 
                               tipo = '0';
 
@@ -303,6 +328,8 @@ class _ChatState extends State<Chat> {
                               controller.notify();
                               GiphyGif newGif = _gif;
                               _gif = null;
+                              await updateLastMsg(
+                                  controller, widget.usuario.usuario);
                               await Firestore.instance
                                   .collection('chats')
                                   .document(roomID)
@@ -313,6 +340,10 @@ class _ChatState extends State<Chat> {
                                 'fecha': DateTime.now(),
                                 'tipo': tipo,
                               });
+                              // await Firestore.instance
+                              //     .collection('chats')
+                              //     .document(roomID)
+                              //     .updateData({'ultimoMsj': DateTime.now()});
 
                               tipo = '0';
 
@@ -321,7 +352,7 @@ class _ChatState extends State<Chat> {
                               controller.notify();
                               break;
                           }
-                          if (documents != null) {
+                          if (documents != null || documents.isNotEmpty) {
                             _scrollController.animateTo(
                               0.0,
                               curve: Curves.easeOut,
@@ -339,6 +370,43 @@ class _ChatState extends State<Chat> {
     );
   }
 
+  updateLastMsg(Controller controller, String user) async {
+    print(documents);
+    if (documents == null || documents.isEmpty) {
+      await controller.usuarioAct.reference.updateData({
+        user + 'Check': false,
+        user + 'LastMsg': DateTime.now(),
+        user + 'Chat': true
+      });
+
+      await widget.usuario.reference.updateData({
+        controller.usuarioAct.usuario + 'Chat': true,
+        controller.usuarioAct.usuario + 'LastMsg': DateTime.now(),
+      });
+      return;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    await controller.usuarioAct.reference.updateData({
+      user + 'LastMsg': DateTime.now(),
+    });
+    await controller.usuarioAct.reference
+        .updateData({user + 'Check': false, user + 'LastMsg': DateTime.now()});
+  }
+
   Future<String> getChat(dynamic usuarios) async {
     if (widget.group) {
       var query = await Firestore.instance
@@ -349,7 +417,7 @@ class _ChatState extends State<Chat> {
         await Firestore.instance
             .collection('chats')
             .document(widget.groupID)
-            .setData({'usuarios': usuarios});
+            .setData({'usuarios': usuarios, 'ultimoMsj': DateTime.now()});
       }
       return widget.groupID;
     }
@@ -368,7 +436,7 @@ class _ChatState extends State<Chat> {
         await Firestore.instance
             .collection('chats')
             .document('${usuarios[0]}-${usuarios[1]}')
-            .setData({'usuarios': usuarios});
+            .setData({'usuarios': usuarios, 'ultimoMsj': DateTime.now()});
         return '${usuarios[0]}-${usuarios[1]}';
       }
 

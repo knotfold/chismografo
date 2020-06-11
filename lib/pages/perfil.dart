@@ -1,72 +1,794 @@
+import 'package:ChisMe/pages/imageviewer.dart';
+import 'package:ChisMe/pages/libretaDetalles.dart';
+import 'package:ChisMe/pages/pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ChisMe/shared/shared.dart';
+
 class Perfil extends StatefulWidget {
   final UsuarioModel usuario;
-  const Perfil({
-    Key key,
-    @required this.usuario
-  }) : super(key: key);
+  const Perfil({Key key, @required this.usuario}) : super(key: key);
 
   @override
   _PerfilState createState() => _PerfilState();
 }
 
 class _PerfilState extends State<Perfil> {
-   UsuarioModel usuario;
+  UsuarioModel usuario;
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    
-    if(widget.usuario != null) {
-         usuario = widget.usuario;
-    }else{
+
+    if (widget.usuario != null) {
+      usuario = widget.usuario;
+    } else {
       usuario = controller.usuario;
     }
     TextEditingController textEditingController = TextEditingController();
     return Scaffold(
         appBar: myAppBar(controller, context),
-        body: DecoratedBox(
-          position: DecorationPosition.background,
-          decoration: BoxDecoration(
-            color: usuario.fotoPortada == null || usuario.fotoPortada == ''
-                ? sLight
-                : Color(0xffffffff),
-            image: DecorationImage(
-                image: NetworkImage(usuario.fotoPortada), fit: BoxFit.cover),
-          ),
-          child: FutureBuilder(
-              future: controller.rebuildUser(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const LinearProgressIndicator();
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              color: Colors.black38,
+        body: GestureDetector(
+          onLongPress: () {
+            if (usuario.fotoPortada == '') {
+              return;
+            }
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ImageViewer(
+                  image: usuario.fotoPortada,
+                ),
+              ),
+            );
+          },
+          child: DecoratedBox(
+            position: DecorationPosition.background,
+            decoration: BoxDecoration(
+              color: usuario.fotoPortada == null || usuario.fotoPortada == ''
+                  ? sLight
+                  : Color(0xffffffff),
+              image: DecorationImage(
+                  image: NetworkImage(usuario.fotoPortada), fit: BoxFit.cover),
+            ),
+            child: FutureBuilder(
+                future: controller.rebuildUser(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const LinearProgressIndicator();
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Stack(
+                          children: [
+                            Align(
                               alignment: Alignment.bottomCenter,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  SizedBox(
-                                      height: usuario.documentId ==
+                              child: Container(
+                                color: Colors.black45,
+                                alignment: Alignment.bottomCenter,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    SizedBox(
+                                        height: usuario.documentId ==
+                                                controller.usuario.documentId
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                1.9
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                1.55),
+                                    GestureDetector(
+                                      onTap: () => usuario.documentId ==
                                               controller.usuario.documentId
-                                          ? MediaQuery.of(context).size.height /
-                                              1.9
-                                          : MediaQuery.of(context).size.height /
-                                              1.55),
-                                  GestureDetector(
-                                    onTap: () => usuario.documentId ==
+                                          ? showDialog(
+                                              child: WillPopScope(
+                                                onWillPop: () async {
+                                                  return controller.loading
+                                                      ? false
+                                                      : true;
+                                                },
+                                                child: SimpleDialog(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  children: <Widget>[
+                                                    DialogContent(
+                                                      foto: 'perfil',
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              context: context,
+                                            )
+                                          : null,
+                                      child: usuario.documentId ==
+                                              controller.usuario.documentId
+                                          ? Stack(
+                                              alignment: Alignment.topRight,
+                                              children: <Widget>[
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  child: FadeInImage(
+                                                    fit: BoxFit.cover,
+                                                    placeholder: AssetImage(
+                                                        'assets/gudtech.jpg'),
+                                                    width: 85,
+                                                    height: 85,
+                                                    image: NetworkImage(
+                                                        usuario.foto),
+                                                  ),
+                                                ),
+                                                CircleAvatar(
+                                                  backgroundColor: pDark,
+                                                  radius: 13,
+                                                  child: Icon(
+                                                    Icons.photo_camera,
+                                                    size: 15,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(260),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ImageViewer(
+                                                        image: usuario.foto,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: FadeInImage(
+                                                  fit: BoxFit.cover,
+                                                  placeholder: AssetImage(
+                                                      'assets/zany-face.png'),
+                                                  width: 85,
+                                                  height: 85,
+                                                  image: NetworkImage(
+                                                      usuario.foto),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Spacer(
+                                          flex: 2,
+                                        ),
+                                        Text(usuario.nombre,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white)),
+                                        usuario.documentId ==
+                                                controller.usuario.documentId
+                                            ? IconButton(
+                                                onPressed: () => showDialog(
+                                                  context: context,
+                                                  child: Dialog(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    child: Container(
+                                                      margin:
+                                                          EdgeInsets.all(20),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          TextField(
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                            maxLength: 30,
+                                                            decoration: InputDecoration(
+                                                                labelStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                                labelText:
+                                                                    'Nombre'),
+                                                            controller:
+                                                                textEditingController,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 15,
+                                                          ),
+                                                          FloatingActionButton
+                                                              .extended(
+                                                            onPressed:
+                                                                () async {
+                                                              controller
+                                                                      .loading =
+                                                                  true;
+
+                                                              controller
+                                                                  .notify();
+
+                                                              await controller
+                                                                  .usuario
+                                                                  .reference
+                                                                  .updateData({
+                                                                'nombre':
+                                                                    textEditingController
+                                                                        .text
+                                                              });
+
+                                                              controller.usuario
+                                                                      .nombre =
+                                                                  textEditingController
+                                                                      .text;
+
+                                                              usuario.documentId =
+                                                                  textEditingController
+                                                                      .text;
+
+                                                              controller
+                                                                      .loading =
+                                                                  false;
+
+                                                              controller
+                                                                  .notify();
+
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            label: Text(
+                                                              'Actualizar',
+                                                            ),
+                                                            icon: Icon(
+                                                              Icons.edit,
+                                                              size: 20,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Container(),
+                                        Spacer(
+                                          flex: 2,
+                                        )
+                                      ],
+                                    ),
+                                    Text(usuario.usuario,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                        )),
+                                    usuario.documentId ==
                                             controller.usuario.documentId
-                                        ? showDialog(
+                                        ? ButtonBar(
+                                            alignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              !controller.usuario.monedasFree
+                                                  ? FlatButton.icon(
+                                                      icon: Icon(
+                                                        Icons.stars,
+                                                        size: 20,
+                                                        color: Colors.white,
+                                                      ),
+                                                      label: Text(
+                                                        'Monedas \nGratis',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        return showDialog(
+                                                          context: context,
+                                                          child: Dialog(
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            child:
+                                                                SingleChildScrollView(
+                                                              child: Container(
+                                                                margin:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            20),
+                                                                child: Column(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Icon(
+                                                                          Icons
+                                                                              .stars,
+                                                                          size:
+                                                                              20,
+                                                                          color:
+                                                                              secondaryColor,
+                                                                        ),
+                                                                        Text(
+                                                                            'Monedas Gratis',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 15,
+                                                                            ))
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                    Text(
+                                                                        'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elegir una vez y a una persona'),
+                                                                    FittedBox(
+                                                                      child:
+                                                                          ListaAmigos(),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    )
+                                                  : Container(),
+                                              FlatButton.icon(
+                                                icon: Icon(
+                                                  Icons.cancel,
+                                                  size: 20,
+                                                  color: Colors.white,
+                                                ),
+                                                label: Text(
+                                                  'Usuarios \nBloqueados',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      child: Dialog(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        child: Container(
+                                                          margin:
+                                                              EdgeInsets.all(5),
+                                                          child: StreamBuilder(
+                                                            stream: Firestore
+                                                                .instance
+                                                                .collection(
+                                                                    'usuarios')
+                                                                .where(
+                                                                    'bloqueados',
+                                                                    arrayContains:
+                                                                        controller
+                                                                            .usuario
+                                                                            .usuario)
+                                                                .snapshots(),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              if (!snapshot
+                                                                  .hasData)
+                                                                return const LinearProgressIndicator();
+
+                                                              List<DocumentSnapshot>
+                                                                  documents =
+                                                                  snapshot.data
+                                                                      .documents;
+
+                                                              return documents
+                                                                      .isEmpty
+                                                                  ? Text(
+                                                                      'No tienes usuarios bloqueados')
+                                                                  : ListView
+                                                                      .builder(
+                                                                      itemCount:
+                                                                          documents
+                                                                              .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        UsuarioModel
+                                                                            user =
+                                                                            UsuarioModel.fromDocumentSnapshot(documents[index],
+                                                                                controller.usuarioAct.usuario);
+
+                                                                        return ListTile(
+                                                                          subtitle: Text(
+                                                                              user.usuario,
+                                                                              style: TextStyle(color: Colors.black)),
+                                                                          leading:
+                                                                              CircleAvatar(
+                                                                            backgroundImage:
+                                                                                NetworkImage(user.foto),
+                                                                          ),
+                                                                          title: Text(
+                                                                              user.nombre,
+                                                                              style: TextStyle(color: Colors.black)),
+                                                                          trailing: controller.loading
+                                                                              ? CircularProgressIndicator()
+                                                                              : Row(
+                                                                                  mainAxisSize: MainAxisSize.min,
+                                                                                  children: <Widget>[
+                                                                                    RaisedButton(
+                                                                                      color: Colors.white,
+                                                                                      onPressed: () async {
+                                                                                        controller.loading = true;
+
+                                                                                        controller.notify();
+
+                                                                                        await user.reference.updateData({
+                                                                                          'bloqueados': FieldValue.arrayRemove([
+                                                                                            controller.usuario.usuario
+                                                                                          ])
+                                                                                        });
+
+                                                                                        controller.loading = false;
+
+                                                                                        controller.notify();
+
+                                                                                        Navigator.of(context).pop();
+                                                                                      },
+                                                                                      child: Text(
+                                                                                        'Desbloquear',
+                                                                                        style: TextStyle(fontSize: 10, color: Colors.black),
+                                                                                      ),
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ));
+                                                },
+                                              )
+                                            ],
+                                          )
+                                        : MiniProfile(
+                                            usuario: usuario,
+                                          ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            usuario.documentId == controller.usuario.documentId
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: StreamBuilder(
+                                            stream: controller.usuario.reference
+                                                .collection('preguntas')
+                                                .where('respuesta',
+                                                    isEqualTo: "")
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (!snapshot.hasData)
+                                                return const Icon(Icons.person);
+                                              List<DocumentSnapshot> documents =
+                                                  snapshot.data.documents;
+                                              return documents.isEmpty
+                                                  ? RaisedButton(
+                                                      padding:
+                                                          EdgeInsets.all(6),
+                                                      elevation: 4,
+                                                      color: pDark,
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            'Preguntas Anónimas',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 10),
+                                                          ),
+                                                          Icon(
+                                                            Icons.help_outline,
+                                                            size: 17,
+                                                            color: Colors.white,
+                                                          )
+                                                        ],
+                                                      ),
+                                                      onPressed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            child: Dialog(
+                                                              child: Container(
+                                                                height: 200,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            15),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Text(
+                                                                      'Preguntas',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20,
+                                                                          color:
+                                                                              Colors.white),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: StreamBuilder(
+                                                                          stream: controller.usuario.reference
+                                                                              .collection(
+                                                                                'preguntas',
+                                                                              )
+                                                                              .where('respuesta', isEqualTo: "")
+                                                                              .orderBy('fecha')
+                                                                              .snapshots(),
+                                                                          builder: (context, snapshot) {
+                                                                            if (!snapshot.hasData)
+                                                                              return const CircularProgressIndicator();
+
+                                                                            List<DocumentSnapshot>
+                                                                                documents =
+                                                                                snapshot.data.documents;
+
+                                                                            return documents.isEmpty
+                                                                                ? Container(
+                                                                                    margin: EdgeInsets.only(top: 20),
+                                                                                    child: Text(
+                                                                                      'No tienes preguntas por el momento',
+                                                                                      style: TextStyle(color: Colors.white),
+                                                                                    ),
+                                                                                  )
+                                                                                : ListView.builder(
+                                                                                    shrinkWrap: true,
+                                                                                    itemCount: documents.length,
+                                                                                    itemBuilder: (BuildContext context, int index) {
+                                                                                      PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+
+                                                                                      return GestureDetector(
+                                                                                        onTap: () {
+                                                                                          controller.preguntaModel = preguntaModel;
+                                                                                          print(preguntaModel.pregunta);
+                                                                                          preguntaModel.respuesta.isEmpty
+                                                                                              ? showDialog(
+                                                                                                  context: context,
+                                                                                                  child: SimpleDialog(
+                                                                                                    backgroundColor: Colors.white,
+                                                                                                    contentPadding: EdgeInsets.all(0),
+                                                                                                    children: <Widget>[DialogRespuesta()],
+                                                                                                  ))
+                                                                                              : null;
+                                                                                        },
+                                                                                        child: ListTile(
+                                                                                            title: Text(
+                                                                                              preguntaModel.pregunta,
+                                                                                              style: TextStyle(color: Colors.white),
+                                                                                            ),
+                                                                                            trailing: Icon(
+                                                                                              preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
+                                                                                              color: Colors.white,
+                                                                                            )),
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                          }),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ));
+                                                      },
+                                                    )
+                                                  : Stack(
+                                                      children: <Widget>[
+                                                        RaisedButton(
+                                                          padding:
+                                                              EdgeInsets.all(4),
+                                                          elevation: 4,
+                                                          color: pDark,
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              Text(
+                                                                'Pregunta nueva',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        10),
+                                                              ),
+                                                              Icon(
+                                                                Icons
+                                                                    .help_outline,
+                                                                size: 17,
+                                                                color: Colors
+                                                                    .white,
+                                                              )
+                                                            ],
+                                                          ),
+                                                          onPressed: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                child: Dialog(
+                                                                  child:
+                                                                      Container(
+                                                                    height: 200,
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            15),
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Text(
+                                                                          'Preguntas',
+                                                                          style: TextStyle(
+                                                                              fontSize: 20,
+                                                                              color: Colors.white),
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Expanded(
+                                                                          child: StreamBuilder(
+                                                                              stream: controller.usuario.reference
+                                                                                  .collection(
+                                                                                    'preguntas',
+                                                                                  )
+                                                                                  .where('respuesta', isEqualTo: "")
+                                                                                  .orderBy('fecha')
+                                                                                  .snapshots(),
+                                                                              builder: (context, snapshot) {
+                                                                                if (!snapshot.hasData) return const CircularProgressIndicator();
+
+                                                                                List<DocumentSnapshot> documents = snapshot.data.documents;
+
+                                                                                return documents.isEmpty
+                                                                                    ? Container(
+                                                                                        margin: EdgeInsets.only(top: 20),
+                                                                                        child: Text(
+                                                                                          'No tienes preguntas por el momento',
+                                                                                          style: TextStyle(color: Colors.white),
+                                                                                        ),
+                                                                                      )
+                                                                                    : ListView.builder(
+                                                                                        shrinkWrap: true,
+                                                                                        itemCount: documents.length,
+                                                                                        itemBuilder: (BuildContext context, int index) {
+                                                                                          PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+
+                                                                                          return GestureDetector(
+                                                                                            onTap: () {
+                                                                                              controller.preguntaModel = preguntaModel;
+                                                                                              print(preguntaModel.pregunta);
+                                                                                              preguntaModel.respuesta.isEmpty
+                                                                                                  ? showDialog(
+                                                                                                      context: context,
+                                                                                                      child: SimpleDialog(
+                                                                                                        backgroundColor: Colors.white,
+                                                                                                        contentPadding: EdgeInsets.all(0),
+                                                                                                        children: <Widget>[DialogRespuesta()],
+                                                                                                      ))
+                                                                                                  : null;
+                                                                                            },
+                                                                                            child: ListTile(
+                                                                                                title: Text(
+                                                                                                  preguntaModel.pregunta,
+                                                                                                  style: TextStyle(color: Colors.white),
+                                                                                                ),
+                                                                                                trailing: Icon(
+                                                                                                  preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
+                                                                                                  color: Colors.white,
+                                                                                                )),
+                                                                                          );
+                                                                                        },
+                                                                                      );
+                                                                              }),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ));
+                                                          },
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 4),
+                                                          // padding: EdgeInsets.only(left: 10,top: 50,right: 10),
+                                                          decoration: BoxDecoration(
+                                                              color: yemahuevo,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20)),
+
+                                                          height: 10,
+                                                          width: 10,
+                                                          alignment: Alignment
+                                                              .topRight,
+                                                        ),
+                                                      ],
+                                                    );
+                                            }),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showDialog(
                                             child: WillPopScope(
                                               onWillPop: () async {
                                                 return controller.loading
@@ -80,971 +802,364 @@ class _PerfilState extends State<Perfil> {
                                                             20)),
                                                 children: <Widget>[
                                                   DialogContent(
-                                                    foto: 'perfil',
+                                                    foto: 'portada',
                                                   ),
                                                 ],
                                               ),
                                             ),
                                             context: context,
-                                          )
-                                        : null,
-                                    child: usuario.documentId ==
-                                            controller.usuario.documentId
-                                        ? Stack(
-                                            alignment: Alignment.topRight,
-                                            children: <Widget>[
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                child: FadeInImage(
-                                                  fit: BoxFit.cover,
-                                                  placeholder: AssetImage(
-                                                      'assets/gudtech.jpg'),
-                                                  width: 85,
-                                                  height: 85,
-                                                  image: NetworkImage(
-                                                     usuario.foto),
-                                                ),
-                                              ),
+                                          );
+                                        },
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.only(left: 8, top: 15),
+                                          alignment: Alignment.topRight,
+                                          child: Column(
+                                            children: [
                                               CircleAvatar(
                                                 backgroundColor: pDark,
-                                                radius: 13,
+                                                radius: 17,
                                                 child: Icon(
                                                   Icons.photo_camera,
-                                                  size: 15,
+                                                  size: 17,
                                                   color: Colors.white,
                                                 ),
-                                              )
-                                            ],
-                                          )
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(260),
-                                            child: FadeInImage(
-                                              fit: BoxFit.cover,
-                                              placeholder: AssetImage(
-                                                  'assets/gudtech.jpg'),
-                                              width: 85,
-                                              height: 85,
-                                              image: NetworkImage(usuario.foto),
-                                            ),
-                                          ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Spacer(
-                                        flex: 2,
-                                      ),
-                                      Text(usuario.nombre,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white)),
-                                      usuario.documentId ==
-                                              controller.usuario.documentId
-                                          ? IconButton(
-                                              onPressed: () => showDialog(
-                                                context: context,
-                                                child: Dialog(
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20)),
-                                                  child: Container(
-                                                    margin: EdgeInsets.all(20),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        TextField(
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                          maxLength: 30,
-                                                          decoration: InputDecoration(
-                                                              labelStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                              labelText:
-                                                                  'Nombre'),
-                                                          controller:
-                                                              textEditingController,
-                                                        ),
-                                                        SizedBox(
-                                                          height: 15,
-                                                        ),
-                                                        FloatingActionButton
-                                                            .extended(
-                                                          onPressed: () async {
-                                                            controller.loading =
-                                                                true;
-
-                                                            controller.notify();
-
-                                                            await controller
-                                                                .usuario
-                                                                .reference
-                                                                .updateData({
-                                                              'nombre':
-                                                                  textEditingController
-                                                                      .text
-                                                            });
-
-                                                            controller.usuario
-                                                                    .nombre =
-                                                                textEditingController
-                                                                    .text;
-
-                                                            usuario.documentId =
-                                                                textEditingController
-                                                                    .text;
-
-                                                            controller.loading =
-                                                                false;
-
-                                                            controller.notify();
-
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          label: Text(
-                                                            'Actualizar',
-                                                          ),
-                                                          icon: Icon(
-                                                            Icons.edit,
-                                                            size: 20,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
                                               ),
-                                              icon: Icon(
-                                                Icons.edit,
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: IconButton(
+                                            iconSize: 30,
+                                            icon: Icon(
+                                              Icons.directions_run,
+                                              color: Colors.white,
+                                            ),
+                                            onPressed: () async {
+                                              await controller.signOut();
+                                              Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil('/',
+                                                      ModalRoute.withName('/'));
+                                            }),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        padding:
+                                            EdgeInsets.only(top: 20, right: 15),
+                                        child: RaisedButton(
+                                          padding: EdgeInsets.all(4),
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: pDark),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          color: pDark,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                'Chat',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                              ),
+                                              Icon(
+                                                Icons.chat,
                                                 size: 15,
                                                 color: Colors.white,
-                                              ),
-                                            )
-                                          : Container(),
-                                      Spacer(
-                                        flex: 2,
-                                      )
-                                    ],
-                                  ),
-                                  Text(usuario.usuario,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                      )),
-                                  usuario.documentId ==
-                                          controller.usuario.documentId
-                                      ? ButtonBar(
-                                          alignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            !controller.usuario.monedasFree
-                                                ? FlatButton.icon(
-                                                    icon: Icon(
-                                                      Icons.stars,
-                                                      size: 20,
-                                                      color: Colors.white,
-                                                    ),
-                                                    label: Text(
-                                                      'Monedas \nGratis',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    onPressed: () {
-                                                      return showDialog(
-                                                        context: context,
-                                                        child: Dialog(
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          child:
-                                                              SingleChildScrollView(
-                                                            child: Container(
-                                                              margin: EdgeInsets
-                                                                  .all(20),
-                                                              child: Column(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Row(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Icon(
-                                                                        Icons
-                                                                            .stars,
-                                                                        size:
-                                                                            20,
-                                                                        color:
-                                                                            secondaryColor,
-                                                                      ),
-                                                                      Text(
-                                                                          'Monedas Gratis',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                          ))
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 20,
-                                                                  ),
-                                                                  Text(
-                                                                      'Si alguien te invito a usar esta App, nosotros le agradeceremos regalandole 25 monedas. Solo puedes elegir una vez y a una persona'),
-                                                                  FittedBox(
-                                                                    child:
-                                                                        ListaAmigos(),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  )
-                                                : Container(),
-                                            FlatButton.icon(
-                                              icon: Icon(
-                                                Icons.cancel,
-                                                size: 20,
-                                                color: Colors.white,
-                                              ),
-                                              label: Text(
-                                                'Usuarios \nBloqueados',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                showDialog(
-                                                    context: context,
-                                                    child: Dialog(
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      child: Container(
-                                                        margin:
-                                                            EdgeInsets.all(5),
-                                                        child: StreamBuilder(
-                                                          stream: Firestore
-                                                              .instance
-                                                              .collection(
-                                                                  'usuarios')
-                                                              .where(
-                                                                  'bloqueados',
-                                                                  arrayContains:
-                                                                      controller
-                                                                          .usuario
-                                                                          .usuario)
-                                                              .snapshots(),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (!snapshot
-                                                                .hasData)
-                                                              return const LinearProgressIndicator();
-
-                                                            List<DocumentSnapshot>
-                                                                documents =
-                                                                snapshot.data
-                                                                    .documents;
-
-                                                            return documents
-                                                                    .isEmpty
-                                                                ? Text(
-                                                                    'No tienes usuarios bloqueados')
-                                                                : ListView
-                                                                    .builder(
-                                                                    itemCount:
-                                                                        documents
-                                                                            .length,
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      UsuarioModel
-                                                                          user =
-                                                                          UsuarioModel.fromDocumentSnapshot(
-                                                                              documents[index]);
-
-                                                                      return ListTile(
-                                                                        subtitle: Text(
-                                                                            user
-                                                                                .usuario,
-                                                                            style:
-                                                                                TextStyle(color: Colors.black)),
-                                                                        leading:
-                                                                            CircleAvatar(
-                                                                          backgroundImage:
-                                                                              NetworkImage(user.foto),
-                                                                        ),
-                                                                        title: Text(
-                                                                            user
-                                                                                .nombre,
-                                                                            style:
-                                                                                TextStyle(color: Colors.black)),
-                                                                        trailing: controller.loading
-                                                                            ? CircularProgressIndicator()
-                                                                            : Row(
-                                                                                mainAxisSize: MainAxisSize.min,
-                                                                                children: <Widget>[
-                                                                                  RaisedButton(
-                                                                                    color: Colors.white,
-                                                                                    onPressed: () async {
-                                                                                      controller.loading = true;
-
-                                                                                      controller.notify();
-
-                                                                                      await user.reference.updateData({
-                                                                                        'bloqueados': FieldValue.arrayRemove([
-                                                                                          controller.usuario.usuario
-                                                                                        ])
-                                                                                      });
-
-                                                                                      controller.loading = false;
-
-                                                                                      controller.notify();
-
-                                                                                      Navigator.of(context).pop();
-                                                                                    },
-                                                                                    child: Text(
-                                                                                      'Desbloquear',
-                                                                                      style: TextStyle(fontSize: 10, color: Colors.black),
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                      );
-                                                                    },
-                                                                  );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ));
-                                              },
-                                            )
-                                          ],
-                                        )
-                                      : MiniProfile(
-                                          usuario: usuario,
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          usuario.documentId == controller.usuario.documentId
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.only(top: 15),
-                                      child: StreamBuilder(
-                                          stream: controller.usuario.reference
-                                              .collection('preguntas')
-                                              .where('respuesta', isEqualTo: "")
-                                              .snapshots(),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData)
-                                              return const Icon(Icons.person);
-                                            List<DocumentSnapshot> documents =
-                                                snapshot.data.documents;
-                                            return documents.isEmpty
-                                                ? RaisedButton(
-                                                    padding: EdgeInsets.all(6),
-                                                    elevation: 4,
-                                                    color: pDark,
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          'Preguntas Anónimas',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 10),
-                                                        ),
-                                                        Icon(
-                                                          Icons.help_outline,
-                                                          size: 17,
-                                                          color: Colors.white,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    onPressed: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          child: Dialog(
-                                                            child: Container(
-                                                              height: 200,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(15),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: <
-                                                                    Widget>[
-                                                                  Text(
-                                                                    'Preguntas',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            20,
-                                                                        color: Colors
-                                                                            .white),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: StreamBuilder(
-                                                                        stream: controller.usuario.reference
-                                                                            .collection(
-                                                                              'preguntas',
-                                                                            )
-                                                                            .where('respuesta', isEqualTo: "")
-                                                                            .orderBy('fecha')
-                                                                            .snapshots(),
-                                                                        builder: (context, snapshot) {
-                                                                          if (!snapshot
-                                                                              .hasData)
-                                                                            return const CircularProgressIndicator();
-
-                                                                          List<DocumentSnapshot>
-                                                                              documents =
-                                                                              snapshot.data.documents;
-
-                                                                          return documents.isEmpty
-                                                                              ? Container(
-                                                                                  margin: EdgeInsets.only(top: 20),
-                                                                                  child: Text(
-                                                                                    'No tienes preguntas por el momento',
-                                                                                    style: TextStyle(color: Colors.white),
-                                                                                  ),
-                                                                                )
-                                                                              : ListView.builder(
-                                                                                  shrinkWrap: true,
-                                                                                  itemCount: documents.length,
-                                                                                  itemBuilder: (BuildContext context, int index) {
-                                                                                    PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
-
-                                                                                    return GestureDetector(
-                                                                                      onTap: () {
-                                                                                        controller.preguntaModel = preguntaModel;
-                                                                                        print(preguntaModel.pregunta);
-                                                                                        preguntaModel.respuesta.isEmpty
-                                                                                            ? showDialog(
-                                                                                                context: context,
-                                                                                                child: SimpleDialog(
-                                                                                                  backgroundColor: Colors.white,
-                                                                                                  contentPadding: EdgeInsets.all(0),
-                                                                                                  children: <Widget>[DialogRespuesta()],
-                                                                                                ))
-                                                                                            : null;
-                                                                                      },
-                                                                                      child: ListTile(
-                                                                                          title: Text(
-                                                                                            preguntaModel.pregunta,
-                                                                                            style: TextStyle(color: Colors.white),
-                                                                                          ),
-                                                                                          trailing: Icon(
-                                                                                            preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
-                                                                                            color: Colors.white,
-                                                                                          )),
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                        }),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ));
-                                                    },
-                                                  )
-                                                : Stack(
-                                                    children: <Widget>[
-                                                      RaisedButton(
-                                                        padding:
-                                                            EdgeInsets.all(4),
-                                                        elevation: 4,
-                                                        color: pDark,
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            Text(
-                                                              'Pregunta nueva',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 10),
-                                                            ),
-                                                            Icon(
-                                                              Icons
-                                                                  .help_outline,
-                                                              size: 17,
-                                                              color:
-                                                                  Colors.white,
-                                                            )
-                                                          ],
-                                                        ),
-                                                        onPressed: () {
-                                                          showDialog(
-                                                              context: context,
-                                                              child: Dialog(
-                                                                child:
-                                                                    Container(
-                                                                  height: 200,
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              15),
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Text(
-                                                                        'Preguntas',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                20,
-                                                                            color:
-                                                                                Colors.white),
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                      ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            10,
-                                                                      ),
-                                                                      Expanded(
-                                                                        child: StreamBuilder(
-                                                                            stream: controller.usuario.reference
-                                                                                .collection(
-                                                                                  'preguntas',
-                                                                                )
-                                                                                .where('respuesta', isEqualTo: "")
-                                                                                .orderBy('fecha')
-                                                                                .snapshots(),
-                                                                            builder: (context, snapshot) {
-                                                                              if (!snapshot.hasData)
-                                                                                return const CircularProgressIndicator();
-
-                                                                              List<DocumentSnapshot> documents = snapshot.data.documents;
-
-                                                                              return documents.isEmpty
-                                                                                  ? Container(
-                                                                                      margin: EdgeInsets.only(top: 20),
-                                                                                      child: Text(
-                                                                                        'No tienes preguntas por el momento',
-                                                                                        style: TextStyle(color: Colors.white),
-                                                                                      ),
-                                                                                    )
-                                                                                  : ListView.builder(
-                                                                                      shrinkWrap: true,
-                                                                                      itemCount: documents.length,
-                                                                                      itemBuilder: (BuildContext context, int index) {
-                                                                                        PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
-
-                                                                                        return GestureDetector(
-                                                                                          onTap: () {
-                                                                                            controller.preguntaModel = preguntaModel;
-                                                                                            print(preguntaModel.pregunta);
-                                                                                            preguntaModel.respuesta.isEmpty
-                                                                                                ? showDialog(
-                                                                                                    context: context,
-                                                                                                    child: SimpleDialog(
-                                                                                                      backgroundColor: Colors.white,
-                                                                                                      contentPadding: EdgeInsets.all(0),
-                                                                                                      children: <Widget>[DialogRespuesta()],
-                                                                                                    ))
-                                                                                                : null;
-                                                                                          },
-                                                                                          child: ListTile(
-                                                                                              title: Text(
-                                                                                                preguntaModel.pregunta,
-                                                                                                style: TextStyle(color: Colors.white),
-                                                                                              ),
-                                                                                              trailing: Icon(
-                                                                                                preguntaModel.respuesta.isEmpty ? Icons.question_answer : Icons.check,
-                                                                                                color: Colors.white,
-                                                                                              )),
-                                                                                        );
-                                                                                      },
-                                                                                    );
-                                                                            }),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ));
-                                                        },
-                                                      ),
-                                                      Container(
-                                                        margin: EdgeInsets.only(
-                                                            top: 4),
-                                                        // padding: EdgeInsets.only(left: 10,top: 50,right: 10),
-                                                        decoration: BoxDecoration(
-                                                            color: yemahuevo,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20)),
-
-                                                        height: 10,
-                                                        width: 10,
-                                                        alignment:
-                                                            Alignment.topRight,
-                                                      ),
-                                                    ],
-                                                  );
-                                          }),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          child: WillPopScope(
-                                            onWillPop: () async {
-                                              return controller.loading
-                                                  ? false
-                                                  : true;
-                                            },
-                                            child: SimpleDialog(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              children: <Widget>[
-                                                DialogContent(
-                                                  foto: 'portada',
-                                                ),
-                                              ],
-                                            ),
+                                              )
+                                            ],
                                           ),
-                                          context: context,
-                                        );
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.only(left: 8,top: 15),
-                                        alignment: Alignment.topRight,
-                                        child: Column(
-                                          children: [
-                                           
-                                            CircleAvatar(
-                                              backgroundColor: pDark,
-                                              radius: 17,
-                                              child: Icon(
-                                                Icons.photo_camera,
-                                                size: 17,
-                                                color: Colors.white,
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) => Chat(
+                                                  usuario: usuario,
+                                                  usuarios: [
+                                                    usuario.usuario,
+                                                    controller.usuario.usuario,
+                                                  ],
+                                                  nombre: usuario.nombre,
+                                                  foto: usuario.foto,
+                                                  group: false,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            );
+                                          },
                                         ),
                                       ),
-                                    ),
-                                    Container(
-                                      
-                                      padding: EdgeInsets.only(top:15),
-                                      child: IconButton(
-                                        
-                                       iconSize: 30,
-                                          icon: Icon(
-                                            
-                                            Icons.directions_run,
-                                            color: sLight,
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        padding:
+                                            EdgeInsets.only(top: 20, right: 15),
+                                        child: RaisedButton(
+                                          padding: EdgeInsets.all(4),
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: pDark),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          color: pDark,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                'Pregúntame ',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                              ),
+                                              Icon(
+                                                Icons.tag_faces,
+                                                size: 15,
+                                                color: Colors.white,
+                                              )
+                                            ],
                                           ),
-                                          onPressed: () async {
-                                           await controller.signOut();
-                                             Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/', ModalRoute.withName('/'));
-                                          }),
-                                    ),
-                                  ],
-                                )
-                              : Container(
-                                  alignment: Alignment.topRight,
-                                  padding: EdgeInsets.only(top: 20, right: 15),
-                                  child: RaisedButton(
-                                    padding: EdgeInsets.all(4),
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                        side: BorderSide(color: pDark),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    color: pDark,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          'Pregúntame ',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10),
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              child: SimpleDialog(
+                                                backgroundColor: Colors.white,
+                                                contentPadding:
+                                                    EdgeInsets.all(0),
+                                                children: <Widget>[
+                                                  HazPregunta(
+                                                    usuario: usuario,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
                                         ),
-                                        Icon(
-                                          Icons.tag_faces,
-                                          size: 15,
-                                          color: Colors.white,
-                                        )
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        child: SimpleDialog(
-                                          backgroundColor: Colors.white,
-                                          contentPadding: EdgeInsets.all(0),
-                                          children: <Widget>[
-                                            HazPregunta(
-                                              usuario: usuario,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                      ),
+                                    ],
+                                  )
+                          ],
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(10),
+                          color: Colors.black45,
+                          child: AmigosHorizontalList(
+                              usuario: usuario, controller: controller),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              // borderRadius: BorderRadius.only(
+                              //     topLeft: Radius.circular(20),
+                              //     topRight: Radius.circular(20)),
+                              color: Colors.white),
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Text(
+                                    ' Preguntas Anónimas ',
+                                    style: TextStyle(fontSize: 16),
                                   ),
-                                ),
-                        ],
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(10),
-                        color: Colors.black38,
-                        child: Column(
-                          children: [
-                            Text('Amigos',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                )),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            StreamBuilder(
-                              stream: Firestore.instance
-                                  .collection('usuarios')
-                                  .where('amigos',
-                                      arrayContains: usuario.documentId)
-                                  .orderBy('nombre')
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData)
-                                  return Container(
-                                      height: 50,
-                                      child: const CircularProgressIndicator());
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              StreamBuilder(
+                                  stream: usuario.reference
+                                      .collection(
+                                        'preguntas',
+                                      )
+                                      .orderBy('fecha')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {}
+                                    if (!snapshot.hasData)
+                                      return const CircularProgressIndicator();
 
-                                List<DocumentSnapshot> documents =
-                                    snapshot.data.documents;
+                                    List<DocumentSnapshot> documents =
+                                        snapshot.data.documents;
 
-                                return documents.isEmpty
-                                    ? Text(usuario.documentId ==
-                                            controller.usuario.documentId
-                                        ? 'No tienes amigos :C'
-                                        : 'Usuario nuevo')
-                                    : Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 40,
-                                              width: 40,
-                                              child: ListView.builder(
-                                                physics:
-                                                    ClampingScrollPhysics(),
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: documents.length,
-                                                itemBuilder: (context, index) {
-                                                  UsuarioModel usuario =
-                                                      UsuarioModel
-                                                          .fromDocumentSnapshot(
-                                                              documents[index]);
-
-                                                  return AvatarAmigo(
-                                                      usuario: usuario);
-                                                },
-                                              ),
+                                    return documents.isEmpty
+                                        ? Container(
+                                            margin: EdgeInsets.only(top: 20),
+                                            child: Text(
+                                              'Este usuario no tiene preguntas por el momento',
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                              },
-                            ),
-                            SizedBox(height: 5),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                            color: Colors.white),
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(15),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Text(
-                                  '|',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  ' Preguntas Anónimas ',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  '|',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            StreamBuilder(
-                                stream: usuario.reference
-                                    .collection(
-                                      'preguntas',
-                                    )
-                                    .where('respuesta')
-                                    .orderBy('fecha')
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData)
-                                    return const CircularProgressIndicator();
+                                          )
+                                        : Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: ListView.builder(
+                                                  physics:
+                                                      ClampingScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: documents.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    PreguntaModel
+                                                        preguntaModel =
+                                                        PreguntaModel
+                                                            .fromDocumentSnapshot(
+                                                                documents[
+                                                                    index]);
 
-                                  List<DocumentSnapshot> documents =
-                                      snapshot.data.documents;
-
-                                  return documents.isEmpty
-                                      ? Container(
-                                          margin: EdgeInsets.only(top: 20),
-                                          child: Text(
-                                            'Este usuario no tiene preguntas por el momento',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        )
-                                      : Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: ListView.builder(
-                                                physics:
-                                                    ClampingScrollPhysics(),
-                                                shrinkWrap: true,
-                                                itemCount: documents.length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  PreguntaModel preguntaModel =
-                                                      PreguntaModel
-                                                          .fromDocumentSnapshot(
-                                                              documents[index]);
-
-                                                  return preguntaModel
-                                                          .respuesta.isNotEmpty
-                                                      ? Column(
-                                                          children: <Widget>[
-                                                            ListTile(
-                                                              title: Text(
-                                                                preguntaModel
-                                                                    .pregunta,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                              subtitle: Text(
+                                                    return preguntaModel
+                                                            .respuesta
+                                                            .isNotEmpty
+                                                        ? Column(
+                                                            children: <Widget>[
+                                                              ListTile(
+                                                                trailing:
+                                                                    IconButton(
+                                                                        icon: Icon(Icons
+                                                                            .lock),
+                                                                        onPressed:
+                                                                            () {
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            child:
+                                                                                DesbloquearDialog(
+                                                                              controller: controller,
+                                                                              pregunta: preguntaModel.pregunta,
+                                                                              respuesta: preguntaModel.respuesta,
+                                                                              usuario: preguntaModel.usuario,
+                                                                            ),
+                                                                          );
+                                                                        }),
+                                                                title: Text(
                                                                   preguntaModel
-                                                                      .respuesta),
-                                                              // trailing: Icon(
-                                                              //   preguntaModel.respuesta.isEmpty
-                                                              //       ? Icons.question_answer
-                                                              //       : Icons.check,
-                                                              //   color: Colors.white,
-                                                              // )
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : Container();
-                                                },
+                                                                      .pregunta,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black),
+                                                                ),
+                                                                subtitle: Text(
+                                                                    preguntaModel
+                                                                        .respuesta),
+                                                                // trailing: Icon(
+                                                                //   preguntaModel.respuesta.isEmpty
+                                                                //       ? Icons.question_answer
+                                                                //       : Icons.check,
+                                                                //   color: Colors.white,
+                                                                // )
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : Container();
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        );
-                                }),
-                          ],
+                                            ],
+                                          );
+                                  }),
+                            ],
+                          ),
                         ),
-                      ),
-                      // Container(
-                      //   height: 300,
-                      //   color: Colors.white60,
-                      // )
-                    ],
-                  ),
-                );
-              }),
+                        // Container(
+                        //   height: 300,
+                        //   color: Colors.white60,
+                        // )
+                      ],
+                    ),
+                  );
+                }),
+          ),
         ));
   }
 }
 
+class AmigosHorizontalList extends StatelessWidget {
+  const AmigosHorizontalList({
+    Key key,
+    @required this.usuario,
+    @required this.controller,
+  }) : super(key: key);
+
+  final UsuarioModel usuario;
+  final Controller controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Amigos',
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            )),
+        SizedBox(
+          height: 5,
+        ),
+        StreamBuilder(
+          stream: Firestore.instance
+              .collection('usuarios')
+              .where('amigos', arrayContains: usuario.documentId)
+              .orderBy('nombre')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData)
+              return Container(
+                  height: 50, child: const CircularProgressIndicator());
+
+            List<DocumentSnapshot> documents = snapshot.data.documents;
+
+            return documents.isEmpty
+                ? Text(usuario.documentId == controller.usuario.documentId
+                    ? 'No tienes amigos :C'
+                    : 'Usuario nuevo')
+                : Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: ListView.builder(
+                            physics: ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: documents.length,
+                            itemBuilder: (context, index) {
+                              UsuarioModel usuario =
+                                  UsuarioModel.fromDocumentSnapshot(
+                                      documents[index],
+                                      controller.usuarioAct.usuario);
+
+                              return AvatarAmigo(usuario: usuario);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+          },
+        ),
+        SizedBox(height: 5),
+      ],
+    );
+  }
+}
+
 class DialogRespuesta extends StatefulWidget {
-  PreguntaModel preguntaModel;
+  final PreguntaModel preguntaModel;
   DialogRespuesta({this.preguntaModel});
   @override
   _DialogRespuestaState createState() => _DialogRespuestaState();
@@ -1499,7 +1614,8 @@ class _ListaAmigosState extends State<ListaAmigos> {
     Controller controller = Provider.of<Controller>(context);
     stream = Firestore.instance
         .collection('usuarios')
-        .where('amigos', arrayContains: controller.usuario.documentId).orderBy('usuario', descending: true)
+        .where('amigos', arrayContains: controller.usuario.documentId)
+        .orderBy('usuario', descending: true)
         .snapshots();
     return StreamBuilder(
         stream: stream,
@@ -1662,7 +1778,11 @@ class AvatarAmigo extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            return Navigator.of(context).push(MaterialPageRoute(builder: (context) => Perfil(usuario: usuario),),);
+            return Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Perfil(usuario: usuario),
+              ),
+            );
           },
           child: Container(
             height: 40,

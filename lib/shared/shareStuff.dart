@@ -45,6 +45,31 @@ AppBar myAppBar(Controller controller, BuildContext context) {
                   fontSize: 20,
                   color: Colors.white),
             ),
+              SizedBox(
+              width: 10,
+            ),
+            GestureDetector(
+            onTap: () {
+              // if (widget.group) {
+              //   Navigator.of(context)
+              //       .pushNamed('/imageViewer', arguments: widget.foto);
+              //   return;
+              // }
+              // controller.selectedUser = widget.usuario;
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => Perfil(
+              //           usuario: widget.usuario,
+              //         )));
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+              child: CircleAvatar(
+                maxRadius: 18,
+                backgroundImage: NetworkImage(controller.usuarioAct.foto),
+              ),
+            ),
+          ),
+          
           ],
         ),
       ),

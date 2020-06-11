@@ -407,13 +407,13 @@ class LibretaDetails extends StatelessWidget {
                                                       context: context,
                                                       child: DesbloquearDialog(
                                                         controller: controller,
-                                                        respuestas: respuestas,
                                                         usuario: respuestas[ind]
                                                             ['usuario'],
                                                         respuesta: respuestas[ind]
                                                             ['respuesta'],
                                                         pregunta: preguntas[index]
                                                             .pregunta,
+                                                            preg: false,
                                                       ),
                                                     );
                                                   },
@@ -459,29 +459,30 @@ class DesbloquearDialog extends StatefulWidget {
   DesbloquearDialog({
     Key key,
     @required this.controller,
-    @required this.respuestas,
     this.pregunta,
     this.respuesta,
     this.usuario,
+    this.preg
   }) : super(key: key);
 
   final Controller controller;
-  final List respuestas;
   final String usuario;
   final String respuesta;
   final String pregunta;
-  final List<String> textos = [
+  final bool preg;
+  final List<String> textosRespuesta = [
     'Disfruta la verdad :)',
     'A veces es mejor no saber todo',
     '¿Por qué no mantenerlo en secreto?',
     'La verdad en ocaciones no es lo mejor',
     'Esto será un secreto entre nosotros ;)',
-    '¿Ésta era la respuesta que esperabas?',
+    '¿Ésta era la persona que esperabas?',
     'La curiosidad mató al gato',
     '¿No era lo que esperabas?',
     '¿Estás satisfecho?',
-    'Sustos que dan gustos'
+    'Sustos que dan gusto'
   ];
+  
 
   @override
   _DesbloquearDialogState createState() => _DesbloquearDialogState();
@@ -493,7 +494,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
     Controller controller = Provider.of(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text('Desbloquear respuesta'),
+      title: Text('Desbloquear respuesta', style: TextStyle(color: Colors.white),),
       content: Text(
           'Para saber quien escribió esta respuesta necesitas pagar  5 monedas'),
       actions: widget.controller.loading
@@ -519,7 +520,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                   controller.notify();
                   var _random = new Random();
                   var randonText =
-                      widget.textos[_random.nextInt(widget.textos.length)];
+                      widget.textosRespuesta[_random.nextInt(widget.textosRespuesta.length)];
                   //(widget.textos.toList()..shuffle()).first;
                   print(randonText);
                   var status = await widget.controller.gastarMonedas();
@@ -535,7 +536,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               fontSize: 25, color: secondaryColor),
                         ),
                         content: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -581,7 +582,7 @@ class _DesbloquearDialogState extends State<DesbloquearDialog> {
                               width: double.maxFinite,
                               alignment: Alignment.bottomRight,
                               child: Text(
-                                '${widget.usuario}',
+                                ' Por: ${widget.usuario}',
                                 style: TextStyle(
                                     fontSize: 20, color: Colors.black),
                               ),

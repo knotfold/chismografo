@@ -54,7 +54,7 @@ class _MiniProfileState extends State<MiniProfile> {
                   child: WillPopScope(
                     onWillPop: () async {
                       Navigator.of(context).pop();
-                     
+
                       return !controller.loading;
                     },
                     child: WillPopScope(
@@ -79,16 +79,40 @@ class _MiniProfileState extends State<MiniProfile> {
                             onPressed: () async {
                               controller.loading = true;
                               controller.notify();
-                              await controller.usuario.reference.updateData({
+                              if(verifyMyFRequest(controller)){
+                                await controller.usuario.reference.updateData({
+                                'solicitudesAE': FieldValue.arrayRemove(
+                                    [widget.usuario.usuario]),
+
+                              });
+                                    await widget.usuario.reference.updateData({
+                               
+                                'bloqueados': FieldValue.arrayUnion(
+                                    [controller.usuario.usuario]),
+                              });
+                              }
+                              if(verifyItsFRequest(controller)){
+                                 await widget.usuario.reference.updateData({
+                                'solicitudesAE': FieldValue.arrayRemove(
+                                    [controller.usuario.usuario]),
+                                'bloqueados': FieldValue.arrayUnion(
+                                    [controller.usuario.usuario]),
+                              });
+                              }
+                              if(verifyFriendship(controller)){
+                                  await controller.usuario.reference.updateData({
                                 'amigos': FieldValue.arrayRemove(
                                     [widget.usuario.usuario]),
                               });
-                              await widget.usuario.reference.updateData({
+                               await widget.usuario.reference.updateData({
                                 'amigos': FieldValue.arrayRemove(
                                     [controller.usuario.usuario]),
                                 'bloqueados': FieldValue.arrayUnion(
                                     [controller.usuario.usuario]),
                               });
+                              }
+                             
+                             
                               controller.loading = false;
                               controller.notify();
                               Navigator.of(context).pop();
@@ -223,22 +247,9 @@ class _MiniProfileState extends State<MiniProfile> {
                                   size: 20,
                                 ),
                                 onPressed: () async {
-                                  controller.loading = true;
-                                  controller.notify();
-                                  await controller.usuario.reference
-                                      .updateData({
-                                    'amigos': FieldValue.arrayRemove(
-                                        [widget.usuario.documentId])
-                                  });
-                                  await widget.usuario.reference.updateData({
-                                    'amigos': FieldValue.arrayRemove(
-                                        [controller.usuario.documentId])
-                                  });
-                                  controller.usuario.amigos
-                                      .remove(widget.usuario.documentId);
-                                  controller.loading = false;
-                                  controller.notify();
-                                  Navigator.of(context).pop();
+                                  showDialog(
+                                      context: context,
+                                      child: DeleteFriendDialog(controller: controller, widget: widget));
                                 },
                               )
                             : FlatButton.icon(
@@ -281,6 +292,91 @@ class _MiniProfileState extends State<MiniProfile> {
 
   bool verifyItsFRequest(Controller controller) {
     return widget.usuario.solicitudesAE.contains(controller.usuario.documentId);
+  }
+}
+
+class DeleteFriendDialog extends StatefulWidget {
+  const DeleteFriendDialog({
+    Key key,
+    @required this.controller,
+    @required this.widget,
+  }) : super(key: key);
+
+  final Controller controller;
+  final MiniProfile widget;
+
+  @override
+  _DeleteFriendDialogState createState() => _DeleteFriendDialogState();
+}
+
+class _DeleteFriendDialogState extends State<DeleteFriendDialog> {
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop();
+
+        return !widget.controller.loading;
+      },
+      child: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: AlertDialog(
+          backgroundColor: Colors.white,
+          content: Text(
+            '¿Seguro que deseas eliminar a este usuario?',
+            style: TextStyle(
+                color: Colors.black),
+          ),
+          actions: controller.loading ? [CircularProgressIndicator()] : [
+            RaisedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                return;
+              },
+              child: Text('No'),
+            ),
+            RaisedButton(
+              onPressed: () async {
+                widget.controller.loading = true;
+                widget.controller.notify();
+                await widget.controller
+                    .usuario.reference
+                    .updateData({
+                  'amigos':
+                      FieldValue.arrayRemove([
+                    widget.widget.usuario.documentId
+                  ])
+                });
+                await widget.widget.usuario.reference
+                    .updateData({
+                  'amigos':
+                      FieldValue.arrayRemove([
+                    widget.controller
+                        .usuario.documentId
+                  ])
+                });
+                widget.controller.usuario.amigos
+                    .remove(widget.widget
+                        .usuario.documentId);
+                widget.controller.loading = false;
+                widget.controller.notify();
+                Navigator.of(context).pushNamed('/home') ;
+                },
+              child: Text('Si'),
+            )
+          ],
+          title: Text(
+            'Eliminar Usuario',
+            style: TextStyle(
+                fontSize: 30,
+                color: Colors.black),
+          ),
+        ),
+      ),
+    );
   }
 }
 

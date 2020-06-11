@@ -412,7 +412,7 @@ class _LogInState extends State<LogIn> {
                 return;
               }
               controller.usuarioAct =
-                  UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+                  UsuarioModel.fromDocumentSnapshot(onValue.documents.first, 'meh');
               await controller.signIn();
               controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/home');
@@ -506,7 +506,7 @@ class _LogInState extends State<LogIn> {
                 return;
               }
               controller.usuarioAct =
-                  UsuarioModel.fromDocumentSnapshot(onValue.documents.first);
+                  UsuarioModel.fromDocumentSnapshot(onValue.documents.first, 'meh');
               await controller.signIn();
               controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/home');
@@ -650,7 +650,7 @@ class _LogInState extends State<LogIn> {
                 await facebookSignIn.logOut();
                 return;
               }
-              controller.usuarioAct = UsuarioModel.fromDocumentSnapshot(ds);
+              controller.usuarioAct = UsuarioModel.fromDocumentSnapshot(ds, 'meh');
               await controller.signIn();
               controller.loading = false;
               Navigator.of(context).pushReplacementNamed('/home');

@@ -20,6 +20,7 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
+
   @override
   Widget buildResults(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
@@ -28,8 +29,11 @@ class CustomSearchDelegate extends SearchDelegate {
         .where('usuarioSearch', isEqualTo: query.toLowerCase().trim())
         .snapshots();
 
+    String hola = 'hola';
+
+
     print(query);
-   
+
     return StreamBuilder(
       stream: stream,
       builder: (context, snapshot) {
@@ -50,15 +54,15 @@ class CustomSearchDelegate extends SearchDelegate {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               List<dynamic> bloqueados = documents[index]['bloqueados'] ?? [];
-              String usuario = documents[index]['usuario'] ?? ''; 
-              if(bloqueados.contains(controller.usuario.usuario)){
+              String usuario = documents[index]['usuario'] ?? '';
+              if (bloqueados.contains(controller.usuario.usuario)) {
                 return Container();
               }
-              if(controller.usuario.bloqueados.contains(usuario)){
+              if (controller.usuario.bloqueados.contains(usuario)) {
                 return Container();
               }
               return AmigoTile(
-                usuario: UsuarioModel.fromDocumentSnapshot(documents[index]),
+                usuario: UsuarioModel.fromDocumentSnapshot(documents[index], controller.usuario.usuario),
                 miniProfile: true,
               );
             },
@@ -68,7 +72,7 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-    @override
+  @override
   String get searchFieldLabel => 'Ejemplo: @usuario';
 
   @override

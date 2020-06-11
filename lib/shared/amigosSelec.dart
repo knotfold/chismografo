@@ -88,7 +88,7 @@ class _AmigosSelec extends State<AmigosSelec> {
                         itemBuilder: (BuildContext context, int index) {
                           UsuarioModel usuarioModel =
                               UsuarioModel.fromDocumentSnapshot(
-                                  documents[index]);
+                                  documents[index], controller.usuario.usuario);
                           return !checkInvitado(
                                       usuarioModel.usuario, controller) ||
                                   controller.toFillForm.creadorUsuario ==

@@ -131,6 +131,11 @@ class FormularioModel {
 
   }
 }
+
+class ChatModel {
+  String ultimoMSg;
+  String foto;
+}
 class PreguntaModel {
 String pregunta;
  String respuesta;
@@ -250,6 +255,9 @@ class UsuarioModel {
   int dailyFormularios;
   String uid;
   List<dynamic> bloqueados;
+  Timestamp userLastMsg;
+ bool userCheck;
+ bool userChat;
 
   UsuarioModel({
     this.contrasena,
@@ -279,7 +287,7 @@ class UsuarioModel {
     };
   }
 
-  UsuarioModel.fromDocumentSnapshot(DocumentSnapshot data) {
+  UsuarioModel.fromDocumentSnapshot(DocumentSnapshot data, String user) {
     contrasena = data['contrasena'];
     correo = data['correo'];
     foto = data['foto'];
@@ -296,6 +304,10 @@ class UsuarioModel {
     dailyFormularios = data['dailyFormularios'] ?? 3;
     uid = data['uid'];
     bloqueados = data['bloqueados'] ?? [];
+    userCheck = data[user + 'Check'] ?? true;
+    userLastMsg = data[user +'LastMsg'] ?? null;
+    userChat = data[user+'Chat'] ?? false;
+    
   }
 }
 
