@@ -53,6 +53,7 @@ class _ChatState extends State<Chat> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: pDark),
         actions: <Widget>[
           GestureDetector(
             onTap: () {
@@ -78,7 +79,7 @@ class _ChatState extends State<Chat> {
         ],
         title: Row(
           children: <Widget>[
-            Text(widget.nombre),
+            Text( widget.group ? widget.nombre : widget.usuario.usuario, style: TextStyle(color: pDark),),
             SizedBox(width: 30),
           ],
         ),
@@ -271,7 +272,7 @@ class _ChatState extends State<Chat> {
                               });
 
                               final String fileName =
-                                  controller.usuario.correo +
+                                  controller.usuario.usuario +
                                       '/chat/' +
                                       DateTime.now().toString();
 

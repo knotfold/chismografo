@@ -19,7 +19,7 @@ class _MiniProfileState extends State<MiniProfile> {
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     if (verifyFriendship(controller)) {
-      controller.usuario.solicitudesAE.remove(widget.usuario.documentId);
+      controller.usuario.solicitudesAE.remove(widget.usuario.usuario);
     }
 
     return Wrap(

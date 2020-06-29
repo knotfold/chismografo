@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:ads/ads.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ChisMe/shared/shared.dart';
@@ -7,6 +8,8 @@ import 'package:ChisMe/services/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class Store extends StatefulWidget {
+  final Ads appAds;
+  Store({this.appAds});
   @override
   _StoreState createState() => _StoreState();
 }
@@ -93,6 +96,12 @@ class _StoreState extends State<Store> {
                 opcion: 'Ir a tus libretas',
                 oportunidades: controller.usuario.dailyFormularios.toString(),
                 newIndex: 0,
+              ),
+              StoreItemVideo(
+                cantidad: '2',
+                cantidadTexto: 'Dos Monedas mirando un anuncio',
+                opcion: 'Mirar Anuncio',
+                appAds: widget.appAds,
               )
             ],
           ),
@@ -174,7 +183,7 @@ class StoreItem extends StatelessWidget {
                     ))
                 : Container(),
             FloatingActionButton.extended(
-              heroTag: 'store',
+              heroTag: null,
               onPressed: () async {
                 final PurchaseParam purchaseParam =
                     PurchaseParam(productDetails: productDetails);
@@ -187,7 +196,7 @@ class StoreItem extends StatelessWidget {
                 }
               },
               label: Text('Comprar'),
-              icon: Icon(Icons.credit_card),
+              icon: Icon(Icons.credit_card, color: primaryColor,),
             ),
           ],
         ),
@@ -272,13 +281,108 @@ class StoreItemFree extends StatelessWidget {
               ),
             ),
             FloatingActionButton.extended(
-              heroTag: 'store',
+              heroTag: null,
               onPressed: () async {
                 controller.seleccionado = newIndex;
                 controller.notify();
               },
               label: Text(opcion),
-              icon: Icon(Icons.navigate_before),
+              icon: Icon(Icons.navigate_before, color: primaryColor,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StoreItemVideo extends StatefulWidget {
+  final String cantidad;
+  final String cantidadTexto;
+  final String opcion;
+  final String oportunidades;
+  final int newIndex;
+  final Ads appAds;
+  const StoreItemVideo({
+    Key key,
+    this.cantidad,
+    this.cantidadTexto,
+    this.opcion,
+    this.oportunidades,
+    this.newIndex,
+    this.appAds
+  }) : super(key: key);
+
+  @override
+  _StoreItemVideoState createState() => _StoreItemVideoState();
+}
+
+class _StoreItemVideoState extends State<StoreItemVideo> {
+  @override
+  Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+    return Card(
+      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        padding: EdgeInsets.all(25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  widget.cantidad,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(
+                  Icons.stars,
+                  color: Colors.yellow[800],
+                  size: 20,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Text(
+                    widget.cantidadTexto,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Oportunidades infinitas',
+              style: TextStyle(fontSize: 20),
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 4, color: secondaryColor)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                ':)',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                ],
+              ),
+            ),
+            FloatingActionButton.extended(
+              heroTag: null,
+              
+              onPressed: () async {
+              
+              widget.appAds.showVideoAd(state: this);
+              },
+              label: Text(widget.opcion),
+              icon: Icon(Icons.movie, color: primaryColor,),
             ),
           ],
         ),

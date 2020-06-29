@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ChisMe/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:ChisMe/services/services.dart';
@@ -36,55 +38,45 @@ class _AmigosState extends State<Amigos> {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    return Scaffold(
-      floatingActionButton: StreamBuilder(
-          stream: Firestore.instance
-              .collection('usuarios')
-              .where('solicitudesAE',
-                  arrayContains: controller.usuario.documentId)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const CircularProgressIndicator();
-            List<DocumentSnapshot> documents = snapshot.data.documents;
 
-            return FloatingActionButton(
-              heroTag: 'btnAA1',
-              child: documents.isEmpty
-                  ? Icon(
-                      Icons.search,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'btnAA1',
+        child: controller.solicitudesAEDocuments.isEmpty
+            ? Icon(
+                Icons.search,
+                size: 30,
+                color: pDark,
+              )
+            : Stack(
+                children: <Widget>[
+                  Container(
+                    child: Icon(
+                      Icons.add_alert,
                       size: 30,
-                      // color: Colors.black,
-                    )
-                  : Stack(
-                      children: <Widget>[
-                        Container(
-                          child: Icon(
-                            Icons.add_alert,
-                            size: 30,
-                            // color: Colors.black,
-                          ),
-                          width: 30,
-                          height: 30,
-                        ),
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: yemahuevo),
-                        )
-                      ],
+                      color: pDark,
                     ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  child: SolicitudesAmistad(
-                    documents: snapshot.data.documents,
+                    width: 30,
+                    height: 30,
                   ),
-                );
-              },
-            );
-          }),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: yemahuevo),
+                  )
+                ],
+              ),
+        onPressed: () {
+          showDialog(
+            context: context,
+            child: SolicitudesAmistad(
+              documents: controller.solicitudesAEDocuments,
+            ),
+          );
+        },
+      ),
       appBar: myAppBar(controller, context),
       body: SingleChildScrollView(
         child: Container(
@@ -96,47 +88,58 @@ class _AmigosState extends State<Amigos> {
                 'Amigos',
                 style: TextStyle(fontSize: 23),
               ),
-              AmigosHorizontalList(
-                  usuario: controller.usuario, controller: controller),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Chats',
-                style: TextStyle(fontSize: 23),
-              ),
+              // AmigosHorizontalList(
+              //     usuario: controller.usuario, controller: controller),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // Text(
+              //   'Chats',
+              //   style: TextStyle(fontSize: 23),
+              // ),
               StreamBuilder(
                 stream: Firestore.instance
                     .collection('usuarios')
-                    .where('amigos',
-                        arrayContains: controller.usuario.documentId)
+                    .where('amigos', arrayContains: controller.usuario.usuario)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
                     return Container(
                         height: 50, child: const CircularProgressIndicator());
                   List<DocumentSnapshot> documents = snapshot.data.documents;
-                  myFuture = buildChatList(documents, controller);
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      UsuarioModel usuario = UsuarioModel.fromDocumentSnapshot(
+                          documents[index], controller.usuarioAct.usuario);
+                      return AmigoTile(
+                        usuario: usuario,
+                        miniProfile: true,
+                      );
+                    },
+                  );
 
-                  return FutureBuilder<List<UsuarioModel>>(
-                      future: myFuture,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData)
-                          return const CircularProgressIndicator();
-                        List<UsuarioModel> chats = snapshot.data;
-                        return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: chats.length,
-                          itemBuilder: (context, index) {
-                            UsuarioModel usuario = chats[index];
-                            return AmigoTile(
-                              usuario: usuario,
-                              miniProfile: false,
-                            );
-                          },
-                        );
-                      });
+                  // return FutureBuilder<List<UsuarioModel>>(
+                  //     future: myFuture,
+                  //     builder: (context, snapshot) {
+                  //       if (!snapshot.hasData)
+                  //         return const CircularProgressIndicator();
+                  //       List<UsuarioModel> chats = snapshot.data;
+                  //       return ListView.builder(
+                  //         physics: NeverScrollableScrollPhysics(),
+                  //         shrinkWrap: true,
+                  //         itemCount: chats.length,
+                  //         itemBuilder: (context, index) {
+                  //           UsuarioModel usuario = chats[index];
+                  //           return AmigoTile(
+                  //             usuario: usuario,
+                  //             miniProfile: false,
+                  //           );
+                  //         },
+                  //       );
+                  //     });
                 },
               ),
             ],

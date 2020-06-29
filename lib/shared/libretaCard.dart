@@ -20,25 +20,29 @@ class _LibretaCardState extends State<LibretaCard> {
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
+      margin: EdgeInsets.only(left: 5, right: 5),
+      padding: EdgeInsets.all(10),
       height: 140,
       child: Card(
-          color: Colors.transparent,
-          elevation: 0,
+          color: Colors.white,
+          elevation: 10,
           margin: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
           child: Container(
             decoration: BoxDecoration(
+              color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF0f2027),
-                      Color(0xFF203a43),
-                      Color(0xFF2c5364)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.topRight,
-                    tileMode: TileMode.clamp)),
-            // decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),gradient:LinearGradient(colors: [Color(0xFF0f2027),Color(0xFF021B79),Color(0xFF0575E6)],begin: Alignment.topLeft,end: Alignment.topRight,tileMode: TileMode.clamp )),
+                ),
+                // gradient: LinearGradient(
+                //     colors: [
+                //       Color(0xFF0f2027),
+                //       Color(0xFF203a43),
+                //       Color(0xFF2c5364)
+                //     ],
+                //     begin: Alignment.topLeft,
+                //     end: Alignment.topRight,
+                //     tileMode: TileMode.clamp)),
+                
+           // decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),gradient:LinearGradient(colors: [Color(0xFF0f2027),Color(0xFF021B79),Color(0xFF0575E6)],begin: Alignment.topLeft,end: Alignment.topRight,tileMode: TileMode.clamp )),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,20 +71,20 @@ class _LibretaCardState extends State<LibretaCard> {
                           ),
                         ),
                         Divider(
-                          color: Colors.white,
+                          color: Colors.black,
                         )
                       ],
                     ),
                     title: Text(
                       widget.formularioModel.nombre,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black),
                     ),
                     subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(widget.formularioModel.creadorUsuario,
-                            style: TextStyle(color: Colors.white54)),
+                            style: TextStyle(color: Colors.black54)),
                         SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -89,11 +93,11 @@ class _LibretaCardState extends State<LibretaCard> {
                           children: <Widget>[
                             Text(
                               'Participantes: ',
-                              style: TextStyle(color: Colors.white54),
+                              style: TextStyle(color: Colors.black54),
                             ),
                             Text(
                               '${widget.formularioModel.usuarios.length} / 25',
-                              style: TextStyle(color: Colors.white54),
+                              style: TextStyle(color: Colors.black54),
                             ),
                           ],
                         ),
@@ -105,7 +109,7 @@ class _LibretaCardState extends State<LibretaCard> {
                         Icon(
                           Icons.arrow_forward_ios,
                           size: 15,
-                          color: Colors.white,
+                          color: primaryColor,
                         ),
                         // controller.usuario.usuario == widget.formularioModel.creadorUsuario ? Container() : 
                         IconButton(
@@ -124,7 +128,7 @@ class _LibretaCardState extends State<LibretaCard> {
                           },
                           icon: Icon(
                             Icons.report,
-                            color: Colors.white,
+                            color: secondaryColor,
                             size: 20,
                           ),
                         ),

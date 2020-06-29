@@ -10,13 +10,14 @@ class TusLibretas extends StatelessWidget {
   Widget build(BuildContext context) {
     Controller controller = Provider.of(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.book, color:pDark),
         heroTag: 'btnT1',
         isExtended: true,
         splashColor: secondaryColor,
         onPressed: () => Navigator.of(context).pushNamed('/creadorLibreta'),
-        label: Text('Nueva libreta'),
-        icon: Icon(Icons.book),
+        // label: Text('Nueva libreta', style: TextStyle(color: primaryColor),),
+        // icon: Icon(Icons.book, color: primaryColor,),
       ),
       appBar: myAppBar(controller, context),
       body: SingleChildScrollView(

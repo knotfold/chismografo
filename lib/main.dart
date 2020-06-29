@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           ),
             brightness: Brightness.light,
             cardTheme: CardTheme(elevation: 10),
-            appBarTheme: AppBarTheme(color: primaryColor),
+            appBarTheme: AppBarTheme(color: Colors.white),
             primaryColor: primaryColor,
             colorScheme: ColorScheme(
               primary: primaryColor,
@@ -109,7 +109,7 @@ class MyApp extends StatelessWidget {
                 highlightColor: secondaryColor,
                 buttonColor: secondaryColor),
             floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: secondaryColor,
+              backgroundColor: Colors.white,
               elevation: 5,
             )),
         home: LogIn(),
@@ -121,6 +121,7 @@ class MyApp extends StatelessWidget {
               ),
           '/imageViewer' : (context) => ImageViewer(
             image: ModalRoute.of(context).settings.arguments,
+            usuarioModel: null,
           ),
           '/chat' : (context) => Chat(
             usuarios: ModalRoute.of(context).settings.arguments,

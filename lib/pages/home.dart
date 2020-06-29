@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ads/ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:ChisMe/pages/pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,15 +10,40 @@ import 'package:provider/provider.dart';
 import 'package:ChisMe/services/services.dart';
 import 'dart:io';
 
+import 'dart:io' show Platform;
+import 'package:firebase_admob/firebase_admob.dart';
+
+
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
+
+
 class _HomeState extends State<Home> {
+  Ads appAds;
+  final String appId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544~3347511713'
+      : 'ca-app-pub-3940256099942544~1458002511';
+
+  final String bannerUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  final String screenUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/1033173712'
+      : 'ca-app-pub-3940256099942544/4411468910';
+
+  final String videoUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/5224354917'
+      : 'ca-app-pub-3940256099942544/1712485313';
+
   UsuarioModel usuarioModel;
 
   StreamSubscription<List<PurchaseDetails>> _subscription;
+  Future myFuture;
 
   List<String> productos = ['05monedas', '10monedas', '20monedas'];
 
@@ -28,7 +54,56 @@ class _HomeState extends State<Home> {
       _handlePurchaseUpdates(purchases);
     });
     Future.delayed(Duration.zero, () async {
+      
+
+
       Controller controller = Provider.of<Controller>(context, listen: false);
+
+
+       var eventListener = (MobileAdEvent event) {
+      if (event == MobileAdEvent.opened) {
+        print("eventListener: The opened ad is clicked on.");
+      }
+    };
+
+    appAds = Ads(
+      appId,
+      bannerUnitId: bannerUnitId,
+      screenUnitId: screenUnitId,
+      keywords: <String>['ibm', 'computers'],
+      contentUrl: 'http://www.ibm.com',
+      childDirected: false,
+      testDevices: ['Samsung_Galaxy_SII_API_26:5554'],
+      testing: false,
+      listener: eventListener,
+    );
+ 
+    appAds.setVideoAd(
+      adUnitId: videoUnitId,
+      keywords: ['dart', 'java'],
+      contentUrl: 'http://www.publang.org',
+      childDirected: true,
+      testDevices: null,
+      listener: (RewardedVideoAdEvent event,
+          {String rewardType, int rewardAmount}) {
+        print("The ad was sent a reward amount.");
+        setState(() {
+            // controller.usuarioAct.coins = controller.usuarioAct.coins + 5;
+            // controller.notify();
+        });
+      },
+    );
+
+    _setEventListeners(appAds, controller, context);
+
+    
+
+    // appAds.showBannerAd();
+
+
+
+
+
       usuarioModel = controller.usuario;
 
       Stream purchaseUpdated =
@@ -46,19 +121,39 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     _subscription.cancel();
+    appAds?.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
+
+   
     super.initState();
+
+   
     initPlatformState(context);
   }
 
+ 
   _onItemTapped(int index, Controller controller) {
     setState(() {
       controller.seleccionado = index;
     });
+  }
+
+  Future<bool> checkIfMessage(
+      List<DocumentSnapshot> list, Controller controller) async {
+    bool message = true;
+    for (var element in list) {
+      bool check = element[controller.usuarioAct.usuario + 'Check'] ?? true;
+
+      if (!check) {
+        message = false;
+        break;
+      }
+    }
+    return message;
   }
 
   @override
@@ -68,10 +163,8 @@ class _HomeState extends State<Home> {
       TusLibretas(),
       LibretasA(),
       Amigos(),
-      Perfil(
-        usuario: usuarioModel,
-      ),
-      Store(),
+      Chats(),
+      Store(appAds: appAds,),
     ];
     return WillPopScope(
       onWillPop: () async {
@@ -80,13 +173,14 @@ class _HomeState extends State<Home> {
       child: Scaffold(
         body: _widgetOptions.elementAt(controller.seleccionado),
         bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(canvasColor: primaryColor),
-          child: BottomNavigationBar(
+          data: Theme.of(context).copyWith(canvasColor: Colors.white),
+          child: BottomNavigationBar( 
+            type: BottomNavigationBarType.shifting,
             backgroundColor: Colors.transparent,
             // fixedColor: primaryColor,
             currentIndex: controller.seleccionado,
-            selectedItemColor: secondaryColor,
-            unselectedItemColor: pLight,
+            selectedItemColor: primaryColor ,
+            unselectedItemColor: Colors.black45,
             onTap: (int index) {
               _onItemTapped(index, controller);
             },
@@ -105,10 +199,13 @@ class _HomeState extends State<Home> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData)
                         return const Icon(Icons.collections_bookmark);
-                      List<DocumentSnapshot> documents =
+                    
+                     controller.invitacionesDocuments =
                           snapshot.data.documents;
 
-                      return documents.isEmpty
+               
+
+                      return controller.invitacionesDocuments.isEmpty
                           ? Icon(Icons.collections_bookmark)
                           : Stack(
                               children: <Widget>[
@@ -125,7 +222,7 @@ class _HomeState extends State<Home> {
                                   height: 10,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: yemahuevo),
+                                      color: secondaryColor ),
                                 )
                               ],
                             );
@@ -142,10 +239,11 @@ class _HomeState extends State<Home> {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return const Icon(Icons.contacts);
 
-                      List<DocumentSnapshot> documents =
+                      controller.solicitudesAEDocuments =
                           snapshot.data.documents;
+                      
 
-                      return documents.isEmpty
+                      return controller.solicitudesAEDocuments.isEmpty
                           ? Icon(Icons.contacts)
                           : Stack(
                               children: <Widget>[
@@ -162,7 +260,7 @@ class _HomeState extends State<Home> {
                                   height: 10,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
-                                      color: yemahuevo),
+                                      color: secondaryColor),
                                 )
                               ],
                             );
@@ -171,39 +269,46 @@ class _HomeState extends State<Home> {
               ),
               BottomNavigationBarItem(
                 icon: StreamBuilder(
-                    stream: controller.usuario.reference
-                        .collection('preguntas')
-                        .where('respuesta', isEqualTo: "")
+                    stream: Firestore.instance
+                        .collection('usuarios')
+                        .where('amigos',
+                            arrayContains: controller.usuario.usuario)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return const Icon(Icons.person);
 
-                      List<DocumentSnapshot> documents =
+                      controller.amigosDocuments =
                           snapshot.data.documents;
-
-                      return documents.isEmpty
-                          ? Icon(Icons.person)
-                          : Stack(
-                              children: <Widget>[
-                                Container(
-                                    child: Icon(
-                                      Icons.person,
-                                    ),
-                                    width: 30,
-                                    height: 30),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.only(right: 20),
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: yemahuevo),
-                                )
-                              ],
-                            );
+                      myFuture = checkIfMessage(controller.amigosDocuments, controller);
+                      return FutureBuilder(
+                          future: myFuture,
+                          builder: (context, snap) {
+                            if (!snap.hasData) return Icon(Icons.chat);
+                            return snap.data
+                                ? Icon(Icons.chat)
+                                : Stack(
+                                    children: <Widget>[
+                                      Container(
+                                          child: Icon(
+                                            Icons.chat,
+                                          ),
+                                          width: 30,
+                                          height: 30),
+                                      Container(
+                                        alignment: Alignment.topLeft,
+                                        margin: EdgeInsets.only(right: 20),
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: secondaryColor),
+                                      )
+                                    ],
+                                  );
+                          });
                     }),
-                title: Text('Perfil'),
+                title: Text('Chats'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.store),
@@ -282,6 +387,8 @@ class _HomeState extends State<Home> {
     }
   }
 
+
+
   void _handleInvalidPurchase(PurchaseDetails purchaseDetails) {
     // handle invalid purchase here if  _verifyPurchase` failed.
     showDialog(
@@ -304,3 +411,94 @@ class _HomeState extends State<Home> {
         ));
   }
 }
+
+void _setEventListeners(Ads appAds, Controller controller, BuildContext context){
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+  appAds.video.loadedListener = () {
+    print("An ad has loaded in memory.");
+  };
+
+  appAds.video.failedListener = () {
+    print("An ad has failed to load in memory.");
+  };
+
+  appAds.video.clickedListener = () {
+    print("An ad has been clicked on.");
+  };
+
+  appAds.video.openedListener = () {
+    print("An ad has been opened.");
+  };
+
+  appAds.video.leftAppListener = () {
+    print("You've left the app to view the video.");
+  };
+
+  appAds.video.closedListener = () {
+    print("The video has been closed.");
+  };
+
+  appAds.video.rewardedListener = (String rewardType, int rewardAmount) {
+    print("The ad was sent a reward amount.");
+    deliverFreeCoins('2', controller, context);
+   
+  };
+
+  appAds.video.startedListener = () {
+    print("You've just started playing the Video ad.");
+  };
+
+  appAds.video.completedListener = () {
+    print("You've just finished playing the Video ad.");
+  };
+
+  List<String> two = appAds.keywords;
+  String three = appAds.contentUrl;
+  bool seven = appAds.childDirected;
+  List<String> eight = appAds.testDevices;
+  print(two);
+}
+
+  void deliverFreeCoins(String cantidad, Controller controller, BuildContext context) async {
+    
+    var result = await controller.buyCoins(int.parse(cantidad));
+    if (result) {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text(
+              '¡Gracias!',
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+            content: Row(
+              children: <Widget>[
+                Text('Felicidades has aquirido $cantidad monedas'),
+                Icon(
+                  Icons.stars,
+                  color: Colors.yellow[800],
+                ),
+              ],
+            ),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text(
+              'Error',
+              style: TextStyle(fontSize: 20),
+            ),
+            content: Text('Error'),
+          ));
+    }
+  }

@@ -18,7 +18,7 @@ class AmigoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Controller controller = Provider.of<Controller>(context);
-    return  !usuario.userChat  ? Container() : ListTile(
+    return  !usuario.userChat && !miniProfile  ? Container() : ListTile(
       onTap: () {
         if (miniProfile) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -52,13 +52,13 @@ class AmigoTile extends StatelessWidget {
           CircleAvatar(
             radius: 22,
             backgroundImage: NetworkImage(usuario.foto),
-          ), !usuario.userCheck
+          ), !usuario.userCheck 
               ? Container(
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: yemahuevo),
+                      color: secondaryColor),
                 )
               : Container(width: 10, height: 10,),
         ],

@@ -3,10 +3,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:ChisMe/services/controller.dart';
+import 'package:ChisMe/services/models.dart';
+import 'package:provider/provider.dart';
 
 class ImageViewer extends StatefulWidget {
   final String image;
-  ImageViewer({this.image});
+  final UsuarioModel usuarioModel;
+  ImageViewer({this.image, @required this.usuarioModel});
 
   @override
   _ImageViewerState createState() => _ImageViewerState();
@@ -15,13 +19,14 @@ class ImageViewer extends StatefulWidget {
 class _ImageViewerState extends State<ImageViewer> {
   bool loading = false;
   _save() async {
-    setState(() {
-      loading = true;
-    });
+   
     try {
+       loading = true;
+        setState(() {
+     
+    });
       // Saved with this method.
-      var imageId = await ImageDownloader.downloadImage(
-         widget.image);
+      var imageId = await ImageDownloader.downloadImage(widget.image);
       if (imageId == null) {
         return;
       }
@@ -31,9 +36,13 @@ class _ImageViewerState extends State<ImageViewer> {
       var path = await ImageDownloader.findPath(imageId);
       var size = await ImageDownloader.findByteSize(imageId);
       var mimeType = await ImageDownloader.findMimeType(imageId);
-        Fluttertoast.showToast(
-                    msg: 'Imagen guardada en $path', toastLength: Toast.LENGTH_SHORT);
+      Fluttertoast.showToast(
+          msg: 'Imagen guardada en $path', toastLength: Toast.LENGTH_SHORT);
     } on PlatformException catch (error) {
+      loading = false;
+      setState(() {
+        
+      });
       print(error);
     }
 
@@ -44,21 +53,31 @@ class _ImageViewerState extends State<ImageViewer> {
 
   @override
   Widget build(BuildContext context) {
+    Controller controller = Provider.of<Controller>(context);
+   UsuarioModel usuario = widget.usuarioModel ?? UsuarioModel(usuario: controller.usuarioAct.usuario, amigos: []);
+   List<dynamic> amigos = usuario.amigos;
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         actions: <Widget>[
-         loading ? Container(child: CircularProgressIndicator(), margin: EdgeInsets.symmetric(vertical: 10),) : IconButton(
-              icon: Icon(
-                Icons.file_download,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                await _save();
-              
-              })
+          usuario.usuario != controller.usuario.usuario &&
+                  !verifyFriendship(controller, amigos)
+              ? Container()
+              : loading
+                  ? Container(
+                      child: CircularProgressIndicator(),
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        Icons.file_download,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {
+                        await _save();
+                      })
         ],
       ),
       body: Center(
@@ -68,5 +87,9 @@ class _ImageViewerState extends State<ImageViewer> {
         )),
       ),
     );
+  }
+
+  bool verifyFriendship(Controller controller, List<dynamic> amigos) {
+    return amigos.contains(controller.usuario.documentId);
   }
 }

@@ -39,6 +39,7 @@ class _PerfilState extends State<Perfil> {
               MaterialPageRoute(
                 builder: (context) => ImageViewer(
                   image: usuario.fotoPortada,
+                  usuarioModel: usuario,
                 ),
               ),
             );
@@ -113,13 +114,14 @@ class _PerfilState extends State<Perfil> {
                                               children: <Widget>[
                                                 ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(50),
+                                                      BorderRadius.circular(
+                                                          180),
                                                   child: FadeInImage(
                                                     fit: BoxFit.cover,
                                                     placeholder: AssetImage(
-                                                        'assets/gudtech.jpg'),
-                                                    width: 85,
-                                                    height: 85,
+                                                        'assets/file-picture-icon.png'),
+                                                    width: 115,
+                                                    height: 115,
                                                     image: NetworkImage(
                                                         usuario.foto),
                                                   ),
@@ -145,6 +147,7 @@ class _PerfilState extends State<Perfil> {
                                                       builder: (context) =>
                                                           ImageViewer(
                                                         image: usuario.foto,
+                                                        usuarioModel: usuario,
                                                       ),
                                                     ),
                                                   );
@@ -153,8 +156,8 @@ class _PerfilState extends State<Perfil> {
                                                   fit: BoxFit.cover,
                                                   placeholder: AssetImage(
                                                       'assets/zany-face.png'),
-                                                  width: 85,
-                                                  height: 85,
+                                                  width: 115,
+                                                  height: 115,
                                                   image: NetworkImage(
                                                       usuario.foto),
                                                 ),
@@ -174,7 +177,7 @@ class _PerfilState extends State<Perfil> {
                                         Text(usuario.nombre,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 20,
                                                 color: Colors.white)),
                                         usuario.documentId ==
                                                 controller.usuario.documentId
@@ -214,6 +217,7 @@ class _PerfilState extends State<Perfil> {
                                                           ),
                                                           FloatingActionButton
                                                               .extended(
+                                                            heroTag: 'perfilll',
                                                             onPressed:
                                                                 () async {
                                                               controller
@@ -279,9 +283,10 @@ class _PerfilState extends State<Perfil> {
                                     ),
                                     Text(usuario.usuario,
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 20,
                                           color: Colors.white,
                                         )),
+                                    SizedBox(height: 15),
                                     usuario.documentId ==
                                             controller.usuario.documentId
                                         ? ButtonBar(
@@ -511,7 +516,7 @@ class _PerfilState extends State<Perfil> {
                                                       padding:
                                                           EdgeInsets.all(6),
                                                       elevation: 4,
-                                                      color: pDark,
+                                                      color: Colors.white,
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -525,14 +530,15 @@ class _PerfilState extends State<Perfil> {
                                                           Text(
                                                             'Preguntas Anónimas',
                                                             style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
+                                                                color:
+                                                                    primaryColor,
                                                                 fontSize: 10),
                                                           ),
+                                                          SizedBox(width: 5),
                                                           Icon(
                                                             Icons.help_outline,
                                                             size: 17,
-                                                            color: Colors.white,
+                                                            color: primaryColor,
                                                           )
                                                         ],
                                                       ),
@@ -599,7 +605,7 @@ class _PerfilState extends State<Perfil> {
                                                                                     shrinkWrap: true,
                                                                                     itemCount: documents.length,
                                                                                     itemBuilder: (BuildContext context, int index) {
-                                                                                      PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+                                                                                      PreguntaPModel preguntaModel = PreguntaPModel.fromDocumentSnapshot(documents[index]);
 
                                                                                       return GestureDetector(
                                                                                         onTap: () {
@@ -729,7 +735,7 @@ class _PerfilState extends State<Perfil> {
                                                                                         shrinkWrap: true,
                                                                                         itemCount: documents.length,
                                                                                         itemBuilder: (BuildContext context, int index) {
-                                                                                          PreguntaModel preguntaModel = PreguntaModel.fromDocumentSnapshot(documents[index]);
+                                                                                          PreguntaPModel preguntaModel = PreguntaPModel.fromDocumentSnapshot(documents[index]);
 
                                                                                           return GestureDetector(
                                                                                             onTap: () {
@@ -854,29 +860,27 @@ class _PerfilState extends State<Perfil> {
                                         padding:
                                             EdgeInsets.only(top: 20, right: 15),
                                         child: RaisedButton(
-                                          padding: EdgeInsets.all(4),
-                                          elevation: 2,
+                                          elevation: 0,
                                           shape: RoundedRectangleBorder(
-                                              side: BorderSide(color: pDark),
+                                              side: BorderSide(
+                                                  color: Colors.white),
                                               borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          color: pDark,
+                                                  BorderRadius.circular(15)),
+                                          color: Colors.white,
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
+                                              Icon(
+                                                Icons.chat,
+                                                size: 20,
+                                                color: pDark,
+                                              ),
+                                              SizedBox(width: 10),
                                               Text(
                                                 'Chat',
                                                 style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10),
+                                                    color: pDark, fontSize: 15),
                                               ),
-                                              Icon(
-                                                Icons.chat,
-                                                size: 15,
-                                                color: Colors.white,
-                                              )
                                             ],
                                           ),
                                           onPressed: () {
@@ -902,29 +906,29 @@ class _PerfilState extends State<Perfil> {
                                         padding:
                                             EdgeInsets.only(top: 20, right: 15),
                                         child: RaisedButton(
-                                          padding: EdgeInsets.all(4),
+                                          padding: EdgeInsets.all(5),
                                           elevation: 2,
                                           shape: RoundedRectangleBorder(
                                               side: BorderSide(color: pDark),
                                               borderRadius:
                                                   BorderRadius.circular(20)),
-                                          color: pDark,
+                                          color: Colors.white,
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
+                                              Icon(
+                                                Icons.tag_faces,
+                                                size: 20,
+                                                color: pDark,
+                                              ),
+                                              SizedBox(width: 10),
                                               Text(
                                                 'Pregúntame ',
                                                 style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10),
+                                                    color: pDark, fontSize: 15),
                                               ),
-                                              Icon(
-                                                Icons.tag_faces,
-                                                size: 15,
-                                                color: Colors.white,
-                                              )
                                             ],
                                           ),
                                           onPressed: () {
@@ -984,7 +988,7 @@ class _PerfilState extends State<Perfil> {
                                       .collection(
                                         'preguntas',
                                       )
-                                      .orderBy('fecha')
+                                      .orderBy('fecha', descending: true)
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasError) {}
@@ -1014,9 +1018,9 @@ class _PerfilState extends State<Perfil> {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    PreguntaModel
+                                                    PreguntaPModel
                                                         preguntaModel =
-                                                        PreguntaModel
+                                                        PreguntaPModel
                                                             .fromDocumentSnapshot(
                                                                 documents[
                                                                     index]);
@@ -1159,7 +1163,7 @@ class AmigosHorizontalList extends StatelessWidget {
 }
 
 class DialogRespuesta extends StatefulWidget {
-  final PreguntaModel preguntaModel;
+  final PreguntaPModel preguntaModel;
   DialogRespuesta({this.preguntaModel});
   @override
   _DialogRespuestaState createState() => _DialogRespuestaState();
@@ -1403,7 +1407,7 @@ class _DialogContentState extends State<DialogContent> {
                         ? controller.usuario.foto
                         : controller.usuario.fotoPortada)
                     : FileImage(imagen),
-                placeholder: AssetImage('assets/gudtech.jpg'),
+                placeholder: AssetImage('assets/file-picture-icon.png'),
               ),
             ),
           ),
@@ -1462,7 +1466,7 @@ class _DialogContentState extends State<DialogContent> {
                                   controller.notify();
 
                                   final String fileName =
-                                      controller.usuario.correo +
+                                      controller.usuario.usuario +
                                           '/perfil/' +
                                           DateTime.now().toString();
 
@@ -1517,13 +1521,13 @@ class _DialogContentState extends State<DialogContent> {
                                 ),
                               )
                             : FloatingActionButton.extended(
-                                heroTag: 'perfil4',
+                                heroTag: 'perfil5',
                                 onPressed: () async {
                                   controller.loading = true;
                                   controller.notify();
 
                                   final String fileName =
-                                      controller.usuario.correo +
+                                      controller.usuario.usuario +
                                           '/portada/' +
                                           DateTime.now().toString();
 

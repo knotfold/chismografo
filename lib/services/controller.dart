@@ -20,7 +20,7 @@ class Controller with ChangeNotifier {
   // );
   UsuarioModel usuarioAct;
   UsuarioModel selectedUser;
-  PreguntaModel preguntaModel;
+  PreguntaPModel preguntaModel;
   int seleccionado = 0;
   UsuarioModel get usuario => usuarioAct;
   agregausuario(UsuarioModel usuario) {
@@ -41,6 +41,11 @@ class Controller with ChangeNotifier {
   String sexo;
   String tipo;
   bool loading2 = false;
+
+  //Listas de documentSnapshots
+  List<DocumentSnapshot> invitacionesDocuments = [];
+  List<DocumentSnapshot> solicitudesAEDocuments = [];
+  List<DocumentSnapshot> amigosDocuments = [];
 
   //cosas para responder un formulario
   FormularioModel toFillForm;

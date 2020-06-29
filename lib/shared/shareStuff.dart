@@ -1,3 +1,4 @@
+import 'package:ChisMe/pages/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ChisMe/services/services.dart';
@@ -6,11 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 AppBar myAppBar(Controller controller, BuildContext context) {
   return AppBar(
-    
+    iconTheme: IconThemeData(color: pDark),
+    actionsIconTheme: IconThemeData(color: pDark),
     elevation: 0,
     title: Text(
       'ChisMe ;)',
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: pDark),
     ),
     actions: <Widget>[
       Container(
@@ -18,7 +20,7 @@ AppBar myAppBar(Controller controller, BuildContext context) {
         child: Row(
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.live_help),
+              icon: Icon(Icons.live_help, color: primaryColor,),
               onPressed: () {
                 controller.sdtP = 0;
                 showDialog(
@@ -43,33 +45,71 @@ AppBar myAppBar(Controller controller, BuildContext context) {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.white),
+                  color: Colors.black),
             ),
-              SizedBox(
-              width: 10,
+            SizedBox(
+              width: 20,
             ),
-            GestureDetector(
-            onTap: () {
-              // if (widget.group) {
-              //   Navigator.of(context)
-              //       .pushNamed('/imageViewer', arguments: widget.foto);
-              //   return;
-              // }
-              // controller.selectedUser = widget.usuario;
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => Perfil(
-              //           usuario: widget.usuario,
-              //         )));
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-              child: CircleAvatar(
-                maxRadius: 18,
-                backgroundImage: NetworkImage(controller.usuarioAct.foto),
-              ),
-            ),
-          ),
-          
+            StreamBuilder(
+                stream: controller.usuario.reference
+                    .collection('preguntas')
+                    .where('respuesta', isEqualTo: "")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Perfil(
+                                  usuario: controller.usuario,
+                                )));
+                      },
+                      child: CircleAvatar(
+                        maxRadius: 18,
+                        backgroundImage:
+                            NetworkImage(controller.usuarioAct.foto),
+                      ),
+                    );
+                  }
+
+                  List<DocumentSnapshot> documents = snapshot.data.documents;
+                  print(documents.length);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Perfil(
+                                usuario: controller.usuario,
+                              )));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                      child: documents.isEmpty
+                          ? CircleAvatar(
+                              maxRadius: 18,
+                              backgroundImage:
+                                  NetworkImage(controller.usuarioAct.foto),
+                            )
+                          : Stack(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  maxRadius: 18,
+                                  backgroundImage:
+                                      NetworkImage(controller.usuarioAct.foto),
+                                ),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(right: 20),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: yemahuevo),
+                                ),
+                              ],
+                            ),
+                    ),
+                  );
+                }),
           ],
         ),
       ),
@@ -87,7 +127,6 @@ class TutorialDialog extends StatefulWidget {
 }
 
 class _TutorialDialogState extends State<TutorialDialog> {
-
   Future<DocumentSnapshot> fetchTutorial(Controller controller) async {
     String search;
     switch (controller.seleccionado) {
@@ -153,12 +192,11 @@ class _TutorialDialogState extends State<TutorialDialog> {
               }
               List<dynamic> map = snapshot.data[search];
               List<Widget> pages = [];
-            
+
               map.forEach((f) {
-   
                 pages.add(Container(
                   child: SingleChildScrollView(
-                                      child: Column(
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
@@ -169,7 +207,10 @@ class _TutorialDialogState extends State<TutorialDialog> {
                         SizedBox(
                           height: 25,
                         ),
-                        Text(f['desc'],style: TextStyle(color: Colors.white),),
+                        Text(
+                          f['desc'],
+                          style: TextStyle(color: Colors.white),
+                        ),
                         SizedBox(
                           height: 25,
                         ),
@@ -186,9 +227,8 @@ class _TutorialDialogState extends State<TutorialDialog> {
                 ));
               });
 
-     
               return SingleChildScrollView(
-                              child: Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
@@ -201,7 +241,7 @@ class _TutorialDialogState extends State<TutorialDialog> {
                           return Icon(
                             Icons.fiber_manual_record,
                             size: 10,
-                            color:  controller.sdtP == index
+                            color: controller.sdtP == index
                                 ? secondaryColor
                                 : Colors.grey,
                           );
@@ -211,18 +251,15 @@ class _TutorialDialogState extends State<TutorialDialog> {
                     Container(
                       height: 400,
                       child: PageView(
-                        onPageChanged: (value){
+                        onPageChanged: (value) {
                           controller.sdtP = value;
                           controller.notify();
-                          setState(() {
-                            
-                          });
+                          setState(() {});
                         },
                         controller: controller.pageController2,
                         children: pages,
                       ),
                     ),
-                    
                   ],
                 ),
               );

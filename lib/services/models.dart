@@ -136,15 +136,15 @@ class ChatModel {
   String ultimoMSg;
   String foto;
 }
-class PreguntaModel {
+class PreguntaPModel {
 String pregunta;
  String respuesta;
  Timestamp fecha;
  String usuario;
 DocumentReference reference;
-  PreguntaModel({this.pregunta, this.respuesta,this.fecha,this.usuario});
+  PreguntaPModel({this.pregunta, this.respuesta,this.fecha,this.usuario});
 
-  PreguntaModel.fromString(String string) {
+  PreguntaPModel.fromString(String string) {
     pregunta = string;
     respuesta = string;
     usuario = string;
@@ -164,7 +164,7 @@ DocumentReference reference;
       'usuario': usuario,
     };
   }
-   PreguntaModel.fromDocumentSnapshot(DocumentSnapshot data) {
+   PreguntaPModel.fromDocumentSnapshot(DocumentSnapshot data) {
    
     usuario = data['usuario'] ?? '';
     pregunta = data['pregunta'] ?? '';
@@ -179,12 +179,14 @@ class Respuesta {
   String respuesta;
   dynamic fecha;
   String usuario;
+  List<dynamic> likes;
 
   Map<String,dynamic> toMap(){
     return {
       'respuesta' : respuesta,
       'fecha' : fecha,
       'usuario': usuario,
+      'likes' : likes,
     };
   }
 
@@ -192,6 +194,7 @@ class Respuesta {
     respuesta = res;
     usuario = user;
     fecha = dateString(DateTime.now());
+    likes = [];
   }
 
   String dateString(DateTime dateTime) {
@@ -206,6 +209,7 @@ class Respuesta {
     respuesta = map['respuesta'];
     fecha = map['fecha'];
     usuario = map['usuario'];
+    likes = map['likes'] ?? [];
   }
 }
 
@@ -266,7 +270,9 @@ class UsuarioModel {
     this.fotoPortada,
     this.nombre,
     this.documentId,
-    this.monedasFree
+    this.monedasFree,
+    this.usuario,
+    this.amigos
   });
 
   Map<String, dynamic> toMap() {

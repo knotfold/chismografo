@@ -23,7 +23,7 @@ class LibretasA extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const CircularProgressIndicator();
           List<DocumentSnapshot> documents = snapshot.data.documents;
-          return FloatingActionButton.extended(
+          return FloatingActionButton(
             heroTag: 'btnA1',
             onPressed: () {
               documents.isEmpty
@@ -32,72 +32,81 @@ class LibretasA extends StatelessWidget {
                       context: context,
                       child: Dialog(
                         child: Container(
-                          child: documents.isEmpty ? Text('No tienes solicitudes') : ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: documents.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              FormularioModel formularioModel =
-                                  FormularioModel.fromDS(documents[index]);
-                              return ListTile(
-                                leading: Icon(
-                                  Icons.book,
-                                  color: Colors.white,
-                                ),
-                                title: Text(
-                                  formularioModel.nombre,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: Text(
-                                  formularioModel.creadorUsuario,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                trailing: controller.loading
-                                    ? CircularProgressIndicator
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          IconButton(
-                                            onPressed: () async {
-                                              controller.toFillForm =
-                                                  formularioModel;
-                                              Navigator.of(context).pushNamed(
-                                                  '/responderLibreta',
-                                                  arguments: formularioModel);
-                                            },
-                                            icon: Icon(Icons.check, color: Colors.white54),
+                          padding: EdgeInsets.all(10),
+                          child: documents.isEmpty ? Text('No tienes solicitudes') : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text('Solicitudes de libretas', style: TextStyle(color: Colors.white, fontSize: 20),),
+                              SizedBox(height: 5),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: documents.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  FormularioModel formularioModel =
+                                      FormularioModel.fromDS(documents[index]);
+                                  return ListTile(
+                                    leading: Icon(
+                                      Icons.book,
+                                      color: Colors.white,
+                                    ),
+                                    title: Text(
+                                      formularioModel.nombre,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    subtitle: Text(
+                                      formularioModel.creadorUsuario,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: controller.loading
+                                        ? CircularProgressIndicator
+                                        : Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              IconButton(
+                                                onPressed: () async {
+                                                  controller.toFillForm =
+                                                      formularioModel;
+                                                  Navigator.of(context).pushNamed(
+                                                      '/responderLibreta',
+                                                      arguments: formularioModel);
+                                                },
+                                                icon: Icon(Icons.check, color: Colors.white54),
+                                              ),
+                                              IconButton(
+                                                onPressed: () async {
+                                                  controller.loading = true;
+                                                  controller.notify();
+                                                documents[index].reference
+                                                      .updateData({
+                                                    'invitaciones':
+                                                        FieldValue.arrayRemove([
+                                                      controller.usuario.usuario
+                                                    ])
+                                                  });
+                                                  controller.loading = false;
+                                                  controller.notify();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                icon: Icon(Icons.cancel, color: Colors.white54),
+                                              ),
+                                            ],
                                           ),
-                                          IconButton(
-                                            onPressed: () async {
-                                              controller.loading = true;
-                                              controller.notify();
-                                            documents[index].reference
-                                                  .updateData({
-                                                'invitaciones':
-                                                    FieldValue.arrayRemove([
-                                                  controller.usuario.usuario
-                                                ])
-                                              });
-                                              controller.loading = false;
-                                              controller.notify();
-                                              Navigator.of(context).pop();
-                                            },
-                                            icon: Icon(Icons.cancel, color: Colors.white54),
-                                          ),
-                                        ],
-                                      ),
-                              );
-                            },
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     );
             },
-            label:
-                Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
-            icon: documents.isEmpty
+            // label:
+            //     Text(documents.isEmpty ? 'Sin solicitudes' : 'Nueva solicitud'),
+            child: documents.isEmpty
                 ? Icon(
                     Icons.tag_faces,
                     size: 30,
+                    color: pDark,
                   )
                 : Stack(
                     children: <Widget>[
@@ -105,6 +114,7 @@ class LibretasA extends StatelessWidget {
                           child: Icon(
                             Icons.fiber_new,
                             size: 30,
+                            color: pDark,
                           ),
                           width: 30,
                           height: 30),
@@ -115,7 +125,7 @@ class LibretasA extends StatelessWidget {
                         height: 10,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: yemahuevo),
+                            color: secondaryColor),
                       )
                     ],
                   ),

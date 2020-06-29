@@ -328,7 +328,7 @@ class _RegistroUsuarioState extends State<RegistroUsuario> {
               });
 
               if (imagen != null) {
-                final String fileName = formUsuario['correo'] +
+                final String fileName = formUsuario['usuario'] +
                     '/perfil/PP' +
                     DateTime.now().toString();
 

@@ -14,6 +14,7 @@ class FormularioCreator extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(color: pDark),
           elevation: 1,
         ),
         body: PageView(
@@ -51,6 +52,7 @@ class FormularioCreator extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             ),
             TextFormField(
+              maxLength: 10,
               controller: controller.textEditingController,
               decoration: InputDecoration(
                 labelText: 'Nombre',
